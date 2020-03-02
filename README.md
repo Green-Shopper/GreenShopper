@@ -1,7 +1,8 @@
 # Boilermaker
 
+##Team Members:
+AAron Staton
 Dylan!
-_Good things come in pairs_
 Manny Garcia
 
 Looking to mix up a backend with `express`/`sequelize` and a frontend with
