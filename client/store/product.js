@@ -20,7 +20,7 @@ export const fetchProductsThunk = () => async dispatch => {
 
 export const fetchSingleProductThunk = id => async dispatch => {
   try {
-    const {data} = await axios.get(`api/albums/${id}`)
+    const {data} = await axios.get(`api/products/${id}`)
     dispatch(fetchedSingleProduct(data))
   } catch (error) {
     console.error(error)
