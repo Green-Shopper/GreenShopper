@@ -15,3 +15,24 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
+
+//Find product by id
+router.get('/:id', async (req, res, next) => {
+  try {
+    const id = req.params.id
+    const foundProduct = await Product.findByPk(
+      id,
+      //Eager Loading
+      {
+        include: [{model: User}, {model: Order}]
+      }
+    )
+    if (foundProduct) {
+      res.json(foundAlbum)
+    } else {
+      res.sendStatus(404)
+    }
+  } catch (error) {
+    next(error)
+  }
+})

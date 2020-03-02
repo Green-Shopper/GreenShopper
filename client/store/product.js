@@ -2,9 +2,11 @@ import axios from 'axios'
 
 //ACTION TYPES
 const FETCH_PRODUCTS = 'FETCH_PRODUCTS'
+const FETCH_SINGLE_PRODUCT = 'FETCH_SINGLE_PRODUCT'
 
 //ACTION CREATORS
 const fetchedProducts = products => ({type: FETCH_PRODUCTS, products})
+const fetchedSingleProduct = product => ({type: FETCH_SINGLE_PRODUCT, product})
 
 //THUNK CREATORS
 export const fetchProductsThunk = () => async dispatch => {
@@ -16,15 +18,27 @@ export const fetchProductsThunk = () => async dispatch => {
   }
 }
 
+export const fetchSingleProductThunk = id => async dispatch => {
+  try {
+    const {data} = await axios.get(`api/albums/${id}`)
+    dispatch(fetchedSingleProduct(data))
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 //INITIAL STATE
 const initialState = {
   products: []
 }
 
+//REDUCER
 const productReducers = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_PRODUCTS:
       return action.products
+    case FETCH_SINGLE_PRODUCT:
+      return action.product
     default:
       return state
   }
