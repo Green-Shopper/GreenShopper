@@ -28,7 +28,7 @@ router.get('/:id', async (req, res, next) => {
       }
     )
     if (foundProduct) {
-      res.json(foundAlbum)
+      res.json(foundProduct)
     } else {
       res.sendStatus(404)
     }
