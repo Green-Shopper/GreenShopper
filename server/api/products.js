@@ -28,6 +28,21 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
+//Add product to store
+router.post('/', async (req, res, next) => {
+  try {
+    const newProduct = await Product.create(req.body)
+    if (!newProduct) {
+      console.error('Can not create product')
+    } else {
+      res.send(newProduct)
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
+//Add to cart
 router.post('/:id', async (req, res, next) => {
   try {
     console.log('REQ.SESSION:,', req.session.userId)
