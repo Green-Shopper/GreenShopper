@@ -5,7 +5,10 @@ const Product = db.define('product', {
   title: {
     type: Sequlize.STRING,
     unique: true,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      notEmpty: true
+    }
   },
   description: {
     type: Sequlize.TEXT,
