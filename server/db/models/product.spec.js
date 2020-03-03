@@ -7,28 +7,30 @@ describe('Product model', () => {
     return db.sync({force: true})
   })
 
-  describe('sets correct values at product creation', async () => {
+  console.log('before values check')
+  describe('sets correct values at product creation', () => {
+    console.log('inside values check')
     let plant
-    try {
-      plant = await Product.create({
-        title: 'sugar cane',
-        description: 'Very low maintenance.',
-        price: 199.0,
-        imgUrl: './defaultImg.jpg',
-        stock: 100
-      })
-    } catch (error) {
-      console.error('an error occured while creating product. Error: ', error)
-    }
+    beforeEach(async () => {
+      try {
+        plant = await Product.create({
+          title: 'sugar cane',
+          description: 'Very low maintenance.',
+          price: 199.0,
+          imgUrl: './defaultImg.jpg',
+          stock: 100
+        })
+      } catch (error) {
+        console.error('an error occured while creating product. Error: ', error)
+      }
+    })
 
     it('correctly sets title field', () => {
-      expect(plant.title).to.be.equal('yucca cane')
+      expect(plant.title).to.be.equal('sugar cane')
     })
 
     it('correctly sets description field', () => {
-      expect(plant.description).to.be.equal(
-        'Architectural and very low maintenance.'
-      )
+      expect(plant.description).to.be.equal('Very low maintenance.')
     })
 
     it('correctly sets the price', () => {
@@ -36,7 +38,7 @@ describe('Product model', () => {
         'in correctly set price typeof plant.price is: ',
         typeof plant.price
       )
-      expect(typeof plant.price).to.be.equal('float')
+      expect(typeof plant.price).to.be.equal('number')
       expect(plant.price).to.be.equal(199.0)
     })
 
@@ -47,9 +49,9 @@ describe('Product model', () => {
     it('correctly sets the stock field', () => {
       console.log(
         'in set product stock field typeof product.stock is: ',
-        typeof Product.stock
+        typeof plant.stock
       )
-      expect(typeof plant.stock).to.be.equal('integer')
+      expect(typeof plant.stock).to.be.equal('number')
       expect(plant.stock).to.be.equal(100)
     })
   }) // end describe('sets correct values at product creation')
