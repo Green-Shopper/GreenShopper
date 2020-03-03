@@ -1,4 +1,4 @@
-const productsSeed = [
+const productsSeedData = [
   {
     title: 'red prayer plant',
     description: `Colorful and bold with hints of red on two-toned leaves`,
@@ -176,4 +176,4 @@ const productsSeed = [
   }
 ]
 
-module.exports = productsSeed
+module.exports = productsSeedData
