@@ -1,6 +1,6 @@
 const router = require('express').Router()
 //Require product model
-const {Product} = require('../db/models/')
+const {Product, Order} = require('../db/models/')
 module.exports = router
 
 //FInd all products
@@ -27,3 +27,20 @@ router.get('/:id', async (req, res, next) => {
     next(error)
   }
 })
+
+// router.put('/:id', async (req, res, next) => {
+//   try {
+//     const id = req.params.id
+//     const foundProduct = await Product.findByPk(id, {
+//       include: [{model: Order}]
+//     })
+//     if (orderId) {
+//       //do something
+//       OrderSummary.addProduct(id)
+//     } else {
+//       await OrderSummary.create(id)
+//     }
+//   } catch (error) {
+//     next(error)
+//   }
+// })

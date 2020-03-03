@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchProductsThunk} from '../store/album'
-// import {Link} from 'react-router-dom'
+import {fetchProductsThunk} from '../store/product'
+import {Link} from 'react-router-dom'
 
 export class AllProducts extends Component {
   componentDidMount() {
@@ -9,12 +9,15 @@ export class AllProducts extends Component {
   }
 
   render() {
-    const {products} = this.props
+    const {products} = this.props.products
     const productList = products.length ? (
       products.map(product => {
         return (
           <div key={product.id}>
-            <h4>{product.title}</h4>
+            <Link to={`/products/${product.id}`}>
+              <h4>{product.title}</h4>
+            </Link>
+            <p>{product.description}</p>
           </div>
         )
       })
