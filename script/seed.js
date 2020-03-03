@@ -1,13 +1,43 @@
 'use strict'
 
 const db = require('../server/db')
-const {User, Product, Order} = require('../server/db/models')
+const {User, Product, Order, OrderSummary} = require('../server/db/models')
 const productsSeedData = require('./product-seed-data')
 const usersSeedData = require('./user-seed-data')
+const ordersSeedData = require('./order-seed-data')
 
 async function seed() {
+  async function assignOrdersToUsers(orders, users) {
+    const ordersLen = orders.length
+    const usersLen = users.length
+    let userAtIndex = 0
+    let ordersIndex = 0
+
+    //while there are unassigned orders we continue this loop
+    //on each iteration we assign the order to the next user in line
+    //once we reach the end of the users array we start at the beggining of the array again
+    while (ordersIndex < ordersLen) {
+      userAtIndex = userAtIndex === usersLen ? 0 : userAtIndex
+
+      await orders[ordersIndex].setUser(users[userAtIndex])
+      userAtIndex++
+      ordersIndex++
+    }
+  }
+
+  async function assignProductsToOrders(products, orders) {
+    await orders.forEach(async order => {
+      await order.addProduct(products[Math.ceil(Math.random() * 25)])
+    })
+  }
   await db.sync({force: true})
   console.log('db synced!')
+
+  const orders = await Promise.all(
+    ordersSeedData.map(order => {
+      return Order.create(order)
+    })
+  )
 
   const users = await Promise.all(
     usersSeedData.map(user => {
@@ -21,6 +51,11 @@ async function seed() {
     })
   )
 
+  await assignProductsToOrders(products, orders)
+  await assignOrdersToUsers(orders, users)
+
+  await orders[0].setUser(users[1])
+  console.log(`seeded ${orders.length} orders`)
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${products.length} products`)
   console.log(`seeded successfully`)
