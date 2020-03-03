@@ -16,7 +16,7 @@ Product.belongsToMany(Order, {through: OrderSummary})
 
 //User to Order one to many association
 User.hasMany(Order)
-Order.belongsToOne(User)
+Order.belongsTo(User)
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,
