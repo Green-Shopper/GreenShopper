@@ -14,12 +14,16 @@ describe('User model', () => {
       let cody
 
       beforeEach(async () => {
-        cody = await User.create({
-          email: 'cody@puppybook.com',
-          firstName: 'cody',
-          lastName: 'bones',
-          password: 'bones'
-        })
+        try {
+          cody = await User.create({
+            email: 'cody@puppybook.com',
+            firstName: 'cody',
+            lastName: 'bones',
+            password: 'bones'
+          })
+        } catch (error) {
+          console.error('An error occurred while creating user. Error: ', error)
+        }
       })
 
       it('returns true if the password is correct', () => {
@@ -32,13 +36,20 @@ describe('User model', () => {
     }) // end describe('correctPassword')
   }) // end describe('instanceMethods')
 
-  describe('sets correct values at user creation', async () => {
-    let cody = await User.create({
-      email: 'cody@puppybook.com',
-      password: 'bones',
-      firstName: 'Cody',
-      lastName: 'Bones',
-      isAdmin: true
+  describe('sets correct values at user creation', () => {
+    let cody
+    beforeEach(async () => {
+      try {
+        cody = await User.create({
+          email: 'cody@puppybook.com',
+          password: 'bones',
+          firstName: 'Cody',
+          lastName: 'Bones',
+          isAdmin: true
+        })
+      } catch (error) {
+        console.error('An error occurred while creating user. Error: ', error)
+      }
     })
 
     it('correctly sets firstName field', () => {
