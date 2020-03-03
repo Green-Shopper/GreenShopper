@@ -30,15 +30,34 @@ export const me = () => async dispatch => {
   }
 }
 
-export const auth = (email, password, method) => async dispatch => {
+export const auth = (
+  email,
+  password,
+  method,
+  firstName,
+  lastName
+) => async dispatch => {
   let res
   try {
-    res = await axios.post(`/auth/${method}`, {email, password})
+    console.log('logging method: ', method)
+    if (method === 'login') {
+      res = await axios.post(`/auth/${method}`, {email, password})
+      console.log('firing login redux log')
+    } else if (method === 'signup') {
+      res = await axios.post(`/auth/${method}`, {
+        email,
+        password,
+        firstName,
+        lastName
+      })
+      console.log('firing sign up redux log')
+    }
   } catch (authError) {
     return dispatch(getUser({error: authError}))
   }
 
   try {
+    console.log('logging Res', res)
     dispatch(getUser(res.data))
     history.push('/home')
   } catch (dispatchOrHistoryErr) {
