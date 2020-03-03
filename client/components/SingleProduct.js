@@ -9,11 +9,12 @@ export class SingleProduct extends Component {
   }
 
   render() {
-    const {products} = this.props
-    const product = products ? products : {}
+    const {singleProduct} = this.props
+    const product = singleProduct ? singleProduct : {}
     return (
       <div>
         <h4>{product.title}</h4>
+        <img src={product.imgUrl} alt="Image of flower" />
         <h5>{product.price}</h5>
         <p>{product.description}</p>
       </div>
@@ -25,8 +26,8 @@ const mapStateToProps = state => ({
   products: state.products
 })
 
-const mapDispatchToProps = {
-  fetchProducts: id => dispatchEvent(fetchSingleProductThunk(id))
-}
+const mapDispatchToProps = dispatch => ({
+  fetchSingleProduct: id => dispatch(fetchSingleProductThunk(id))
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct)

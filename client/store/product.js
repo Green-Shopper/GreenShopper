@@ -11,7 +11,7 @@ const fetchedSingleProduct = product => ({type: FETCH_SINGLE_PRODUCT, product})
 //THUNK CREATORS
 export const fetchProductsThunk = () => async dispatch => {
   try {
-    const {data} = await axios.get(`api/products`)
+    const {data} = await axios.get('/api/products')
     dispatch(fetchedProducts(data))
   } catch (error) {
     console.error(error)
@@ -20,7 +20,7 @@ export const fetchProductsThunk = () => async dispatch => {
 
 export const fetchSingleProductThunk = id => async dispatch => {
   try {
-    const {data} = await axios.get(`api/products/${id}`)
+    const {data} = await axios.get(`/api/products/${id}`)
     dispatch(fetchedSingleProduct(data))
   } catch (error) {
     console.error(error)
@@ -29,16 +29,17 @@ export const fetchSingleProductThunk = id => async dispatch => {
 
 //INITIAL STATE
 const initialState = {
-  products: []
+  products: [],
+  singleProduct: {}
 }
 
 //REDUCER
 const productReducers = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_PRODUCTS:
-      return action.products
+      return {...state, products: action.products}
     case FETCH_SINGLE_PRODUCT:
-      return action.product
+      return {...state, singleProduct: action.product}
     default:
       return state
   }

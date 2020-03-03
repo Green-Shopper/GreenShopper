@@ -1,15 +1,12 @@
 const router = require('express').Router()
 //Require product model
-const {Product, User, Order} = require('../db/models/')
+const {Product} = require('../db/models/')
 module.exports = router
 
 //FInd all products
 router.get('/', async (req, res, next) => {
   try {
-    const products = await Product.findAll({
-      //Eager loading
-      include: [{model: User}, {model: Order}]
-    })
+    const products = await Product.findAll()
     res.json(products)
   } catch (err) {
     next(err)
@@ -20,13 +17,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const id = req.params.id
-    const foundProduct = await Product.findByPk(
-      id,
-      //Eager Loading
-      {
-        include: [{model: User}, {model: Order}]
-      }
-    )
+    const foundProduct = await Product.findByPk(id)
     if (foundProduct) {
       res.json(foundProduct)
     } else {

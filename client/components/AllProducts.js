@@ -29,8 +29,8 @@ const mapStateToProps = state => ({
   products: state.products
 })
 
-const mapDispatchToProps = {
-  fetchProducts: () => dispatchEvent(fetchProductsThunk())
-}
+const mapDispatchToProps = dispatch => ({
+  fetchProducts: () => dispatch(fetchProductsThunk())
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllProducts)
