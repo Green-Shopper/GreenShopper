@@ -7,9 +7,7 @@ describe('Product model', () => {
     return db.sync({force: true})
   })
 
-  console.log('before values check')
   describe('sets correct values at product creation', () => {
-    console.log('inside values check')
     let plant
     beforeEach(async () => {
       try {
@@ -34,10 +32,6 @@ describe('Product model', () => {
     })
 
     it('correctly sets the price', () => {
-      console.log(
-        'in correctly set price typeof plant.price is: ',
-        typeof plant.price
-      )
       expect(typeof plant.price).to.be.equal('number')
       expect(plant.price).to.be.equal(199.0)
     })
@@ -47,10 +41,6 @@ describe('Product model', () => {
     })
 
     it('correctly sets the stock field', () => {
-      console.log(
-        'in set product stock field typeof product.stock is: ',
-        typeof plant.stock
-      )
       expect(typeof plant.stock).to.be.equal('number')
       expect(plant.stock).to.be.equal(100)
     })
