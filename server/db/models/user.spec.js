@@ -14,12 +14,16 @@ describe('User model', () => {
       let cody
 
       beforeEach(async () => {
-        cody = await User.create({
-          email: 'cody@puppybook.com',
-          firstName: 'cody',
-          lastName: 'bones',
-          password: 'bones'
-        })
+        try {
+          cody = await User.create({
+            email: 'cody@puppybook.com',
+            firstName: 'cody',
+            lastName: 'bones',
+            password: 'bones'
+          })
+        } catch (error) {
+          console.error('An error occurred while creating user. Error: ', error)
+        }
       })
 
       it('returns true if the password is correct', () => {
