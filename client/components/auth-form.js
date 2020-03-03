@@ -11,63 +11,114 @@ const AuthForm = props => {
 
   return (
     <div>
-      {displayName === 'Login' ? (
-        <div>
-          <form onSubmit={handleSubmit} name={name}>
-            <div>
-              <label htmlFor="email">
-                <small>Email</small>
-              </label>
-              <input name="email" type="text" />
+      <div className="main-header">
+        <div className="showcase container">
+          <div className="row">
+            <div className="col s12 m10 offset-m1 center">
+              <div className="card-panel grey-text">
+                {displayName === 'Login' ? (
+                  <div>
+                    <form onSubmit={handleSubmit} name={name}>
+                      <div className="input-field">
+                        <i className="material-icons prefix grey-text">email</i>
+                        <label htmlFor="email">Email</label>
+                        <input
+                          name="email"
+                          type="email"
+                          className="validate grey-text text-darken-2"
+                          required
+                        />
+                      </div>
+
+                      <div className="input-field">
+                        <i className="material-icons prefix grey0text">lock</i>
+                        <label htmlFor="password">Password</label>
+                        <input
+                          name="password"
+                          type="password"
+                          className="validate grey-text text-darken-2"
+                          required
+                        />
+                      </div>
+                      <div className="input-field center">
+                        <button className="btn" type="submit">
+                          {displayName}
+                        </button>
+                      </div>
+                      {error &&
+                        error.response && <div> {error.response.data} </div>}
+                    </form>
+                    <div className="input-field center">
+                      <a
+                        className="waves-effect waves-light btn-small blue"
+                        href="/auth/google"
+                      >
+                        <i className="fab fa-google left" /> {displayName}
+                        with Google
+                      </a>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <form onSubmit={handleSubmit} name={name}>
+                      <div>
+                        <div className="row">
+                          <div className="input-field col s6 l6">
+                            <i className="material-icons prefix grey-text">
+                              person
+                            </i>
+                            <label htmlFor="firstName">First Name</label>
+                            <input
+                              name="firstName"
+                              type="text"
+                              className="validate grey-text text-darken-2"
+                            />
+                            <span
+                              className="helper-text"
+                              data-error="* required"
+                            />
+                          </div>
+                          <div className="input-field col s6 l6">
+                            <label htmlFor="lastName">Last Name</label>
+                            <input
+                              name="lastName"
+                              type="text"
+                              className="validate grey-text text-darken-2"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="input-field">
+                        <i className="material-icons prefix grey-text">email</i>
+                        <label htmlFor="email">Email</label>
+                        <input
+                          name="email"
+                          type="email"
+                          className="validate grey-text text-darken-2"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="password">
+                          <small>Password</small>
+                        </label>
+                        <input name="password" type="password" />
+                      </div>
+                      <div>
+                        <button type="submit">{displayName}</button>
+                      </div>
+                      {error &&
+                        error.response && <div> {error.response.data} </div>}
+                    </form>
+                    <a href="/auth/google">{displayName} with Google</a>
+                  </div>
+                )}
+                {/* end form */}
+              </div>
             </div>
-            <div>
-              <label htmlFor="password">
-                <small>Password</small>
-              </label>
-              <input name="password" type="password" />
-            </div>
-            <div>
-              <button type="submit">{displayName}</button>
-            </div>
-            {error && error.response && <div> {error.response.data} </div>}
-          </form>
-          <a href="/auth/google">{displayName} with Google</a>
+          </div>
         </div>
-      ) : (
-        <div>
-          <form onSubmit={handleSubmit} name={name}>
-            <div>
-              <label htmlFor="firstName">
-                <small>First Name</small>
-              </label>
-              <input name="firstName" type="text" />
-            </div>
-            <div>
-              <label htmlFor="lastName">
-                <small>Last Name</small>
-              </label>
-              <input name="lastName" type="text" />
-            </div>
-            <div>
-              <label htmlFor="email">
-                <small>Email</small>
-              </label>
-              <input name="email" type="text" />
-            </div>
-            <div>
-              <label htmlFor="password">
-                <small>Password</small>
-              </label>
-              <input name="password" type="password" />
-            </div>
-            <div>
-              <button type="submit">{displayName}</button>
-            </div>
-            {error && error.response && <div> {error.response.data} </div>}
-          </form>
-          <a href="/auth/google">{displayName} with Google</a>
-        </div>
-      )}
+      </div>
     </div>
   )
 }
