@@ -9,7 +9,7 @@ export class SingleProduct extends Component {
   }
 
   render() {
-    const {singleProduct} = this.props
+    const {singleProduct} = this.props.products
     const product = singleProduct ? singleProduct : {}
     return (
       <div>
@@ -17,6 +17,7 @@ export class SingleProduct extends Component {
         <img src={product.imgUrl} alt="Image of flower" />
         <h5>{product.price}</h5>
         <p>{product.description}</p>
+        <button type="submit">Add to Cart</button>
       </div>
     )
   }
