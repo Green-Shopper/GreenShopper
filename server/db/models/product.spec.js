@@ -8,13 +8,18 @@ describe('Product model', () => {
   })
 
   describe('sets correct values at product creation', async () => {
-    let plant = await Product.create({
-      title: 'yucca cane',
-      description: 'Architectural and very low maintenance.',
-      price: 199.0,
-      imgUrl: './defaultImg.jpg',
-      stock: 100
-    })
+    let plant
+    try {
+      plant = await Product.create({
+        title: 'sugar cane',
+        description: 'Very low maintenance.',
+        price: 199.0,
+        imgUrl: './defaultImg.jpg',
+        stock: 100
+      })
+    } catch (error) {
+      console.error('an error occured while creating product. Error: ', error)
+    }
 
     it('correctly sets title field', () => {
       expect(plant.title).to.be.equal('yucca cane')
@@ -47,5 +52,28 @@ describe('Product model', () => {
       expect(typeof plant.stock).to.be.equal('integer')
       expect(plant.stock).to.be.equal(100)
     })
-  })
-})
+  }) // end describe('sets correct values at product creation')
+
+  describe('column validations', () => {
+    it('does not allow title to be empty', async () => {
+      let error
+      try {
+        let plant = await Product.build({
+          title: '',
+          description: 'Architectural and very low maintenance.',
+          price: 199.0,
+          imgUrl: './defaultImg.jpg',
+          stock: 100
+        })
+        await plant.validate()
+      } catch (err) {
+        // console.error(
+        //   'expected error, title field was left empty. Error: ',
+        //   err
+        // )
+        error = err
+      }
+      expect(error).to.be.an('error')
+    })
+  }) // end column validations
+}) // end describe('Product model')
