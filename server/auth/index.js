@@ -12,6 +12,8 @@ router.post('/login', async (req, res, next) => {
       console.log('Incorrect password for user:', req.body.email)
       res.status(401).send('Wrong username and/or password')
     } else {
+      console.log('USER ID:', user.dataValues.id)
+      req.session.userId = user.dataValues.id
       req.login(user, err => (err ? next(err) : res.json(user)))
     }
   } catch (err) {

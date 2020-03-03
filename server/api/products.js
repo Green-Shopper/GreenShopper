@@ -1,6 +1,6 @@
 const router = require('express').Router()
 //Require product model
-const {Product, Order} = require('../db/models/')
+const {Product, User, Order, OrderSummary} = require('../db/models/')
 module.exports = router
 
 //FInd all products
@@ -28,19 +28,18 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-// router.put('/:id', async (req, res, next) => {
-//   try {
-//     const id = req.params.id
-//     const foundProduct = await Product.findByPk(id, {
-//       include: [{model: Order}]
-//     })
-//     if (orderId) {
-//       //do something
-//       OrderSummary.addProduct(id)
-//     } else {
-//       await OrderSummary.create(id)
-//     }
-//   } catch (error) {
-//     next(error)
-//   }
-// })
+router.post('/:id', async (req, res, next) => {
+  try {
+    console.log('REQ.SESSION:,', req.session.userId)
+    const productId = req.params.id
+    const foundProduct = await Product.findByPk(productId)
+    // const orderId = req.body.id
+    // const userId = req.body.id
+    const newOrder = await Order.create()
+    newOrder.addProduct(foundProduct)
+    newOrder.setUser(req.session.userId)
+    res.json(newOrder)
+  } catch (error) {
+    next(error)
+  }
+})
