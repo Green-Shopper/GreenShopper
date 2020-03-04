@@ -22,6 +22,7 @@ export class AllProducts extends Component {
             <Link to={`/products/${product.id}`}>
               <h4>{product.title}</h4>
             </Link>
+
             <p>{product.description}</p>
             {isAdmin ? (
               <button

@@ -5,7 +5,9 @@ import PropTypes from 'prop-types'
 import {Login, Signup, UserHome} from './components'
 import {me} from './store'
 import AllProducts from './components/AllProducts'
+import {AllUsers} from './components/AllUsers'
 import SingleProduct from './components/SingleProduct'
+import {fetchUsersThunk} from './store/allUsers'
 
 /**
  * COMPONENT
@@ -13,6 +15,7 @@ import SingleProduct from './components/SingleProduct'
 class Routes extends Component {
   componentDidMount() {
     this.props.loadInitialData()
+    this.props.fetchUsers()
   }
 
   render() {
@@ -29,9 +32,15 @@ class Routes extends Component {
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
+            <Route
+              exact
+              path="/users"
+              render={props => <AllUsers {...props} users={this.props.users} />}
+            />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
+
         <Route component={Login} />
       </Switch>
     )
@@ -45,7 +54,8 @@ const mapState = state => {
   return {
     // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.
     // Otherwise, state.user will be an empty object, and state.user.id will be falsey
-    isLoggedIn: !!state.user.id
+    isLoggedIn: !!state.user.id,
+    users: state.users
   }
 }
 
@@ -53,7 +63,8 @@ const mapDispatch = dispatch => {
   return {
     loadInitialData() {
       dispatch(me())
-    }
+    },
+    fetchUsers: () => dispatch(fetchUsersThunk())
   }
 }
 
