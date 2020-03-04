@@ -42,22 +42,3 @@ router.post('/', async (req, res, next) => {
     next(error)
   }
 })
-
-//Add to cart
-router.post('/:id', async (req, res, next) => {
-  console.log('in post route')
-  try {
-    // console.log('REQ.SESSION:,', req.session)
-    console.log('REQ.SESSION.userid: ', req.session.userId)
-    const productId = req.params.id
-    const foundProduct = await Product.findByPk(productId)
-    // const orderId = req.body.id
-    // const userId = req.body.id
-    const newOrder = await Order.create()
-    await newOrder.addProduct(foundProduct)
-    newOrder.setUser(req.session.userId)
-    res.json(newOrder)
-  } catch (error) {
-    next(error)
-  }
-})
