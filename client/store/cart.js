@@ -2,11 +2,17 @@ import axios from 'axios'
 
 //ACTION TYPES
 const ADD_PRODUCT_TO_CART = 'ADD_PRODUCT_TO_CART'
+const REMOVE_PRODUCT_TO_CART = 'REMOVE_PRODUCT_TO_CART'
 
 //ACTION CREATORS
 export const addedProductToCart = product => ({
   type: ADD_PRODUCT_TO_CART,
   product
+})
+
+const removedProductFromCart = productId => ({
+  type: REMOVE_PRODUCT_TO_CART,
+  productId
 })
 
 //THUNK CREATORS
@@ -27,10 +33,20 @@ export const addProductToCartThunk = productToAdd => async dispatch => {
   }
 }
 
-//INITIAL STATE
-const initialState = {
-  itemsInCart: []
+export const removeProductFromCartThunk = productId => async dispatch => {
+  try {
+    await axios.delete(`/api/cart/${productId}`)
+    dispatch(removedProductFromCart(productId))
+  } catch (error) {
+    console.error(
+      'An error occurred in thunk while removing product from cart. Error: ',
+      error
+    )
+  }
 }
+
+//INITIAL STATE
+const initialState = []
 
 //REDUCER
 const cartReducers = (state = initialState, action) => {
@@ -38,7 +54,7 @@ const cartReducers = (state = initialState, action) => {
     case ADD_PRODUCT_TO_CART: {
       let updatedProduct
       //map the old cart and create a copy of it
-      const previousCartCopy = state.itemsInCart.map(product => {
+      const previousCartCopy = state.map(product => {
         //if product added is in the cart already update the quantity
         if (product.id === action.product.id) {
           updatedProduct = Object.assign({}, product)
@@ -53,7 +69,16 @@ const cartReducers = (state = initialState, action) => {
       if (!updatedProduct) {
         updatedCart = [...updatedCart, action.product]
       }
-      return {...state, itemsInCart: updatedCart}
+      return updatedCart
+    }
+    case REMOVE_PRODUCT_TO_CART: {
+      const previousCartCopy = []
+      for (let i = 0; i < state.length; i++) {
+        if (+state[i].id !== +action.productId) {
+          previousCartCopy.push(state[i])
+        }
+      }
+      return previousCartCopy
     }
     default:
       return state
