@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchProductsThunk} from '../store/product'
 import {Link} from 'react-router-dom'
+import NewProductForm from './NewProductForm'
 
 export class AllProducts extends Component {
   componentDidMount() {
@@ -9,7 +10,9 @@ export class AllProducts extends Component {
   }
 
   render() {
+    console.log('PROPS:', this.props.products.products)
     const {products} = this.props.products
+    console.log('PRODUCTS:', products)
     const productList = products.length ? (
       products.map(product => {
         return (
@@ -24,7 +27,16 @@ export class AllProducts extends Component {
     ) : (
       <h4>No products to display</h4>
     )
-    return <div>{productList}</div>
+    return (
+      <div>
+        <h4>Add a new product</h4>
+        <div>
+          <NewProductForm addProduct={this.addProduct} />
+        </div>
+        <hr />
+        <div>{productList}</div>
+      </div>
+    )
   }
 }
 
