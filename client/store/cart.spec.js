@@ -29,6 +29,7 @@ describe('cart thunk creators', () => {
   describe('addToCart', () => {
     it('eventually dispatches the POST addedToCart  action', async () => {
       const fakeProductAdded = {
+        id: 3,
         title: 'red prayer plant',
         description: `Colorful and bold with hints of red on two-toned leaves`,
         price: 35.0,
