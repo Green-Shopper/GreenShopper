@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchSingleProductThunk} from '../store/singleProduct'
-import {addProductToCartThunk} from '../store/cart'
+import {addProductToCartThunk, removeProductFromCartThunk} from '../store/cart'
 
 export class SingleProduct extends Component {
   componentDidMount() {
@@ -25,6 +25,9 @@ export class SingleProduct extends Component {
         >
           Add to Cart
         </button>
+        <button type="button" onClick={() => this.props.removeFromCart(id)}>
+          Remove from Cart
+        </button>
       </div>
     )
   }
@@ -36,7 +39,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchSingleProduct: id => dispatch(fetchSingleProductThunk(id)),
-  addToCart: id => dispatch(addProductToCartThunk(id))
+  addToCart: id => dispatch(addProductToCartThunk(id)),
+  removeFromCart: id => dispatch(removeProductFromCartThunk(id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct)
