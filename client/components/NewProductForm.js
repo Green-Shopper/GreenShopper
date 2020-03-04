@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {addProductThunk} from '../store/product'
+import {addProductThunk} from '../store/products'
 
 export class NewProductForm extends Component {
   constructor(props) {

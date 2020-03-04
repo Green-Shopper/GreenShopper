@@ -60,7 +60,7 @@ router.post('/:id', async (req, res, next) => {
 })
 
 //Delete product
-router.delete(':/id', async (req, res, next) => {
+router.delete('/:id', adminsOnly, async (req, res, next) => {
   try {
     const productId = req.params.id
     const foundProduct = await Product.findByPk(productId)
