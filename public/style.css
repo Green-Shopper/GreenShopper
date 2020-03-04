@@ -22,3 +22,7 @@ form div {
 .main-header .showcase {
   padding-top: 70px;
 }
+
+#allUsersHeading {
+  text-align: center;
+}
