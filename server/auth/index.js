@@ -3,6 +3,7 @@ const User = require('../db/models/user')
 module.exports = router
 
 router.post('/login', async (req, res, next) => {
+  console.log('signing in user: ', req.body.email)
   try {
     const user = await User.findOne({where: {email: req.body.email}})
     if (!user) {
@@ -22,9 +23,10 @@ router.post('/login', async (req, res, next) => {
 })
 
 router.post('/signup', async (req, res, next) => {
+  console.log('signing up req.body is: ', req.body)
   try {
     const user = await User.create(req.body)
-    await user.createOrder()
+    // await user.createOrder()
     req.login(user, err => (err ? next(err) : res.json(user)))
   } catch (err) {
     if (err.name === 'SequelizeUniqueConstraintError') {
