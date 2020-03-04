@@ -17,7 +17,7 @@ export class SingleProduct extends Component {
       <div>
         <h4>{product.title}</h4>
         <img src={product.imgUrl} alt="Image of flower" />
-        <h5>{product.price}</h5>
+        <h5>Price: ${product.price}</h5>
         <p>{product.description}</p>
         <button
           type="button"
