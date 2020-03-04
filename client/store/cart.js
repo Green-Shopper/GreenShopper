@@ -4,9 +4,9 @@ import axios from 'axios'
 const ADD_PRODUCT_TO_CART = 'ADD_PRODUCT_TO_CART'
 
 //ACTION CREATORS
-export const addedProductToCart = addDetails => ({
+export const addedProductToCart = product => ({
   type: ADD_PRODUCT_TO_CART,
-  addDetails
+  product
 })
 
 //THUNK CREATORS
@@ -15,11 +15,9 @@ export const addedProductToCart = addDetails => ({
 export const addProductToCartThunk = productToAdd => async dispatch => {
   try {
     const {data} = await axios.post(
-      `/api/products/${productToAdd.id}`,
+      `/api/cart/${productToAdd.id}`,
       productToAdd
     )
-    console.log('DATA returned from api/products/:id', data)
-    //need to pass an object with product details and quantity added
     dispatch(addedProductToCart(data))
   } catch (error) {
     console.error(
