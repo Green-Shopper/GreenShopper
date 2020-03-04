@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchProductsThunk} from '../store/product'
+import {fetchProductsThunk, deleteProductThunk} from '../store/products'
 import {Link} from 'react-router-dom'
+import NewProductForm from './NewProductForm'
+import me from '../store/user'
 
 export class AllProducts extends Component {
   componentDidMount() {
@@ -9,7 +11,10 @@ export class AllProducts extends Component {
   }
 
   render() {
-    const {products} = this.props.products
+    // console.log('PROPS:', this.props)
+    // console.log('isAdmin?:', this.props.isAdmin)
+    const {isAdmin} = this.props
+    const {products} = this.props
     const productList = products.length ? (
       products.map(product => {
         return (
@@ -19,22 +24,50 @@ export class AllProducts extends Component {
             </Link>
 
             <p>{product.description}</p>
+            {isAdmin ? (
+              <button
+                type="button"
+                onClick={() => this.props.deleteProduct(product.id)}
+              >
+                X
+              </button>
+            ) : (
+              ''
+            )}
           </div>
         )
       })
     ) : (
       <h4>No products to display</h4>
     )
-    return <div>{productList}</div>
+    return (
+      <div>
+        {isAdmin ? (
+          <div>
+            <h4>Add a new product</h4>
+            <div>
+              <NewProductForm addProduct={this.addProduct} />
+            </div>
+          </div>
+        ) : (
+          ''
+        )}
+
+        <hr />
+        <div>{productList}</div>
+      </div>
+    )
   }
 }
 
 const mapStateToProps = state => ({
-  products: state.products
+  products: state.products,
+  isAdmin: state.user.isAdmin
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchProducts: () => dispatch(fetchProductsThunk())
+  fetchProducts: () => dispatch(fetchProductsThunk()),
+  deleteProduct: productId => dispatch(deleteProductThunk(productId))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllProducts)

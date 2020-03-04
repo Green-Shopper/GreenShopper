@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchSingleProductThunk} from '../store/product'
+import {fetchSingleProductThunk} from '../store/singleProduct'
 
 export class SingleProduct extends Component {
   componentDidMount() {
@@ -9,13 +9,14 @@ export class SingleProduct extends Component {
   }
 
   render() {
-    const {singleProduct} = this.props.products
+    console.log('SINGLE PRODUCT:', this.props)
+    const {singleProduct} = this.props
     const product = singleProduct ? singleProduct : {}
     return (
       <div>
         <h4>{product.title}</h4>
         <img src={product.imgUrl} alt="Image of flower" />
-        <h5>{product.price}</h5>
+        <h5>Price: ${product.price}</h5>
         <p>{product.description}</p>
         <button type="submit">Add to Cart</button>
       </div>
@@ -24,7 +25,7 @@ export class SingleProduct extends Component {
 }
 
 const mapStateToProps = state => ({
-  products: state.products
+  singleProduct: state.singleProduct
 })
 
 const mapDispatchToProps = dispatch => ({
