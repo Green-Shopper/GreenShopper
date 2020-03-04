@@ -33,7 +33,6 @@ export const addProductThunk = newProduct => async dispatch => {
 
 export const deleteProductThunk = productId => async dispatch => {
   try {
-    console.log('Delete product thunk fired')
     await axios.delete(`api/products/${productId}`)
     dispatch(deletedProduct(productId))
   } catch (error) {
