@@ -4,15 +4,20 @@ import axios from 'axios'
 const ADD_PRODUCT_TO_CART = 'ADD_PRODUCT_TO_CART'
 
 //ACTION CREATORS
-const addedProductToCart = addDetails => ({
+export const addedProductToCart = addDetails => ({
   type: ADD_PRODUCT_TO_CART,
   addDetails
 })
 
 //THUNK CREATORS
-export const addedProductToCartThunk = id => async dispatch => {
+//productToAdd is an object with two values
+//{id: product Id, quantity: quantity to buy}
+export const addProductToCartThunk = productToAdd => async dispatch => {
   try {
-    const {data} = await axios.post(`/api/products/${id}`)
+    const {data} = await axios.post(
+      `/api/products/${productToAdd.id}`,
+      productToAdd
+    )
     console.log(data)
     //need to pass an object with product details and quantity added
     dispatch(addedProductToCart(data))
