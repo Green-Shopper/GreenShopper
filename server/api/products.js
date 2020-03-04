@@ -30,6 +30,7 @@ router.get('/:id', async (req, res, next) => {
 
 //Add product to store
 router.post('/', async (req, res, next) => {
+  console.log('in post no id route')
   try {
     const newProduct = await Product.create(req.body)
     if (!newProduct) {
@@ -44,14 +45,16 @@ router.post('/', async (req, res, next) => {
 
 //Add to cart
 router.post('/:id', async (req, res, next) => {
+  console.log('in post route')
   try {
-    console.log('REQ.SESSION:,', req.session.userId)
+    // console.log('REQ.SESSION:,', req.session)
+    console.log('REQ.SESSION.userid: ', req.session.userId)
     const productId = req.params.id
     const foundProduct = await Product.findByPk(productId)
     // const orderId = req.body.id
     // const userId = req.body.id
     const newOrder = await Order.create()
-    newOrder.addProduct(foundProduct)
+    await newOrder.addProduct(foundProduct)
     newOrder.setUser(req.session.userId)
     res.json(newOrder)
   } catch (error) {
