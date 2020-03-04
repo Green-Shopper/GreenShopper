@@ -1,5 +1,5 @@
 const router = require('express').Router()
-//Require product model
+const {adminsOnly} = require('./utils')
 const {Product, User, Order, OrderSummary} = require('../db/models/')
 module.exports = router
 
@@ -29,14 +29,30 @@ router.get('/:id', async (req, res, next) => {
 })
 
 //Add product to store
-router.post('/', async (req, res, next) => {
-  console.log('in post no id route')
+router.post('/', adminsOnly, async (req, res, next) => {
   try {
     const newProduct = await Product.create(req.body)
     if (!newProduct) {
       console.error('Can not create product')
     } else {
       res.send(newProduct)
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
+//Delete product
+router.delete('/:id', adminsOnly, async (req, res, next) => {
+  try {
+    const productId = req.params.id
+    const foundProduct = await Product.findByPk(productId)
+    if (!foundProduct) {
+      console.error('Product not found, can not delete product')
+      res.sendStatus(404)
+    } else {
+      const destroyedProduct = await foundProduct.destroy()
+      res.json(destroyedProduct)
     }
   } catch (error) {
     next(error)

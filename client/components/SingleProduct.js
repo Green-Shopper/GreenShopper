@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchSingleProductThunk} from '../store/product'
+import {fetchSingleProductThunk} from '../store/singleProduct'
 import {addProductToCartThunk} from '../store/cart'
 
 export class SingleProduct extends Component {
@@ -11,7 +11,7 @@ export class SingleProduct extends Component {
 
   render() {
     const id = this.props.match.params.id
-    const {singleProduct} = this.props.products
+    const {singleProduct} = this.props
     const product = singleProduct ? singleProduct : {}
     return (
       <div>
@@ -31,7 +31,7 @@ export class SingleProduct extends Component {
 }
 
 const mapStateToProps = state => ({
-  products: state.products
+  singleProduct: state.singleProduct
 })
 
 const mapDispatchToProps = dispatch => ({
