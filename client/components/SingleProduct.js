@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchSingleProductThunk} from '../store/product'
+import {fetchSingleProductThunk} from '../store/singleProduct'
 
 export class SingleProduct extends Component {
   componentDidMount() {
@@ -9,7 +9,8 @@ export class SingleProduct extends Component {
   }
 
   render() {
-    const {singleProduct} = this.props.products
+    console.log('SINGLE PRODUCT:', this.props)
+    const {singleProduct} = this.props
     const product = singleProduct ? singleProduct : {}
     return (
       <div>
@@ -24,7 +25,7 @@ export class SingleProduct extends Component {
 }
 
 const mapStateToProps = state => ({
-  products: state.products
+  singleProduct: state.singleProduct
 })
 
 const mapDispatchToProps = dispatch => ({
