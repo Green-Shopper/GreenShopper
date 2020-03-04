@@ -10,13 +10,12 @@ import cart from './cart'
 
 import usersReducer from './allUsers'
 
+
 const reducer = combineReducers({
   user: user,
   products: productsReducers,
   singleProduct: singleProductReducer,
-
   cart: cart,
-
   users: usersReducer
 })
 const middleware = composeWithDevTools(

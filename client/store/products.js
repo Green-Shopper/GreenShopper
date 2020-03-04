@@ -31,8 +31,6 @@ export const addProductThunk = newProduct => async dispatch => {
   }
 }
 
-//INITIAL STATE
-
 export const deleteProductThunk = productId => async dispatch => {
   try {
     await axios.delete(`api/products/${productId}`)

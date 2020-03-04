@@ -7,6 +7,7 @@ export const fetchedSingleProduct = product => ({
   type: FETCH_SINGLE_PRODUCT,
   product
 })
+
 export const editedProduct = (id, update) => ({type: EDIT_PRODUCT, id, update})
 
 export const editProductThunk = (id, update) => async dispatch => {
@@ -20,6 +21,7 @@ export const editProductThunk = (id, update) => async dispatch => {
     console.error(error)
   }
 }
+
 
 export const fetchSingleProductThunk = id => async dispatch => {
   try {
