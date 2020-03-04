@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchSingleProductThunk} from '../store/product'
+import {addProductToCartThunk} from '../store/cart'
 
 export class SingleProduct extends Component {
   componentDidMount() {
@@ -9,6 +10,7 @@ export class SingleProduct extends Component {
   }
 
   render() {
+    const id = this.props.match.params.id
     const {singleProduct} = this.props.products
     const product = singleProduct ? singleProduct : {}
     return (
@@ -17,7 +19,12 @@ export class SingleProduct extends Component {
         <img src={product.imgUrl} alt="Image of flower" />
         <h5>{product.price}</h5>
         <p>{product.description}</p>
-        <button type="submit">Add to Cart</button>
+        <button
+          type="button"
+          onClick={() => this.props.addToCart({id, quantity: 1})}
+        >
+          Add to Cart
+        </button>
       </div>
     )
   }
@@ -28,7 +35,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchSingleProduct: id => dispatch(fetchSingleProductThunk(id))
+  fetchSingleProduct: id => dispatch(fetchSingleProductThunk(id)),
+  addToCart: id => dispatch(addProductToCartThunk(id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct)
