@@ -7,6 +7,7 @@ import {me} from './store'
 import AllProducts from './components/AllProducts'
 import {AllUsers} from './components/AllUsers'
 import SingleProduct from './components/SingleProduct'
+import EditProduct from './components/EditProduct'
 import {fetchUsersThunk} from './store/allUsers'
 
 /**
@@ -32,6 +33,7 @@ class Routes extends Component {
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
+            <Route path="/editproduct/:id" component={EditProduct} />
             <Route
               exact
               path="/users"

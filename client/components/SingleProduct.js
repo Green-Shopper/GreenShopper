@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchSingleProductThunk} from '../store/singleProduct'
-import {addProductToCartThunk, removeProductFromCartThunk} from '../store/cart'
+import {addProductToCartThunk, removeProductFromCartThun} from '../store/cart'
+import {Link} from 'react-router-dom'
 
 export class SingleProduct extends Component {
   componentDidMount() {
@@ -11,7 +12,7 @@ export class SingleProduct extends Component {
 
   render() {
     const id = this.props.match.params.id
-    const {singleProduct} = this.props
+    const {singleProduct, isAdmin} = this.props
     const product = singleProduct ? singleProduct : {}
     return (
       <div>
@@ -25,16 +26,21 @@ export class SingleProduct extends Component {
         >
           Add to Cart
         </button>
+
+        {isAdmin ? <Link to={`/editproduct/${id}`}>Edit Product</Link> : null}
+
         <button type="button" onClick={() => this.props.removeFromCart(id)}>
           Remove from Cart
         </button>
+
       </div>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  singleProduct: state.singleProduct
+  singleProduct: state.singleProduct,
+  isAdmin: state.user.isAdmin
 })
 
 const mapDispatchToProps = dispatch => ({
