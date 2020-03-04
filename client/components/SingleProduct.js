@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchSingleProductThunk} from '../store/product'
+import {fetchSingleProductThunk} from '../store/singleProduct'
+import {addProductToCartThunk} from '../store/cart'
+import {Link} from 'react-router-dom'
 
 export class SingleProduct extends Component {
   componentDidMount() {
@@ -9,7 +11,8 @@ export class SingleProduct extends Component {
   }
 
   render() {
-    const {singleProduct} = this.props.products
+    const id = this.props.match.params.id
+    const {singleProduct, isAdmin} = this.props
     const product = singleProduct ? singleProduct : {}
     return (
       <div>
@@ -17,18 +20,26 @@ export class SingleProduct extends Component {
         <img src={product.imgUrl} alt="Image of flower" />
         <h5>Price: ${product.price}</h5>
         <p>{product.description}</p>
-        <button type="submit">Add to Cart</button>
+        <button
+          type="button"
+          onClick={() => this.props.addToCart({id, quantity: 1})}
+        >
+          Add to Cart
+        </button>
+        {isAdmin ? <Link to={`/editproduct/${id}`}>Edit Product</Link> : null}
       </div>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  products: state.products
+  singleProduct: state.singleProduct,
+  isAdmin: state.user.isAdmin
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchSingleProduct: id => dispatch(fetchSingleProductThunk(id))
+  fetchSingleProduct: id => dispatch(fetchSingleProductThunk(id)),
+  addToCart: id => dispatch(addProductToCartThunk(id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct)

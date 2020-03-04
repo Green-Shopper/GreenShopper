@@ -1,5 +1,5 @@
 const router = require('express').Router()
-//Require product model
+const {adminsOnly} = require('./utils')
 const {Product, User, Order, OrderSummary} = require('../db/models/')
 module.exports = router
 
@@ -29,7 +29,7 @@ router.get('/:id', async (req, res, next) => {
 })
 
 //Add product to store
-router.post('/', async (req, res, next) => {
+router.post('/', adminsOnly, async (req, res, next) => {
   try {
     const newProduct = await Product.create(req.body)
     if (!newProduct) {
@@ -42,26 +42,26 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-//Add to cart
-router.post('/:id', async (req, res, next) => {
+//Delete product
+router.delete('/:id', adminsOnly, async (req, res, next) => {
   try {
-    console.log('REQ.SESSION:,', req.session.userId)
     const productId = req.params.id
     const foundProduct = await Product.findByPk(productId)
-    // const orderId = req.body.id
-    // const userId = req.body.id
-    const newOrder = await Order.create()
-    newOrder.addProduct(foundProduct)
-    newOrder.setUser(req.session.userId)
-    res.json(newOrder)
+    if (!foundProduct) {
+      console.error('Product not found, can not delete product')
+      res.sendStatus(404)
+    } else {
+      const destroyedProduct = await foundProduct.destroy()
+      res.json(destroyedProduct)
+    }
   } catch (error) {
     next(error)
   }
 })
 
-router.put('/editproduct/:id', async (req, res, next) => {
+router.put('/editproduct/:id', adminsOnly, async (req, res, next) => {
   try {
-    Product.update(req.body, {where: {id: req.params.id}})
+    await Product.update(req.body, {where: {id: req.params.id}})
     res.sendStatus(204)
   } catch (error) {
     next(error)

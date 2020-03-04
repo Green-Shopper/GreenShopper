@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {editProductThunk, fetchSingleProductThunk} from '../store/product'
+import {editProductThunk, fetchSingleProductThunk} from '../store/singleProduct'
 
 export class EditProduct extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      title: '',
+      title: 'bye',
       description: '',
       price: '',
       imgUrl: '',
@@ -27,13 +27,18 @@ export class EditProduct extends Component {
     })
   }
 
-  handleSubmit() {
+  handleSubmit(event) {
+    const id = this.props.match.params.id
+    event.preventDefault()
     this.props.editProduct(this.props.match.params.id, this.state)
+    this.props.history.push(`/products/${id}`)
+
     //Below is resetting the state for the fields of the form
   }
 
   render() {
     // const product = this.props.products.singleProduct
+    console.log('PROPS', this.props.singleProduct.title)
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit}>
@@ -44,6 +49,7 @@ export class EditProduct extends Component {
               name="title"
               onChange={this.handleChange}
               value={this.state.title}
+              placeholder={this.props.singleProduct.title}
             />
           </label>
 
@@ -54,6 +60,7 @@ export class EditProduct extends Component {
               name="description"
               onChange={this.handleChange}
               value={this.state.description}
+              placeholder={this.props.singleProduct.description}
             />
           </label>
 
@@ -64,6 +71,7 @@ export class EditProduct extends Component {
               name="price"
               onChange={this.handleChange}
               value={this.state.price}
+              placeholder={this.props.singleProduct.price}
             />
           </label>
 
@@ -71,9 +79,10 @@ export class EditProduct extends Component {
             Image URL:
             <input
               type="text"
-              name="imageUrl"
+              name="imgUrl"
               onChange={this.handleChange}
               value={this.state.imgUrl}
+              placeholder={this.props.singleProduct.imgUrl}
             />
           </label>
 
@@ -84,6 +93,7 @@ export class EditProduct extends Component {
               name="stock"
               onChange={this.handleChange}
               value={this.state.stock}
+              placeholder={this.props.singleProduct.stock}
             />
           </label>
 
@@ -95,7 +105,7 @@ export class EditProduct extends Component {
 }
 
 const mapStateToProps = state => ({
-  products: state.products
+  singleProduct: state.singleProduct
 })
 
 const mapDispatchToProps = dispatch => ({
