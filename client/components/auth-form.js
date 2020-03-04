@@ -98,19 +98,33 @@ const AuthForm = props => {
                           required
                         />
                       </div>
-                      <div>
-                        <label htmlFor="password">
-                          <small>Password</small>
-                        </label>
-                        <input name="password" type="password" />
+                      <div className="input-field">
+                        <i className="material-icons prefix grey-text">lock</i>
+                        <label htmlFor="password">Password</label>
+                        <input
+                          name="password"
+                          type="password"
+                          className="validate grey-text text-darken-2"
+                          required
+                        />
                       </div>
-                      <div>
-                        <button type="submit">{displayName}</button>
+                      <div className="input-field center">
+                        <button className="btn" type="submit">
+                          {displayName}
+                        </button>
                       </div>
                       {error &&
                         error.response && <div> {error.response.data} </div>}
                     </form>
-                    <a href="/auth/google">{displayName} with Google</a>
+                    <div className="input-field center">
+                      <a
+                        className="waves-effect waves-light btn-small blue"
+                        href="/auth/google"
+                      >
+                        <i className="fab fa-google left" /> {displayName}
+                        with Google
+                      </a>
+                    </div>
                   </div>
                 )}
                 {/* end form */}

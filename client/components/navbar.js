@@ -9,7 +9,8 @@ const Navbar = ({handleClick, isLoggedIn}) => (
     <nav className="nav-wrapper lime darken-3">
       <div className="container">
         <Link to="/home" className="brand-logo left">
-          <i className="fas fa-leaf" />GS
+          <i className="fas fa-leaf" />
+          GS
         </Link>
         {isLoggedIn ? (
           <div>
@@ -47,13 +48,18 @@ const Navbar = ({handleClick, isLoggedIn}) => (
                 <Link to="/products">Products</Link>
               </li>
               <li>
+                <Link
+                  to="/shoppingcart"
+                  className="btn-floating btn-medium waves-effect waves-light yellow darken-2"
+                >
+                  <i className="material-icons">shopping_cart</i>
+                </Link>
+              </li>
+              <li>
                 <Link to="/login">Login</Link>
               </li>
               <li>
                 <Link to="/signup">Sign Up</Link>
-              </li>
-              <li>
-                <Link to="/products">Plants</Link>
               </li>
             </ul>
           </div>
