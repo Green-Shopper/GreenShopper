@@ -1,6 +1,35 @@
 const router = require('express').Router()
 const {Product, Order, OrderSummary} = require('../db/models/')
 
+//Remove from cart
+router.delete('/:id', async (req, res, next) => {
+  const {userId} = req.session
+  try {
+    const orders = await Order.findAll({
+      where: {
+        userId: userId,
+        isCart: true
+      },
+      include: {
+        model: Product,
+        where: {
+          id: req.params.id
+        }
+      }
+    })
+    for (let i = 0; i < orders.length; i++) {
+      await orders[i].destroy()
+    }
+    res.json(orders)
+  } catch (error) {
+    console.error(
+      'An error occurred in the remove from cart delete route. Error: ',
+      error
+    )
+    next(error)
+  }
+})
+
 //Add to cart
 router.post('/:id', async (req, res, next) => {
   try {
