@@ -18,7 +18,7 @@ export const addProductToCartThunk = productToAdd => async dispatch => {
       `/api/products/${productToAdd.id}`,
       productToAdd
     )
-    console.log(data)
+    console.log('DATA returned from api/products/:id', data)
     //need to pass an object with product details and quantity added
     dispatch(addedProductToCart(data))
   } catch (error) {
@@ -55,7 +55,7 @@ const cartReducers = (state = initialState, action) => {
       if (!updatedProduct) {
         updatedCart = [...updatedCart, action.product]
       }
-      return {...state, updatedCart}
+      return {...state, itemsInCart: updatedCart}
     }
     default:
       return state
