@@ -4,6 +4,7 @@ import axios from 'axios'
 const FETCH_PRODUCTS = 'FETCH_PRODUCTS'
 const FETCH_SINGLE_PRODUCT = 'FETCH_SINGLE_PRODUCT'
 const ADD_PRODUCT = 'ADD_PRODUCT'
+const EDIT_PRODUCT = 'EDIT_PRODUCT'
 
 //ACTION CREATORS
 export const fetchedProducts = products => ({type: FETCH_PRODUCTS, products})
@@ -12,6 +13,7 @@ export const fetchedSingleProduct = product => ({
   product
 })
 export const addedProduct = newProduct => ({type: ADD_PRODUCT, newProduct})
+export const editedProduct = (id, update) => ({type: EDIT_PRODUCT, id, update})
 
 //THUNK CREATORS
 export const fetchProductsThunk = () => async dispatch => {
@@ -34,9 +36,24 @@ export const fetchSingleProductThunk = id => async dispatch => {
 
 export const addProductThunk = newProduct => async dispatch => {
   try {
-    console.log('Add product thunk fired')
     const {data} = await axios.post(`api/products`, newProduct)
     dispatch(addedProduct(data))
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const editProductThunk = (id, update) => async dispatch => {
+  try {
+    console.log('EDIT PRODUCT THUNK')
+    await axios.put(`api/products/editproduct/${id}`, {
+      title: update.title,
+      description: update.description,
+      price: update.price,
+      imageUrl: update.imgUrl,
+      stock: update.stock
+    })
+    dispatch(editedProduct(id, update))
   } catch (error) {
     console.error(error)
   }
@@ -59,6 +76,14 @@ const productReducers = (state = initialState, action) => {
       // eslint-disable-next-line no-case-declarations
       const newProduct = [...state.products, action.newProduct]
       return {...state.products, products: newProduct}
+    case EDIT_PRODUCT:
+      const editedProduct = {
+        update: action.update
+      }
+      return {
+        ...state,
+        singleProduct: editedProduct
+      }
     default:
       return state
   }

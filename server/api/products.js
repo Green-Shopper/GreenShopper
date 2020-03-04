@@ -58,3 +58,12 @@ router.post('/:id', async (req, res, next) => {
     next(error)
   }
 })
+
+router.put('/editproduct/:id', async (req, res, next) => {
+  try {
+    Product.update(req.body, {where: {id: req.params.id}})
+    res.sendStatus(204)
+  } catch (error) {
+    next(error)
+  }
+})
