@@ -42,23 +42,6 @@ router.post('/', adminsOnly, async (req, res, next) => {
   }
 })
 
-//Add to cart
-router.post('/:id', async (req, res, next) => {
-  try {
-    console.log('REQ.SESSION:,', req.session.userId)
-    const productId = req.params.id
-    const foundProduct = await Product.findByPk(productId)
-    // const orderId = req.body.id
-    // const userId = req.body.id
-    const newOrder = await Order.create()
-    newOrder.addProduct(foundProduct)
-    newOrder.setUser(req.session.userId)
-    res.json(newOrder)
-  } catch (error) {
-    next(error)
-  }
-})
-
 //Delete product
 router.delete('/:id', adminsOnly, async (req, res, next) => {
   try {
