@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchProductsThunk} from '../store/product'
+import {fetchProductsThunk, deleteProductThunk} from '../store/product'
 import {Link} from 'react-router-dom'
 import NewProductForm from './NewProductForm'
 
@@ -10,9 +10,8 @@ export class AllProducts extends Component {
   }
 
   render() {
-    console.log('PROPS:', this.props.products.products)
+    console.log('PROPS:', this.props)
     const {products} = this.props.products
-    console.log('PRODUCTS:', products)
     const productList = products.length ? (
       products.map(product => {
         return (
@@ -21,6 +20,12 @@ export class AllProducts extends Component {
               <h4>{product.title}</h4>
             </Link>
             <p>{product.description}</p>
+            <button
+              type="button"
+              onClick={() => this.props.deleteProduct(product.id)}
+            >
+              X
+            </button>
           </div>
         )
       })
@@ -45,7 +50,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchProducts: () => dispatch(fetchProductsThunk())
+  fetchProducts: () => dispatch(fetchProductsThunk()),
+  deleteProduct: productId => dispatch(deleteProductThunk(productId))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllProducts)

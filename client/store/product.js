@@ -1,9 +1,11 @@
+/* eslint-disable no-case-declarations */
 import axios from 'axios'
 
 //ACTION TYPES
 const FETCH_PRODUCTS = 'FETCH_PRODUCTS'
 const FETCH_SINGLE_PRODUCT = 'FETCH_SINGLE_PRODUCT'
 const ADD_PRODUCT = 'ADD_PRODUCT'
+const DELETE_PRODUCT = 'DELETE_PRODUCT'
 
 //ACTION CREATORS
 export const fetchedProducts = products => ({type: FETCH_PRODUCTS, products})
@@ -12,6 +14,7 @@ export const fetchedSingleProduct = product => ({
   product
 })
 export const addedProduct = newProduct => ({type: ADD_PRODUCT, newProduct})
+export const deletedProduct = productId => ({type: DELETE_PRODUCT, productId})
 
 //THUNK CREATORS
 export const fetchProductsThunk = () => async dispatch => {
@@ -19,7 +22,7 @@ export const fetchProductsThunk = () => async dispatch => {
     const {data} = await axios.get('/api/products')
     dispatch(fetchedProducts(data))
   } catch (error) {
-    console.error(error)
+    console.error('Find All Products Thunk Error:', error)
   }
 }
 
@@ -28,7 +31,7 @@ export const fetchSingleProductThunk = id => async dispatch => {
     const {data} = await axios.get(`/api/products/${id}`)
     dispatch(fetchedSingleProduct(data))
   } catch (error) {
-    console.error(error)
+    console.error('Fetch Single Product Thunk Error:', error)
   }
 }
 
@@ -38,7 +41,17 @@ export const addProductThunk = newProduct => async dispatch => {
     const {data} = await axios.post(`api/products`, newProduct)
     dispatch(addedProduct(data))
   } catch (error) {
-    console.error(error)
+    console.error('Add Product Thunk Error:', error)
+  }
+}
+
+export const deleteProductThunk = productId => async dispatch => {
+  try {
+    console.log('Delete product thunk fired')
+    await axios.delete(`api/products/${productId}`)
+    dispatch(deletedProduct(productId))
+  } catch (error) {
+    console.error('Delete Product Thunk Error:', error)
   }
 }
 
@@ -59,6 +72,12 @@ const productReducers = (state = initialState, action) => {
       // eslint-disable-next-line no-case-declarations
       const newProduct = [...state.products, action.newProduct]
       return {...state.products, products: newProduct}
+    case DELETE_PRODUCT:
+      const oldProducts = [...state.products]
+      const remainingProducts = oldProducts.filter(
+        product => product.productId !== action.id
+      )
+      return {...state, products: remainingProducts}
     default:
       return state
   }
