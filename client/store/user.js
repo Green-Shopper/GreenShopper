@@ -6,6 +6,7 @@ import history from '../history'
  */
 const GET_USER = 'GET_USER'
 const REMOVE_USER = 'REMOVE_USER'
+const UPDATE_USER = 'UPDATE_USER'
 
 /**
  * INITIAL STATE
@@ -17,6 +18,7 @@ const defaultUser = {}
  */
 const getUser = user => ({type: GET_USER, user})
 const removeUser = () => ({type: REMOVE_USER})
+const updateUser = () => ({type: UPDATE_USER})
 
 /**
  * THUNK CREATORS
@@ -29,6 +31,8 @@ export const me = () => async dispatch => {
     console.error(err)
   }
 }
+
+// export const updateUserThunk = ()
 
 export const auth = (
   email,
@@ -59,7 +63,7 @@ export const auth = (
   try {
     console.log('logging Res', res)
     dispatch(getUser(res.data))
-    history.push('/home')
+    history.push('/user')
   } catch (dispatchOrHistoryErr) {
     console.error(dispatchOrHistoryErr)
   }

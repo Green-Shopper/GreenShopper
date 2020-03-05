@@ -1,121 +1,147 @@
-import React from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
+import {UserNav} from './user-nav'
 
 /**
  * COMPONENT
  */
-export const UserHome = props => {
-  const {email, firstName, lastName, imgUrl} = props
+export class UserHome extends Component {
+  // const {email, firstName, lastName, imgUrl} = props
+  constructor(props) {
+    super(props)
+    this.state = {
+      firstName: '',
+      lastName: '',
+      email: ''
+    }
+  }
 
-  return (
-    <div>
-      <section className="products">
-        <div className="row">
-          {/* <UserNav /> */}
-          <div className="col s9 l9" id="products">
-            <h3 className="center grey-text text-darken-1">
-              Welcome, {firstName}!
-            </h3>
-            <div className="row">
-              <div className="col s12 l3">
-                {imgUrl ? (
-                  <img src={imgUrl} className="circle responsive-img" />
-                ) : (
-                  <img
-                    src="img/basicprofile.jpg"
-                    className="circle responsive-img"
-                  />
-                )}
-              </div>
-              <div className="col s12 l9">
-                {/* FORM START */}
-                <div className="row">
-                  <form className="col s12">
-                    <div className="row">
-                      <div className="input-field col s6">
-                        <input
-                          id="first_name2"
-                          type="text"
-                          className="validate"
-                        />
-                        <label className="black-text" forHtml="first_name2">
-                          {firstName}
-                        </label>
-                        <span
-                          className="helper-text"
-                          data-error="wrong"
-                          data-success="right"
-                        >
-                          update by clicking on field
-                        </span>
-                      </div>
-                      <div className="input-field col s6">
-                        <input
-                          id="first_name2"
-                          type="text"
-                          className="validate"
-                        />
-                        <label className="black-text" forHtml="first_name2">
-                          {lastName}
-                        </label>
-                        <span
-                          className="helper-text"
-                          data-error="wrong"
-                          data-success="right"
-                        >
-                          update by clicking on field
-                        </span>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="input-field col s12">
-                        <input
-                          disabled
-                          value="I am not editable"
-                          id="disabled"
-                          type="text"
-                          className="validate"
-                        />
-                        {/* <label for="disabled">Disabled</label> */}
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="input-field col s12">
-                        <input
-                          id="first_name2"
-                          type="text"
-                          className="validate"
-                        />
-                        <label className="black-text" forHtml="first_name2">
-                          {email}
-                        </label>
-                        <span
-                          className="helper-text"
-                          data-error="wrong"
-                          data-success="right"
-                        >
-                          update by clicking on field
-                        </span>
-                      </div>
-                    </div>
-                  </form>
-                  <button
-                    className="btn waves-effect waves-light"
-                    type="submit"
-                    name="action"
-                  >
-                    Update Changes
-                  </button>
+  componentDidMount() {
+    // const id = this.props.match.params.id
+    // this.props.fetchSingleProduct(id)
+    this.setState({
+      firstName: `${this.props.firstName}`,
+      lastName: `${this.props.lastName}`,
+      email: `${this.props.email}`
+    })
+    // console.log('FIRSTNAME', this.props.firstName)
+  }
+
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    })
+  }
+
+  handleSubmit(event) {
+    // const id = this.props.match.params.id
+    event.preventDefault()
+    // this.props.editProduct(this.props.match.params.id, this.state)
+  }
+
+  render() {
+    const {firstName, imgUrl, googleId, email} = this.props
+    return (
+      <div>
+        <section className="user-home-padding">
+          <div className="row">
+            <UserNav />
+            <div className="col s9 l9" id="user-home-padding">
+              <h3 className="center grey-text text-darken-1">
+                Welcome, {firstName}!
+              </h3>
+              <div className="row">
+                <div className="col s12 l3">
+                  {imgUrl ? (
+                    <img src={imgUrl} className="circle responsive-img" />
+                  ) : (
+                    <img
+                      src="img/basicprofile.jpg"
+                      className="circle responsive-img"
+                    />
+                  )}
                 </div>
-                {/* FORM END */}
+                <div className="col s12 l9">
+                  <div className="row">
+                    <form onSubmit={this.handleSubmit} className="col s12">
+                      <div className="row">
+                        <div className="input-field col s6">
+                          <input
+                            type="text"
+                            name="firstName"
+                            onChange={this.handleChange}
+                            value={this.state.firstName}
+                            className="validate"
+                          />
+                          <label className="black-text" />
+                          <span className="helper-text" data-error="wrong">
+                            update by clicking on field
+                          </span>
+                        </div>
+                        <div className="input-field col s6">
+                          <input
+                            type="text"
+                            name="lastName"
+                            onChange={this.handleChange}
+                            value={this.state.lastName}
+                            className="validate"
+                          />
+                          <label className="black-text" />
+                          <span className="helper-text" data-error="wrong">
+                            update by clicking on field
+                          </span>
+                        </div>
+                      </div>
+                      {googleId ? (
+                        <div className="row">
+                          <div className="input-field col s12">
+                            <input
+                              disabled
+                              value={`${email} (google sign in)`}
+                              id="disabled"
+                              type="text"
+                              className="validate"
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="row">
+                          <div className="input-field col s12">
+                            <input
+                              type="text"
+                              name="email"
+                              onChange={this.handleChange}
+                              value={this.state.email}
+                              className="validate"
+                            />
+                            <label
+                              className="black-text"
+                              forHtml="first_name2"
+                            />
+                            <span className="helper-text" data-error="wrong">
+                              update by clicking on field
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </form>
+                    <button
+                      className="btn waves-effect waves-light"
+                      type="submit"
+                      name="action"
+                    >
+                      Update Changes
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-    </div>
-  )
+        </section>
+      </div>
+    )
+  }
 }
 
 /**
@@ -126,7 +152,8 @@ const mapState = state => {
     email: state.user.email,
     firstName: state.user.firstName,
     lastName: state.user.lastName,
-    imgUrl: state.user.imgUrl
+    imgUrl: state.user.imgUrl,
+    googleId: state.user.googleId
   }
 }
 
