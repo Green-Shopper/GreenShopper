@@ -27,7 +27,8 @@ export class UserHome extends Component {
       firstName: `${this.props.firstName}`,
       lastName: `${this.props.lastName}`,
       email: `${this.props.email}`,
-      id: `${this.props.id}`
+      id: `${this.props.id}`,
+      imgUrl: `${this.props.imgUrl}`
     })
     // console.log('FIRSTNAME', this.props.firstName)
   }
@@ -45,12 +46,12 @@ export class UserHome extends Component {
   }
 
   render() {
-    const {firstName, imgUrl, googleId, email, id} = this.props
+    const {firstName, imgUrl, googleId, email} = this.props
     return (
       <div>
         <section className="user-home-padding">
           <div className="row">
-            <UserNav />
+            <UserNav googleId={googleId} />
             <div className="col s9 l9" id="user-home-padding">
               <h3 className="center grey-text text-darken-1">
                 Welcome, {firstName}!
