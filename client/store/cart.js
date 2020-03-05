@@ -4,11 +4,17 @@ import axios from 'axios'
 const ADD_PRODUCT_TO_CART = 'ADD_PRODUCT_TO_CART'
 const REMOVE_PRODUCT_TO_CART = 'REMOVE_PRODUCT_TO_CART'
 const UPDATE_PRODUCT_QTY_IN_CART = 'UPDATE_PRODUCT_QTY_IN_CART'
+const GET_ALL_CART_ITEMS = 'GET_ALL_CART_ITEMS'
 
 //ACTION CREATORS
-export const addedProductToCart = product => ({
+const addedProductToCart = product => ({
   type: ADD_PRODUCT_TO_CART,
   product
+})
+
+const gotAllCartItems = cartItems => ({
+  type: GET_ALL_CART_ITEMS,
+  cartItems
 })
 
 const removedProductFromCart = productId => ({
@@ -33,7 +39,20 @@ export const addProductToCartThunk = productToAdd => async dispatch => {
     dispatch(addedProductToCart(data))
   } catch (error) {
     console.error(
-      'An error occurred in thunk while adding product to cart. Error: ',
+      'An error occurred in thunk while adding product to cart. ',
+      error
+    )
+  }
+}
+
+export const getAllCartItemsThunk = () => async dispatch => {
+  try {
+    const {data} = await axios('/api/cart')
+    console.log('data recieved from the db: ', data)
+    dispatch(gotAllCartItems(data))
+  } catch (error) {
+    console.error(
+      'An error occurred in thunk while getting all cart items from db. ',
       error
     )
   }
@@ -45,7 +64,7 @@ export const removeProductFromCartThunk = productId => async dispatch => {
     dispatch(removedProductFromCart(productId))
   } catch (error) {
     console.error(
-      'An error occurred in thunk while removing product from cart. Error: ',
+      'An error occurred in thunk while removing product from cart. ',
       error
     )
   }
@@ -58,7 +77,7 @@ export const updateProductQtyInCart = updateInfo => async dispatch => {
     dispatch(updatedProductQtyInCart(data))
   } catch (error) {
     console.error(
-      'An error occurred in the thunk while updating product quantity in cart. Error: ',
+      'An error occurred in the thunk while updating product quantity in cart. ',
       error
     )
   }
@@ -74,6 +93,18 @@ const cartReducers = (state = initialState, action) => {
       if (state.length < 1) return [action.product]
       return [...state, action.product]
     }
+    case GET_ALL_CART_ITEMS: {
+      return [...action.cartItems]
+    }
+    case REMOVE_PRODUCT_TO_CART: {
+      const previousCartCopy = []
+      for (let i = 0; i < state.length; i++) {
+        if (+state[i].id !== +action.productId) {
+          previousCartCopy.push(state[i])
+        }
+      }
+      return previousCartCopy
+    }
     case UPDATE_PRODUCT_QTY_IN_CART: {
       const updatedCart = state.map(product => {
         console.log('in reducer:', product, action)
@@ -84,15 +115,6 @@ const cartReducers = (state = initialState, action) => {
         }
       })
       return updatedCart
-    }
-    case REMOVE_PRODUCT_TO_CART: {
-      const previousCartCopy = []
-      for (let i = 0; i < state.length; i++) {
-        if (+state[i].id !== +action.productId) {
-          previousCartCopy.push(state[i])
-        }
-      }
-      return previousCartCopy
     }
     default:
       return state
