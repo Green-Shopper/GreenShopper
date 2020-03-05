@@ -1,18 +1,41 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchSingleProductThunk} from '../store/singleProduct'
-import {addProductToCartThunk, removeProductFromCartThunk} from '../store/cart'
+import {
+  addProductToCartThunk,
+  removeProductFromCartThunk,
+  updateProductQtyInCart
+} from '../store/cart'
 import {Link} from 'react-router-dom'
 
 export class SingleProduct extends Component {
   componentDidMount() {
     const id = this.props.match.params.id
+    console.log('this.props is: ', this.props)
     this.props.fetchSingleProduct(id)
+  }
+
+  clickHandler(id, cart) {
+    console.log('id, and cart are: ', id, cart)
+    let itemInCart
+    if (cart.length > 0) {
+      itemInCart = cart.filter(cartItem => cartItem.id !== id)
+    }
+    console.log('In the cart now: ', cart)
+    if (itemInCart) {
+      console.log('itemInCart is: ', itemInCart[0].quantity)
+      this.props.updateQuantity({
+        id,
+        quantity: itemInCart[0].quantity + 1
+      })
+    } else {
+      this.props.addToCart({id, quantity: 1})
+    }
   }
 
   render() {
     const id = this.props.match.params.id
-    const {singleProduct, isAdmin} = this.props
+    const {singleProduct, isAdmin, cart} = this.props
     const product = singleProduct ? singleProduct : {}
     return (
       <div className="container container-padding">
@@ -42,11 +65,12 @@ export class SingleProduct extends Component {
                   <button
                     className="btn waves-effect waves-light center"
                     type="button"
-                    onClick={() => this.props.addToCart({id, quantity: 1})}
+                    onClick={() => this.clickHandler(id, cart)}
                   >
                     Add to Cart
                     <i className="material-icons right">shopping_cart</i>
                   </button>
+
                   {isAdmin ? (
                     <Link
                       to={`/editproduct/${id}`}
@@ -67,13 +91,16 @@ export class SingleProduct extends Component {
 
 const mapStateToProps = state => ({
   singleProduct: state.singleProduct,
-  isAdmin: state.user.isAdmin
+  isAdmin: state.user.isAdmin,
+  cart: state.cart
 })
 
 const mapDispatchToProps = dispatch => ({
   fetchSingleProduct: id => dispatch(fetchSingleProductThunk(id)),
   addToCart: id => dispatch(addProductToCartThunk(id)),
-  removeFromCart: id => dispatch(removeProductFromCartThunk(id))
+  removeFromCart: id => dispatch(removeProductFromCartThunk(id)),
+  //updateInfo needs to be an object with productId and the new quantity to buy {productId, quantity}
+  updateQuantity: updateInfo => dispatch(updateProductQtyInCart(updateInfo))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct)

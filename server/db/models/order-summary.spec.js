@@ -75,7 +75,7 @@ describe('OrderSummary model', () => {
 
     it('sets quantity to 0 by default', () => {
       expect(typeof orderSummary.quantity).to.be.equal('number')
-      expect(orderSummary.quantity).to.be.equal(0)
+      expect(orderSummary.quantity).to.be.equal(1)
     })
   })
 }) //end OrderSummary tests
