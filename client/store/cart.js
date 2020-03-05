@@ -3,16 +3,28 @@ import axios from 'axios'
 //ACTION TYPES
 const ADD_PRODUCT_TO_CART = 'ADD_PRODUCT_TO_CART'
 const REMOVE_PRODUCT_TO_CART = 'REMOVE_PRODUCT_TO_CART'
+const UPDATE_PRODUCT_QTY_IN_CART = 'UPDATE_PRODUCT_QTY_IN_CART'
+const GET_ALL_CART_ITEMS = 'GET_ALL_CART_ITEMS'
 
 //ACTION CREATORS
-export const addedProductToCart = product => ({
+const addedProductToCart = product => ({
   type: ADD_PRODUCT_TO_CART,
   product
+})
+
+const gotAllCartItems = cartItems => ({
+  type: GET_ALL_CART_ITEMS,
+  cartItems
 })
 
 const removedProductFromCart = productId => ({
   type: REMOVE_PRODUCT_TO_CART,
   productId
+})
+
+const updatedProductQtyInCart = updatedProduct => ({
+  type: UPDATE_PRODUCT_QTY_IN_CART,
+  updatedProduct
 })
 
 //THUNK CREATORS
@@ -27,7 +39,20 @@ export const addProductToCartThunk = productToAdd => async dispatch => {
     dispatch(addedProductToCart(data))
   } catch (error) {
     console.error(
-      'An error occurred in thunk while adding product to cart. Error: ',
+      'An error occurred in thunk while adding product to cart. ',
+      error
+    )
+  }
+}
+
+export const getAllCartItemsThunk = () => async dispatch => {
+  try {
+    const {data} = await axios('/api/cart')
+    console.log('data recieved from the db: ', data)
+    dispatch(gotAllCartItems(data))
+  } catch (error) {
+    console.error(
+      'An error occurred in thunk while getting all cart items from db. ',
       error
     )
   }
@@ -39,7 +64,20 @@ export const removeProductFromCartThunk = productId => async dispatch => {
     dispatch(removedProductFromCart(productId))
   } catch (error) {
     console.error(
-      'An error occurred in thunk while removing product from cart. Error: ',
+      'An error occurred in thunk while removing product from cart. ',
+      error
+    )
+  }
+}
+
+export const updateProductQtyInCart = updateInfo => async dispatch => {
+  try {
+    const {data} = await axios.put(`/api/cart/${updateInfo.id}`, updateInfo)
+    console.log('data recieved back from api: ', data)
+    dispatch(updatedProductQtyInCart(data))
+  } catch (error) {
+    console.error(
+      'An error occurred in the thunk while updating product quantity in cart. ',
       error
     )
   }
@@ -52,24 +90,11 @@ const initialState = []
 const cartReducers = (state = initialState, action) => {
   switch (action.type) {
     case ADD_PRODUCT_TO_CART: {
-      let updatedProduct
-      //map the old cart and create a copy of it
-      const previousCartCopy = state.map(product => {
-        //if product added is in the cart already update the quantity
-        if (product.id === action.product.id) {
-          updatedProduct = Object.assign({}, product)
-          updatedProduct.quantity += action.product.quantity
-          return updatedProduct
-        } else {
-          return product
-        }
-      })
-      let updatedCart = [...previousCartCopy]
-      //if we did not update a product in the cart add the new product
-      if (!updatedProduct) {
-        updatedCart = [...updatedCart, action.product]
-      }
-      return updatedCart
+      if (state.length < 1) return [action.product]
+      return [...state, action.product]
+    }
+    case GET_ALL_CART_ITEMS: {
+      return [...action.cartItems]
     }
     case REMOVE_PRODUCT_TO_CART: {
       const previousCartCopy = []
@@ -79,6 +104,17 @@ const cartReducers = (state = initialState, action) => {
         }
       }
       return previousCartCopy
+    }
+    case UPDATE_PRODUCT_QTY_IN_CART: {
+      const updatedCart = state.map(product => {
+        console.log('in reducer:', product, action)
+        if (product.id === action.updatedProduct.id) {
+          return action.updatedProduct
+        } else {
+          return product
+        }
+      })
+      return updatedCart
     }
     default:
       return state
