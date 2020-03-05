@@ -5,6 +5,7 @@ const ADD_PRODUCT_TO_CART = 'ADD_PRODUCT_TO_CART'
 const REMOVE_PRODUCT_TO_CART = 'REMOVE_PRODUCT_TO_CART'
 const UPDATE_PRODUCT_QTY_IN_CART = 'UPDATE_PRODUCT_QTY_IN_CART'
 const GET_ALL_CART_ITEMS = 'GET_ALL_CART_ITEMS'
+const GET_NEW_CART = 'GET_NEW_CART'
 
 //ACTION CREATORS
 const addedProductToCart = product => ({
@@ -15,6 +16,10 @@ const addedProductToCart = product => ({
 const gotAllCartItems = cartItems => ({
   type: GET_ALL_CART_ITEMS,
   cartItems
+})
+
+const gotNewCart = () => ({
+  type: GET_NEW_CART
 })
 
 const removedProductFromCart = productId => ({
@@ -58,6 +63,16 @@ export const getAllCartItemsThunk = () => async dispatch => {
   }
 }
 
+export const getNewCartThunk = () => async dispatch => {
+  try {
+    const {data} = await axios.post('/api/cart')
+    console.log('data recieved from db', data)
+    dispatch(gotNewCart())
+  } catch (error) {
+    console.error('An error occurred in thunk while getting new cart. ', error)
+  }
+}
+
 export const removeProductFromCartThunk = productId => async dispatch => {
   try {
     await axios.delete(`/api/cart/${productId}`)
@@ -70,7 +85,7 @@ export const removeProductFromCartThunk = productId => async dispatch => {
   }
 }
 
-export const updateProductQtyInCart = updateInfo => async dispatch => {
+export const updateProductQtyInCartThunk = updateInfo => async dispatch => {
   try {
     const {data} = await axios.put(`/api/cart/${updateInfo.id}`, updateInfo)
     console.log('data recieved back from api: ', data)
@@ -87,6 +102,7 @@ export const updateProductQtyInCart = updateInfo => async dispatch => {
 const initialState = []
 
 //REDUCER
+// eslint-disable-next-line complexity
 const cartReducers = (state = initialState, action) => {
   switch (action.type) {
     case ADD_PRODUCT_TO_CART: {
@@ -95,6 +111,9 @@ const cartReducers = (state = initialState, action) => {
     }
     case GET_ALL_CART_ITEMS: {
       return [...action.cartItems]
+    }
+    case GET_NEW_CART: {
+      return []
     }
     case REMOVE_PRODUCT_TO_CART: {
       const previousCartCopy = []
@@ -107,7 +126,6 @@ const cartReducers = (state = initialState, action) => {
     }
     case UPDATE_PRODUCT_QTY_IN_CART: {
       const updatedCart = state.map(product => {
-        console.log('in reducer:', product, action)
         if (product.id === action.updatedProduct.id) {
           return action.updatedProduct
         } else {
