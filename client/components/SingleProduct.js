@@ -27,12 +27,12 @@ export class SingleProduct extends Component {
             </div>
             <div className="card-stacked">
               <div className="card-content">
-                <div className="row">
+                <div className="row center">
                   <div className="col s6 l6">
                     <h2 className="header">{product.title}</h2>
                   </div>
                   <div className="col s6 l6 blue-text text-darken-2">
-                    <h5>${product.price}</h5>
+                    <h5>${product.price / 100}</h5>
                   </div>
                 </div>
                 <p>{product.description}</p>
