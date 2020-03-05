@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchSingleProductThunk} from '../store/singleProduct'
-import {addProductToCartThunk} from '../store/cart'
+import {addProductToCartThunk, removeProductFromCartThunk} from '../store/cart'
 import {Link} from 'react-router-dom'
 
 export class SingleProduct extends Component {
@@ -72,7 +72,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchSingleProduct: id => dispatch(fetchSingleProductThunk(id)),
-  addToCart: id => dispatch(addProductToCartThunk(id))
+  addToCart: id => dispatch(addProductToCartThunk(id)),
+  removeFromCart: id => dispatch(removeProductFromCartThunk(id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct)
