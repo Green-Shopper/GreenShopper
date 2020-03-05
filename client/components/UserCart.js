@@ -58,7 +58,7 @@ export class UserCart extends Component {
         </div>
         <pre>
           <button type="submit">
-            <Link>Checkout</Link>
+            <Link to="/shoppingcart/checkout">Checkout</Link>
           </button>
         </pre>
       </div>

@@ -15,7 +15,7 @@ const Product = db.define('product', {
     allowNull: false
   },
   price: {
-    type: Sequlize.FLOAT,
+    type: Sequlize.INTEGER,
     allowNull: false
   },
   imgUrl: {

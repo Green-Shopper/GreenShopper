@@ -3,6 +3,16 @@ import {connect} from 'react-redux'
 import {deleteProductThunk} from '../store/products'
 import {Link} from 'react-router-dom'
 
+const incrementFunction = function() {
+  console.log('qty incremented!')
+}
+const decrementFunction = function() {
+  console.log('qty decremented')
+}
+const removeFunction = function() {
+  console.log('removedItem!')
+}
+
 export const ShoppingCart = function(props) {
   console.log('logging cart Props', props)
   let subTotal = 0
@@ -26,14 +36,22 @@ export const ShoppingCart = function(props) {
                   <h5>${item.price}</h5>
                   <pre />
                   <p className="qty">
-                    <span className="spanStyle">-</span>1<span className="spanStyle">
+                    <span className="spanStyle" onClick={decrementFunction}>
+                      -
+                    </span>
+                    1
+                    <span className="spanStyle" onClick={incrementFunction}>
                       +
                     </span>
                   </p>
 
                   <div>
                     Remove
-                    <button type="button" className="shoppingRemove">
+                    <button
+                      type="button"
+                      className="shoppingRemove"
+                      onClick={removeFunction}
+                    >
                       X
                     </button>
                   </div>
@@ -49,7 +67,7 @@ export const ShoppingCart = function(props) {
       </div>
       <pre>
         <button type="submit">
-          <Link>Checkout</Link>
+          <Link to="/shoppingcart/checkout">Checkout</Link>
         </button>
       </pre>
     </div>

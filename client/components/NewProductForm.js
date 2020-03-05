@@ -9,7 +9,7 @@ export class NewProductForm extends Component {
       title: '',
       description: '',
       price: '',
-      imageUrl: '',
+      imgUrl: '',
       stock: ''
     }
     this.handleChange = this.handleChange.bind(this)
@@ -30,7 +30,7 @@ export class NewProductForm extends Component {
       title: '',
       description: '',
       price: '',
-      imageUrl: '',
+      imgUrl: '',
       stock: ''
     })
   }
@@ -72,9 +72,9 @@ export class NewProductForm extends Component {
           Image URL:
           <input
             type="text"
-            name="imageUrl"
+            name="imgUrl"
             onChange={this.handleChange}
-            value={this.state.imageUrl}
+            value={this.state.imgUrl}
           />
         </label>
 

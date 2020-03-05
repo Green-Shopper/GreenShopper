@@ -58,3 +58,12 @@ router.delete('/:id', adminsOnly, async (req, res, next) => {
     next(error)
   }
 })
+
+router.put('/editproduct/:id', adminsOnly, async (req, res, next) => {
+  try {
+    await Product.update(req.body, {where: {id: req.params.id}})
+    res.sendStatus(204)
+  } catch (error) {
+    next(error)
+  }
+})

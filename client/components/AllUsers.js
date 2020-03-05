@@ -19,7 +19,7 @@ export const AllUsers = props => {
         {props.users.map(function(user) {
           return (
             <ul key={user.id}>
-              <h3>name: {user.firstName + ' ' + user.lastName} </h3>
+              <h3>{user.firstName + ' ' + user.lastName} </h3>
               <div>Email: {user.email}</div>
               <p />
               <div>id: {user.id}</div>

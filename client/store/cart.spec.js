@@ -8,7 +8,7 @@ import {addProductToCartThunk} from './cart'
 const middlewares = [thunkMiddleware]
 const mockStore = configureMockStore(middlewares)
 
-describe('cart thunk creators', () => {
+xdescribe('cart thunk creators', () => {
   let store
   let mockAxios
 
@@ -26,7 +26,7 @@ describe('cart thunk creators', () => {
     store.clearActions()
   })
 
-  describe('addToCart', () => {
+  xdescribe('addToCart', () => {
     it('eventually dispatches the POST addedToCart  action', async () => {
       const fakeProductAdded = {
         id: 3,
