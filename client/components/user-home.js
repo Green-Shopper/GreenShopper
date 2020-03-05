@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {UserNav} from './user-nav'
+import {updateUserThunk} from '../store/user'
 
 /**
  * COMPONENT
@@ -15,6 +16,8 @@ export class UserHome extends Component {
       lastName: '',
       email: ''
     }
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   componentDidMount() {
@@ -23,7 +26,8 @@ export class UserHome extends Component {
     this.setState({
       firstName: `${this.props.firstName}`,
       lastName: `${this.props.lastName}`,
-      email: `${this.props.email}`
+      email: `${this.props.email}`,
+      id: `${this.props.id}`
     })
     // console.log('FIRSTNAME', this.props.firstName)
   }
@@ -35,13 +39,13 @@ export class UserHome extends Component {
   }
 
   handleSubmit(event) {
-    // const id = this.props.match.params.id
+    const userId = this.props.id
     event.preventDefault()
-    // this.props.editProduct(this.props.match.params.id, this.state)
+    this.props.updateUser(userId, this.state)
   }
 
   render() {
-    const {firstName, imgUrl, googleId, email} = this.props
+    const {firstName, imgUrl, googleId, email, id} = this.props
     return (
       <div>
         <section className="user-home-padding">
@@ -115,24 +119,21 @@ export class UserHome extends Component {
                               value={this.state.email}
                               className="validate"
                             />
-                            <label
-                              className="black-text"
-                              forHtml="first_name2"
-                            />
+                            <label className="black-text" />
                             <span className="helper-text" data-error="wrong">
                               update by clicking on field
                             </span>
                           </div>
                         </div>
                       )}
+                      <button
+                        className="btn waves-effect waves-light"
+                        type="submit"
+                        name="action"
+                      >
+                        Update Changes
+                      </button>
                     </form>
-                    <button
-                      className="btn waves-effect waves-light"
-                      type="submit"
-                      name="action"
-                    >
-                      Update Changes
-                    </button>
                   </div>
                 </div>
               </div>
@@ -153,11 +154,16 @@ const mapState = state => {
     firstName: state.user.firstName,
     lastName: state.user.lastName,
     imgUrl: state.user.imgUrl,
-    googleId: state.user.googleId
+    googleId: state.user.googleId,
+    id: state.user.id
   }
 }
 
-export default connect(mapState)(UserHome)
+const mapDispatchToProps = dispatch => ({
+  updateUser: (id, update) => dispatch(updateUserThunk(id, update))
+})
+
+export default connect(mapState, mapDispatchToProps)(UserHome)
 
 /**
  * PROP TYPES

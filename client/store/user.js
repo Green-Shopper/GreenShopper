@@ -18,7 +18,7 @@ const defaultUser = {}
  */
 const getUser = user => ({type: GET_USER, user})
 const removeUser = () => ({type: REMOVE_USER})
-const updateUser = () => ({type: UPDATE_USER})
+const updateUser = (id, update) => ({type: UPDATE_USER, id, update})
 
 /**
  * THUNK CREATORS
@@ -32,7 +32,19 @@ export const me = () => async dispatch => {
   }
 }
 
-// export const updateUserThunk = ()
+export const updateUserThunk = (id, update) => async dispatch => {
+  try {
+    await axios.put('/api/users', {
+      firstName: update.firstName,
+      lastName: update.lastName,
+      email: update.email,
+      id: update.id
+    })
+    dispatch(updateUser(id, update))
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 export const auth = (
   email,
@@ -88,6 +100,8 @@ export default function(state = defaultUser, action) {
       return action.user
     case REMOVE_USER:
       return defaultUser
+    case UPDATE_USER:
+      return action.update
     default:
       return state
   }
