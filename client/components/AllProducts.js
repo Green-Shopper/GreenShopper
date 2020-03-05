@@ -11,10 +11,7 @@ export class AllProducts extends Component {
   }
 
   render() {
-    // console.log('PROPS:', this.props)
-    // console.log('isAdmin?:', this.props.isAdmin)
-    const {isAdmin} = this.props
-    const {products} = this.props
+    const {products, isAdmin} = this.props
     const productList = products.length ? (
       products.map(product => {
         return (
@@ -52,8 +49,6 @@ export class AllProducts extends Component {
         ) : (
           ''
         )}
-
-        <hr />
         <div>{productList}</div>
       </div>
     )

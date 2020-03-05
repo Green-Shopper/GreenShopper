@@ -8,7 +8,6 @@ const DELETE_PRODUCT = 'DELETE_PRODUCT'
 
 //ACTION CREATORS
 export const fetchedProducts = products => ({type: FETCH_PRODUCTS, products})
-
 export const addedProduct = newProduct => ({type: ADD_PRODUCT, newProduct})
 export const deletedProduct = productId => ({type: DELETE_PRODUCT, productId})
 
@@ -46,7 +45,6 @@ const productsReducers = (state = [], action) => {
     case FETCH_PRODUCTS:
       return [...action.products]
     case ADD_PRODUCT:
-      // eslint-disable-next-line no-case-declarations
       return [...state, action.newProduct]
     case DELETE_PRODUCT:
       return state.filter(product => product.id !== action.productId)
