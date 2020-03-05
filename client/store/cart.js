@@ -11,7 +11,6 @@ const addedProductToCart = product => ({
   type: ADD_PRODUCT_TO_CART,
   product
 })
-
 const gotAllCartItems = cartItems => ({
   type: GET_ALL_CART_ITEMS,
   cartItems
@@ -58,6 +57,8 @@ export const getAllCartItemsThunk = () => async dispatch => {
   }
 }
 
+//INITIAL STATE
+
 export const removeProductFromCartThunk = productId => async dispatch => {
   try {
     await axios.delete(`/api/cart/${productId}`)
@@ -82,11 +83,11 @@ export const updateProductQtyInCart = updateInfo => async dispatch => {
     )
   }
 }
-
 //INITIAL STATE
 const initialState = []
 
 //REDUCER
+// eslint-disable-next-line complexity
 const cartReducers = (state = initialState, action) => {
   switch (action.type) {
     case ADD_PRODUCT_TO_CART: {
