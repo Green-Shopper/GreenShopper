@@ -6,7 +6,7 @@ export class EditProduct extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      title: 'bye',
+      title: '',
       description: '',
       price: '',
       imgUrl: '',
@@ -16,9 +16,16 @@ export class EditProduct extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const id = this.props.match.params.id
-    this.props.fetchSingleProduct(id)
+    await this.props.fetchSingleProduct(id)
+    this.setState({
+      title: `${this.props.singleProduct.title}`,
+      description: `${this.props.singleProduct.description}`,
+      price: `${this.props.singleProduct.price}`,
+      imgUrl: `${this.props.singleProduct.imgUrl}`,
+      stock: `${this.props.singleProduct.stock}`
+    })
   }
 
   handleChange(event) {
@@ -32,73 +39,85 @@ export class EditProduct extends Component {
     event.preventDefault()
     this.props.editProduct(this.props.match.params.id, this.state)
     this.props.history.push(`/products/${id}`)
-
-    //Below is resetting the state for the fields of the form
   }
 
   render() {
-    // const product = this.props.products.singleProduct
-    console.log('PROPS', this.props.singleProduct.title)
     return (
-      <div className="container">
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Title:
-            <input
-              type="text"
-              name="title"
-              onChange={this.handleChange}
-              value={this.state.title}
-              placeholder={this.props.singleProduct.title}
-            />
-          </label>
+      <div className="container container-padding">
+        <div className="col s12 m7">
+          <div className="card horizontal">
+            <div className="card-image">
+              <img
+                src={this.props.singleProduct.imgUrl}
+                className="img-resize"
+                alt="Image of flower"
+              />
+            </div>
+            <div className="card-stacked">
+              <div className="card-content">
+                <form onSubmit={this.handleSubmit}>
+                  <label>
+                    Title:
+                    <input
+                      type="text"
+                      name="title"
+                      onChange={this.handleChange}
+                      value={this.state.title}
+                    />
+                  </label>
 
-          <label>
-            Description:
-            <input
-              type="text"
-              name="description"
-              onChange={this.handleChange}
-              value={this.state.description}
-              placeholder={this.props.singleProduct.description}
-            />
-          </label>
+                  <label>
+                    Description:
+                    <input
+                      type="text"
+                      name="description"
+                      onChange={this.handleChange}
+                      value={this.state.description}
+                    />
+                  </label>
 
-          <label>
-            Price:
-            <input
-              type="number"
-              name="price"
-              onChange={this.handleChange}
-              value={this.state.price}
-              placeholder={this.props.singleProduct.price}
-            />
-          </label>
+                  <label>
+                    Price (in pennies):
+                    <input
+                      type="text"
+                      name="price"
+                      onChange={this.handleChange}
+                      value={this.state.price}
+                    />
+                  </label>
 
-          <label>
-            Image URL:
-            <input
-              type="text"
-              name="imgUrl"
-              onChange={this.handleChange}
-              value={this.state.imgUrl}
-              placeholder={this.props.singleProduct.imgUrl}
-            />
-          </label>
+                  <label>
+                    Image URL:
+                    <input
+                      type="text"
+                      name="imgUrl"
+                      onChange={this.handleChange}
+                      value={this.state.imgUrl}
+                    />
+                  </label>
 
-          <label>
-            Stock:
-            <input
-              type="number"
-              name="stock"
-              onChange={this.handleChange}
-              value={this.state.stock}
-              placeholder={this.props.singleProduct.stock}
-            />
-          </label>
-
-          <button type="submit">Edit Product</button>
-        </form>
+                  <label>
+                    Stock:
+                    <input
+                      type="text"
+                      name="stock"
+                      onChange={this.handleChange}
+                      value={this.state.stock}
+                    />
+                  </label>
+                  <div className="input-field center">
+                    <button
+                      className="btn waves-effect waves-light yellow darken-2"
+                      type="submit"
+                    >
+                      Edit Product <i className="material-icons right">edit</i>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }

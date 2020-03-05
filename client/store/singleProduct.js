@@ -14,14 +14,17 @@ export const editProductThunk = (id, update) => async dispatch => {
   try {
     console.log('EDIT PRODUCT THUNK')
     await axios.put(`/api/products/editproduct/${id}`, {
-      title: update.title
+      title: update.title,
+      description: update.description,
+      price: update.price,
+      imgUrl: update.imgUrl,
+      stock: update.stock
     })
     dispatch(editedProduct(id, update))
   } catch (error) {
     console.error(error)
   }
 }
-
 
 export const fetchSingleProductThunk = id => async dispatch => {
   try {

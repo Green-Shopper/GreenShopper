@@ -23,6 +23,15 @@ form div {
   padding-top: 70px;
 }
 
+.img-resize {
+  height: 500px;
+  object-fit: cover;
+}
+
+.container-padding {
+  padding: 40px 0px 0px 0px;
+}
+
 #allUsersHeading {
   text-align: center;
 }
