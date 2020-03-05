@@ -12,7 +12,6 @@ export class EditProduct extends Component {
       imgUrl: '',
       stock: ''
     }
-    console.log('EDIT PROPS', props)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -69,7 +68,7 @@ export class EditProduct extends Component {
           <label>
             Price:
             <input
-              type="number"
+              type="text"
               name="price"
               onChange={this.handleChange}
               value={this.state.price}
@@ -89,7 +88,7 @@ export class EditProduct extends Component {
           <label>
             Stock:
             <input
-              type="number"
+              type="text"
               name="stock"
               onChange={this.handleChange}
               value={this.state.stock}
