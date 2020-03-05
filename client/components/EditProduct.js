@@ -6,19 +6,27 @@ export class EditProduct extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      title: 'bye',
+      title: '',
       description: '',
       price: '',
       imgUrl: '',
       stock: ''
     }
+    console.log('EDIT PROPS', props)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const id = this.props.match.params.id
-    this.props.fetchSingleProduct(id)
+    await this.props.fetchSingleProduct(id)
+    this.setState({
+      title: `${this.props.singleProduct.title}`,
+      description: `${this.props.singleProduct.description}`,
+      price: `${this.props.singleProduct.price}`,
+      imgUrl: `${this.props.singleProduct.imgUrl}`,
+      stock: `${this.props.singleProduct.stock}`
+    })
   }
 
   handleChange(event) {
@@ -32,13 +40,9 @@ export class EditProduct extends Component {
     event.preventDefault()
     this.props.editProduct(this.props.match.params.id, this.state)
     this.props.history.push(`/products/${id}`)
-
-    //Below is resetting the state for the fields of the form
   }
 
   render() {
-    // const product = this.props.products.singleProduct
-    console.log('PROPS', this.props.singleProduct.title)
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit}>
@@ -49,7 +53,6 @@ export class EditProduct extends Component {
               name="title"
               onChange={this.handleChange}
               value={this.state.title}
-              placeholder={this.props.singleProduct.title}
             />
           </label>
 
@@ -60,7 +63,6 @@ export class EditProduct extends Component {
               name="description"
               onChange={this.handleChange}
               value={this.state.description}
-              placeholder={this.props.singleProduct.description}
             />
           </label>
 
@@ -71,7 +73,6 @@ export class EditProduct extends Component {
               name="price"
               onChange={this.handleChange}
               value={this.state.price}
-              placeholder={this.props.singleProduct.price}
             />
           </label>
 
@@ -82,7 +83,6 @@ export class EditProduct extends Component {
               name="imgUrl"
               onChange={this.handleChange}
               value={this.state.imgUrl}
-              placeholder={this.props.singleProduct.imgUrl}
             />
           </label>
 
@@ -93,7 +93,6 @@ export class EditProduct extends Component {
               name="stock"
               onChange={this.handleChange}
               value={this.state.stock}
-              placeholder={this.props.singleProduct.stock}
             />
           </label>
 
