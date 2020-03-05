@@ -48,6 +48,10 @@ const User = db.define('user', {
   isAdmin: {
     type: Sequelize.BOOLEAN,
     defaulValue: false
+  },
+  imgUrl: {
+    type: Sequelize.STRING,
+    defaultValue: 'img/basicprofile.jpg'
   }
 })
 
