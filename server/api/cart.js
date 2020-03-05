@@ -1,22 +1,31 @@
 const router = require('express').Router()
 const {Product, Order} = require('../db/models/')
 
-//Get all items currently in cart
+//Get all items currently in cart user cart
 router.get('/', async (req, res, next) => {
   console.log('req.user is: ', req.user)
   console.log('req.session is: ', req.session)
   try {
-    const cartItems = await Order.findAll({
-      where: {
-        userId: req.user.id,
-        isCart: true
-      },
-      include: {
-        model: Product
-      }
-    })
+    //hard coded user remember to change
+    const allCartItems = await Order.getAllItemsInCart(req.user.id)
 
-    res.json(cartItems)
+    res.json(allCartItems)
+  } catch (error) {
+    console.error(
+      'An error occurred in the get all cart items route. Error: ',
+      error
+    )
+    next(error)
+  }
+})
+
+//Get all items currently in a users cart
+//remember to add adminsOnly
+router.get('/:id', async (req, res, next) => {
+  try {
+    const allCartItems = await Order.getAllItemsInCart(req.params.id)
+
+    res.json(allCartItems)
   } catch (error) {
     console.error(
       'An error occurred in the get all cart items route. Error: ',
