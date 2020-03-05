@@ -9,7 +9,7 @@ const Order = db.define('order', {
   }
 })
 
-Order.updateQuantity = async function(userId, productId, qty) {
+Order.updateQuantity = async function(userId, productId, newQty) {
   const cartItem = await Order.findOne({
     where: {
       userId: userId,
@@ -24,7 +24,6 @@ Order.updateQuantity = async function(userId, productId, qty) {
   })
   console.log('cartItems are: ', cartItem.dataValues.products[0].orderSummary)
   const orderSummary = cartItem.dataValues.products[0].orderSummary
-  const newQty = +orderSummary.dataValues.quantity + +qty
   const update = await orderSummary.update({
     quantity: newQty
   })
