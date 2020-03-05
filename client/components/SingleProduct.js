@@ -27,12 +27,12 @@ export class SingleProduct extends Component {
             </div>
             <div className="card-stacked">
               <div className="card-content">
-                <div className="row center">
-                  <div className="col s6 l6">
+                <div className="row">
+                  <div className="col s6 l8 left">
                     <h2 className="header">{product.title}</h2>
                   </div>
-                  <div className="col s6 l6 blue-text text-darken-2">
-                    <h5>${product.price / 100}</h5>
+                  <div className="col s6 l4 blue-text text-darken-2">
+                    <h4>${(product.price / 100).toFixed(2)}</h4>
                   </div>
                 </div>
                 <p>{product.description}</p>
@@ -40,7 +40,7 @@ export class SingleProduct extends Component {
               <div className="card-action">
                 <div className="input-field center">
                   <button
-                    className="btn center"
+                    className="btn waves-effect waves-light center"
                     type="button"
                     onClick={() => this.props.addToCart({id, quantity: 1})}
                   >
@@ -48,7 +48,10 @@ export class SingleProduct extends Component {
                     <i className="material-icons right">shopping_cart</i>
                   </button>
                   {isAdmin ? (
-                    <Link to={`/editproduct/${id}`} className="btn right">
+                    <Link
+                      to={`/editproduct/${id}`}
+                      className="btn waves-effect waves-light right yellow darken-2"
+                    >
                       Edit Product <i className="material-icons right">edit</i>
                     </Link>
                   ) : null}

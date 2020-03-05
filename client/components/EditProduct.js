@@ -77,7 +77,7 @@ export class EditProduct extends Component {
                   </label>
 
                   <label>
-                    Price:
+                    Price (in pennies):
                     <input
                       type="text"
                       name="price"
@@ -106,7 +106,10 @@ export class EditProduct extends Component {
                     />
                   </label>
                   <div className="input-field center">
-                    <button className="btn" type="submit">
+                    <button
+                      className="btn waves-effect waves-light yellow darken-2"
+                      type="submit"
+                    >
                       Edit Product <i className="material-icons right">edit</i>
                     </button>
                   </div>
