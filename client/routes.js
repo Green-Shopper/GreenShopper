@@ -7,7 +7,10 @@ import {me} from './store'
 import AllProducts from './components/AllProducts'
 import {AllUsers} from './components/AllUsers'
 import SingleProduct from './components/SingleProduct'
+import ShoppingCart from './components/ShoppingCart'
+import UserCart from './components/UserCart'
 import {fetchUsersThunk} from './store/allUsers'
+import {setProductsInCart} from './store/cart'
 
 /**
  * COMPONENT
@@ -16,11 +19,12 @@ class Routes extends Component {
   componentDidMount() {
     this.props.loadInitialData()
     this.props.fetchUsers()
+    this.props.setProductsInCart()
   }
 
   render() {
     const {isLoggedIn} = this.props
-
+    console.log('logging props in routes', this.props)
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
@@ -37,10 +41,29 @@ class Routes extends Component {
               path="/users"
               render={props => <AllUsers {...props} users={this.props.users} />}
             />
+            <Route
+              exact
+              path="/shoppingcart"
+              render={props => (
+                <ShoppingCart
+                  {...props}
+                  itemsInCart={this.props.cart.itemsInCart}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/userCart/:id"
+              render={props => (
+                <UserCart
+                  {...props}
+                  itemsInCart={this.props.cart.itemsInCart}
+                />
+              )}
+            />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
-
         <Route component={Login} />
       </Switch>
     )
@@ -55,7 +78,8 @@ const mapState = state => {
     // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.
     // Otherwise, state.user will be an empty object, and state.user.id will be falsey
     isLoggedIn: !!state.user.id,
-    users: state.users
+    users: state.users,
+    cart: state.cart
   }
 }
 
@@ -64,7 +88,8 @@ const mapDispatch = dispatch => {
     loadInitialData() {
       dispatch(me())
     },
-    fetchUsers: () => dispatch(fetchUsersThunk())
+    fetchUsers: () => dispatch(fetchUsersThunk()),
+    setProductsInCart: () => dispatch(setProductsInCart())
   }
 }
 
