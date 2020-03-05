@@ -1,12 +1,10 @@
 const router = require('express').Router()
-const {Product, Order} = require('../db/models/')
+const {Product, Order, User} = require('../db/models/')
+const {adminsOnly} = require('./utils')
 
-//Get all items currently in cart user cart
+//Get all items currently in users cart
 router.get('/', async (req, res, next) => {
-  console.log('req.user is: ', req.user)
-  console.log('req.session is: ', req.session)
   try {
-    //hard coded user remember to change
     const allCartItems = await Order.getAllItemsInCart(req.user.id)
 
     res.json(allCartItems)
@@ -19,9 +17,21 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+//Get new cart
+router.post('/', async (req, res, next) => {
+  try {
+    const newOrder = await Order.create()
+    const user = await User.findByPk(req.user.dataValues.id)
+    await user.update({cartId: newOrder.id})
+    res.sendStatus(201)
+  } catch (error) {
+    console.error('An error occurred while creating a new cart')
+    next(error)
+  }
+})
+
 //Get all items currently in a users cart
-//remember to add adminsOnly
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', adminsOnly, async (req, res, next) => {
   try {
     const allCartItems = await Order.getAllItemsInCart(req.params.id)
 
@@ -69,7 +79,6 @@ router.put('/:id', async (req, res, next) => {
   const productId = req.params.id
   const quantityToAdd = req.body.quantity
   const userId = req.user.id
-  // const productId = req.params.id
   try {
     const updatedOrder = await Order.updateQuantity(
       userId,
