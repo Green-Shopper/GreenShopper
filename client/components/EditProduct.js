@@ -43,60 +43,78 @@ export class EditProduct extends Component {
 
   render() {
     return (
-      <div className="container">
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Title:
-            <input
-              type="text"
-              name="title"
-              onChange={this.handleChange}
-              value={this.state.title}
-            />
-          </label>
+      <div className="container container-padding">
+        <div className="col s12 m7">
+          <div className="card horizontal">
+            <div className="card-image">
+              <img
+                src={this.props.singleProduct.imgUrl}
+                className="img-resize"
+                alt="Image of flower"
+              />
+            </div>
+            <div className="card-stacked">
+              <div className="card-content">
+                <form onSubmit={this.handleSubmit}>
+                  <label>
+                    Title:
+                    <input
+                      type="text"
+                      name="title"
+                      onChange={this.handleChange}
+                      value={this.state.title}
+                    />
+                  </label>
 
-          <label>
-            Description:
-            <input
-              type="text"
-              name="description"
-              onChange={this.handleChange}
-              value={this.state.description}
-            />
-          </label>
+                  <label>
+                    Description:
+                    <input
+                      type="text"
+                      name="description"
+                      onChange={this.handleChange}
+                      value={this.state.description}
+                    />
+                  </label>
 
-          <label>
-            Price:
-            <input
-              type="text"
-              name="price"
-              onChange={this.handleChange}
-              value={this.state.price}
-            />
-          </label>
+                  <label>
+                    Price:
+                    <input
+                      type="text"
+                      name="price"
+                      onChange={this.handleChange}
+                      value={this.state.price}
+                    />
+                  </label>
 
-          <label>
-            Image URL:
-            <input
-              type="text"
-              name="imgUrl"
-              onChange={this.handleChange}
-              value={this.state.imgUrl}
-            />
-          </label>
+                  <label>
+                    Image URL:
+                    <input
+                      type="text"
+                      name="imgUrl"
+                      onChange={this.handleChange}
+                      value={this.state.imgUrl}
+                    />
+                  </label>
 
-          <label>
-            Stock:
-            <input
-              type="text"
-              name="stock"
-              onChange={this.handleChange}
-              value={this.state.stock}
-            />
-          </label>
-
-          <button type="submit">Edit Product</button>
-        </form>
+                  <label>
+                    Stock:
+                    <input
+                      type="text"
+                      name="stock"
+                      onChange={this.handleChange}
+                      value={this.state.stock}
+                    />
+                  </label>
+                  <div className="input-field center">
+                    <button className="btn" type="submit">
+                      Edit Product <i className="material-icons right">edit</i>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }

@@ -15,18 +15,48 @@ export class SingleProduct extends Component {
     const {singleProduct, isAdmin} = this.props
     const product = singleProduct ? singleProduct : {}
     return (
-      <div>
-        <h4>{product.title}</h4>
-        <img src={product.imgUrl} alt="Image of flower" />
-        <h5>Price: ${product.price}</h5>
-        <p>{product.description}</p>
-        <button
-          type="button"
-          onClick={() => this.props.addToCart({id, quantity: 1})}
-        >
-          Add to Cart
-        </button>
-        {isAdmin ? <Link to={`/editproduct/${id}`}>Edit Product</Link> : null}
+      <div className="container container-padding">
+        <div className="col s12 m7">
+          <div className="card horizontal">
+            <div className="card-image">
+              <img
+                src={product.imgUrl}
+                className="img-resize"
+                alt="Image of flower"
+              />
+            </div>
+            <div className="card-stacked">
+              <div className="card-content">
+                <div className="row">
+                  <div className="col s6 l6">
+                    <h2 className="header">{product.title}</h2>
+                  </div>
+                  <div className="col s6 l6 blue-text text-darken-2">
+                    <h5>${product.price}</h5>
+                  </div>
+                </div>
+                <p>{product.description}</p>
+              </div>
+              <div className="card-action">
+                <div className="input-field center">
+                  <button
+                    className="btn center"
+                    type="button"
+                    onClick={() => this.props.addToCart({id, quantity: 1})}
+                  >
+                    Add to Cart
+                    <i className="material-icons right">shopping_cart</i>
+                  </button>
+                  {isAdmin ? (
+                    <Link to={`/editproduct/${id}`} className="btn right">
+                      Edit Product <i className="material-icons right">edit</i>
+                    </Link>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
