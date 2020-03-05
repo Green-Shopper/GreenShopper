@@ -3,6 +3,7 @@ import axios from 'axios'
 //ACTION TYPES
 const ADD_PRODUCT_TO_CART = 'ADD_PRODUCT_TO_CART'
 const REMOVE_PRODUCT_TO_CART = 'REMOVE_PRODUCT_TO_CART'
+const UPDATE_PRODUCT_QTY_IN_CART = 'UPDATE_PRODUCT_QTY_IN_CART'
 
 //ACTION CREATORS
 export const addedProductToCart = product => ({
@@ -13,6 +14,11 @@ export const addedProductToCart = product => ({
 const removedProductFromCart = productId => ({
   type: REMOVE_PRODUCT_TO_CART,
   productId
+})
+
+const updatedProductQtyInCart = updatedProduct => ({
+  type: UPDATE_PRODUCT_QTY_IN_CART,
+  updatedProduct
 })
 
 //THUNK CREATORS
@@ -45,6 +51,19 @@ export const removeProductFromCartThunk = productId => async dispatch => {
   }
 }
 
+export const updateProductQtyInCart = updateInfo => async dispatch => {
+  try {
+    const {data} = await axios.put(`/api/cart/${updateInfo.id}`, updateInfo)
+    console.log('data recieved back from api: ', data)
+    dispatch(updatedProductQtyInCart(data))
+  } catch (error) {
+    console.error(
+      'An error occurred in the thunk while updating product quantity in cart. Error: ',
+      error
+    )
+  }
+}
+
 //INITIAL STATE
 const initialState = []
 
@@ -52,23 +71,18 @@ const initialState = []
 const cartReducers = (state = initialState, action) => {
   switch (action.type) {
     case ADD_PRODUCT_TO_CART: {
-      let updatedProduct
-      //map the old cart and create a copy of it
-      const previousCartCopy = state.map(product => {
-        //if product added is in the cart already update the quantity
-        if (product.id === action.product.id) {
-          updatedProduct = Object.assign({}, product)
-          updatedProduct.quantity += action.product.quantity
-          return updatedProduct
+      if (state.length < 1) return [action.product]
+      return [...state, action.product]
+    }
+    case UPDATE_PRODUCT_QTY_IN_CART: {
+      const updatedCart = state.map(product => {
+        console.log('in reducer:', product, action)
+        if (product.id === action.updatedProduct.id) {
+          return action.updatedProduct
         } else {
           return product
         }
       })
-      let updatedCart = [...previousCartCopy]
-      //if we did not update a product in the cart add the new product
-      if (!updatedProduct) {
-        updatedCart = [...updatedCart, action.product]
-      }
       return updatedCart
     }
     case REMOVE_PRODUCT_TO_CART: {
