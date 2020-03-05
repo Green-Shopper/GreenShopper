@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {deleteProductThunk} from '../store/products'
 import {fetchSingleUserThunk} from '../store/singleUser'
+import {getCartByIdThunk} from '../store/singleUserCart'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 
@@ -9,11 +10,12 @@ export class UserCart extends Component {
     const id = this.props.match.params.id
     console.log('loggingIdInMount', id)
     this.props.fetchSingleUser(id)
+    this.props.getCartById(id)
   }
   render() {
     const id = this.props.match.params.id
     let subTotal = 0
-    this.props.itemsInCart.forEach(function(item) {
+    this.props.userCart.forEach(function(item) {
       subTotal += item.price
     })
     console.log('logging Props in USERCART', this.props)
@@ -27,7 +29,7 @@ export class UserCart extends Component {
             "'s Cart"}
         </h3>
         <span>
-          {this.props.itemsInCart.map(function(item) {
+          {this.props.userCart.map(function(item) {
             return (
               <div key={item.id}>
                 <div className="cartProducts">
@@ -69,12 +71,14 @@ export class UserCart extends Component {
 const mapDispatchToProps = function(dispatch) {
   return {
     deleteProducts: () => dispatch(deleteProductThunk()),
-    fetchSingleUser: id => dispatch(fetchSingleUserThunk(id))
+    fetchSingleUser: id => dispatch(fetchSingleUserThunk(id)),
+    getCartById: id => dispatch(getCartByIdThunk(id))
   }
 }
 const mapStateToProps = function(state) {
   return {
-    selectedUser: state.selectedUser
+    selectedUser: state.selectedUser,
+    userCart: state.userCart
   }
 }
 

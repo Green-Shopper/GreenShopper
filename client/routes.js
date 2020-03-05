@@ -10,7 +10,7 @@ import SingleProduct from './components/SingleProduct'
 import ShoppingCart from './components/ShoppingCart'
 import UserCart from './components/UserCart'
 import {fetchUsersThunk} from './store/allUsers'
-import {setProductsInCart} from './store/cart'
+import {getAllCartItemsThunk} from './store/cart'
 import EditProduct from './components/EditProduct'
 import Checkout from './components/Checkout'
 
@@ -21,7 +21,7 @@ class Routes extends Component {
   componentDidMount() {
     this.props.loadInitialData()
     this.props.fetchUsers()
-    this.props.setProductsInCart()
+    this.props.getProductsInCart()
   }
 
   render() {
@@ -49,21 +49,13 @@ class Routes extends Component {
               exact
               path="/shoppingcart"
               render={props => (
-                <ShoppingCart
-                  {...props}
-                  itemsInCart={this.props.cart.itemsInCart}
-                />
+                <ShoppingCart {...props} cart={this.props.cart} />
               )}
             />
             <Route
               exact
               path="/userCart/:id"
-              render={props => (
-                <UserCart
-                  {...props}
-                  itemsInCart={this.props.cart.itemsInCart}
-                />
-              )}
+              render={props => <UserCart {...props} cart={this.props.cart} />}
             />
             <Route component={UserHome} />
           </Switch>
@@ -94,7 +86,7 @@ const mapDispatch = dispatch => {
       dispatch(me())
     },
     fetchUsers: () => dispatch(fetchUsersThunk()),
-    setProductsInCart: () => dispatch(setProductsInCart())
+    getProductsInCart: () => dispatch(getAllCartItemsThunk())
   }
 }
 
