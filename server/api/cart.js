@@ -15,13 +15,7 @@ router.get('/', async (req, res, next) => {
         model: Product
       }
     })
-    console.log(
-      `There are ${
-        cartItems.length
-      } items currently in the cart the first one is ${
-        cartItems[0].dataValues.products[0].title
-      }`
-    )
+
     res.json(cartItems)
   } catch (error) {
     console.error(
@@ -65,15 +59,15 @@ router.delete('/:id', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   const productId = req.params.id
   const quantityToAdd = req.body.quantity
-  // const userId = req.user.id
+  const userId = req.user.id
   // const productId = req.params.id
   try {
     const updatedOrder = await Order.updateQuantity(
-      10,
+      userId,
       productId,
       quantityToAdd
     )
-    res.status(204).json(updatedOrder)
+    res.json(updatedOrder)
   } catch (error) {
     console.error(
       'An error occurred in put route to update product qty in cart. Error: ',
