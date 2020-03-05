@@ -1,5 +1,36 @@
 const router = require('express').Router()
-const {Product, Order, OrderSummary} = require('../db/models/')
+const {Product, Order} = require('../db/models/')
+
+//Get all items currently in cart
+router.get('/', async (req, res, next) => {
+  console.log('req.user is: ', req.user)
+  console.log('req.session is: ', req.session)
+  try {
+    const cartItems = await Order.findAll({
+      where: {
+        userId: req.user.id,
+        isCart: true
+      },
+      include: {
+        model: Product
+      }
+    })
+    console.log(
+      `There are ${
+        cartItems.length
+      } items currently in the cart the first one is ${
+        cartItems[0].dataValues.products[0].title
+      }`
+    )
+    res.json(cartItems)
+  } catch (error) {
+    console.error(
+      'An error occurred in the get all cart items route. Error: ',
+      error
+    )
+    next(error)
+  }
+})
 
 //Remove from cart
 router.delete('/:id', async (req, res, next) => {
@@ -24,6 +55,28 @@ router.delete('/:id', async (req, res, next) => {
   } catch (error) {
     console.error(
       'An error occurred in the remove from cart delete route. Error: ',
+      error
+    )
+    next(error)
+  }
+})
+
+//update quantity in cart
+router.put('/:id', async (req, res, next) => {
+  const productId = req.params.id
+  const quantityToAdd = req.body.quantity
+  // const userId = req.user.id
+  // const productId = req.params.id
+  try {
+    const updatedOrder = await Order.updateQuantity(
+      10,
+      productId,
+      quantityToAdd
+    )
+    res.status(204).json(updatedOrder)
+  } catch (error) {
+    console.error(
+      'An error occurred in put route to update product qty in cart. Error: ',
       error
     )
     next(error)
