@@ -43,7 +43,7 @@ export class SingleProduct extends Component {
           <div className="card horizontal">
             <div className="card-image">
               <img
-                src={product.imgUrl}
+                src={`../../${product.imgUrl}`}
                 className="img-resize"
                 alt="Image of flower"
               />

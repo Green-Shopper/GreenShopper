@@ -12,7 +12,6 @@ const addedProductToCart = product => ({
   type: ADD_PRODUCT_TO_CART,
   product
 })
-
 const gotAllCartItems = cartItems => ({
   type: GET_ALL_CART_ITEMS,
   cartItems
@@ -110,7 +109,6 @@ export const updateProductQtyInCartThunk = updateInfo => async dispatch => {
     )
   }
 }
-
 //INITIAL STATE
 const initialState = []
 

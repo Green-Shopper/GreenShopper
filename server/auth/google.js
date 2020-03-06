@@ -42,8 +42,9 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
           where: {googleId},
           defaults: {email, imgUrl, firstName, lastName, fullName}
         })
-        // await Order.create()
-
+        await user.createOrder()
+        // const cartId = req.user.dataValues.cartId
+        // await user.updateUser({where: {cartId: cartId}})
         done(null, user)
       } catch (error) {
         done(error)
@@ -61,7 +62,7 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
   router.get(
     '/callback',
     passport.authenticate('google', {
-      successRedirect: '/home',
+      successRedirect: '/user',
       failureRedirect: '/login'
     })
   )

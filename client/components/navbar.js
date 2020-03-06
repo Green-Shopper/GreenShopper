@@ -25,6 +25,14 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
               <li>{isAdmin && <Link to="/users">Users</Link>}</li>
               <li>
                 <Link
+                  to="/user"
+                  className="btn-floating btn-medium waves-effect waves-light cyan darken-2"
+                >
+                  <i className="material-icons">person</i>
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/shoppingcart"
                   className="btn-floating btn-medium waves-effect waves-light yellow darken-2"
                 >

@@ -24,6 +24,9 @@ const Product = db.define('product', {
   },
   stock: {
     type: Sequlize.INTEGER
+  },
+  tag: {
+    type: Sequlize.STRING
   }
 })
 

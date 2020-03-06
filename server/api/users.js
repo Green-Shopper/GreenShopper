@@ -16,3 +16,28 @@ router.get('/', adminsOnly, async (req, res, next) => {
     next(err)
   }
 })
+
+router.put('/', async (req, res, next) => {
+  const userId = req.body.id
+  console.log('REQ.BODY', req.body)
+  try {
+    await User.update(req.body, {where: {id: userId}})
+    res.sendStatus(204)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.get('/:id', async (req, res, next) => {
+  try {
+    const user = await User.findOne({
+      attributes: ['id', 'email', 'firstName', 'lastName'],
+      where: {
+        id: req.params.id
+      }
+    })
+    res.json(user)
+  } catch (err) {
+    next(err)
+  }
+})
