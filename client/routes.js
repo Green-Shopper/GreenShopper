@@ -13,6 +13,7 @@ import {fetchUsersThunk} from './store/allUsers'
 import {getAllCartItemsThunk} from './store/cart'
 import EditProduct from './components/EditProduct'
 import Checkout from './components/Checkout'
+import {NewProductForm} from './components/NewProductForm'
 
 /**
  * COMPONENT
@@ -41,6 +42,7 @@ class Routes extends Component {
             <Route path="/user" component={UserHome} />
             {/* <Route path="/home" component={UserHome} /> */}
             <Route path="/editproduct/:id" component={EditProduct} />
+            <Route path="/addproduct/" component={NewProductForm} />
             <Route
               exact
               path="/users"
