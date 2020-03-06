@@ -35,7 +35,11 @@ class Routes extends Component {
         <Route path="/signup" component={Signup} />
         <Route exact path="/products" component={AllProducts} />
         <Route exact path="/products/:id" component={SingleProduct} />
-        <Route exact path="/shoppingcart/checkout" component={Checkout} />
+        <Route
+          exact
+          path="/userCart/:id"
+          render={props => <UserCart {...props} cart={this.props.cart} />}
+        />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
@@ -54,6 +58,11 @@ class Routes extends Component {
               render={props => (
                 <ShoppingCart {...props} cart={this.props.cart} />
               )}
+            />
+            <Route
+              exact
+              path="/shoppingcart/checkout"
+              render={props => <Checkout {...props} cart={this.props.cart} />}
             />
             <Route
               exact

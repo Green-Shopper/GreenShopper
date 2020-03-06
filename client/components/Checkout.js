@@ -13,22 +13,22 @@ export class ShoppingCart extends Component {
   }
 
   render() {
-    //Stripe implementation ========
-    toast.configure()
-    const handleToken = async token => {
-      const response = await axios.post(
-        'http://localhost:8080/shoppingcart/checkout',
-        {
-          token
-        }
-      )
-      const {status} = response.data
-      if (status === 'success') {
-        toast('Success!, Check email for details', {type: 'success'})
-      } else {
-        toast('Something went wrong', {type: 'error'})
-      }
-    }
+    // Stripe implementation ========
+    // toast.configure()
+    // const handleToken = async token => {
+    //   const response = await axios.post(
+    //     'http://localhost:8080/shoppingcart/checkout',
+    //     {
+    //       token
+    //     }
+    //   )
+    //   const {status} = response.data
+    //   if (status === 'success') {
+    //     toast('Success!, Check email for details', {type: 'success'})
+    //   } else {
+    //     toast('Something went wrong', {type: 'error'})
+    //   }
+    // }
 
     //Stripe implementation ========
 
@@ -63,7 +63,7 @@ export class ShoppingCart extends Component {
         </div>
         <StripeCheckout
           stripeKey="pk_test_swgZVNKN4tyqgBXKrWl8R5HW000gFy8jra"
-          token={handleToken}
+          // token={handleToken}
           billingAddress
           shippingAddress
           amount={subTotal * 100}
