@@ -33,7 +33,6 @@ export class SingleProduct extends Component {
     }
     console.log('In the cart now: ', cart, 'logging itemInCart', itemInCart)
     if (itemInCart.length) {
-      // console.log('itemInCart is: ', itemInCart[0].quantity)
       this.props.updateQuantity({
         id,
         quantity: itemInCart[0].quantity + 1

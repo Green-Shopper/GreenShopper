@@ -18,24 +18,23 @@ export class ShoppingCart extends Component {
     this.props.getProductsInCart()
   }
   incrementFunction(item) {
-    console.log('qty incremented!')
-
     this.props.updateQuantity({
       id: item.id,
       quantity: item.quantity + 1
     })
   }
   decrementFunction(item) {
-    console.log('qty decremented')
     this.props.updateQuantity({
       id: item.id,
       quantity: item.quantity - 1
     })
   }
   render() {
-    console.log('logging cart Props', this.props)
     let subTotal = 0
-    this.props.cart.forEach(function(item) {
+    this.props.cart.forEach(item => {
+      if (item.quantity === 0) {
+        this.props.removeProductFromCart(item.id)
+      }
       subTotal += item.price * item.quantity
     })
     return (
