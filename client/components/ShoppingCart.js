@@ -50,7 +50,7 @@ export class ShoppingCart extends Component {
                   <img src={item.imgUrl} className="tempPic" />
                   <div>
                     <h4>{item.title}</h4>
-                    <p>Description: {item.description}</p>
+                    <p>Description!: {item.description}</p>
                     <h5>${(item.price / 100).toFixed(2)}</h5>
                     <pre />
                     <p className="qty">
