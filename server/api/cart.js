@@ -5,7 +5,9 @@ const {adminsOnly} = require('./utils')
 //Get all items currently in users cart
 router.get('/', async (req, res, next) => {
   try {
-    const allCartItems = await Order.getAllItemsInCart(req.user.id)
+    const allCartItems = await Order.getAllItemsInCart(
+      req.user.dataValues.cartId
+    )
 
     res.json(allCartItems)
   } catch (error) {
@@ -33,7 +35,8 @@ router.post('/', async (req, res, next) => {
 //Get all items currently in a users cart
 router.get('/:id', adminsOnly, async (req, res, next) => {
   try {
-    const allCartItems = await Order.getAllItemsInCart(req.params.id)
+    const user = await User.findByPk(req.params.id)
+    const allCartItems = await Order.getAllItemsInCart(user.dataValues.cartId)
 
     res.json(allCartItems)
   } catch (error) {
@@ -47,24 +50,13 @@ router.get('/:id', adminsOnly, async (req, res, next) => {
 
 //Remove from cart
 router.delete('/:id', async (req, res, next) => {
-  const {userId} = req.session
+  const productId = req.params.id
   try {
-    const orders = await Order.findAll({
-      where: {
-        userId: userId,
-        isCart: true
-      },
-      include: {
-        model: Product,
-        where: {
-          id: req.params.id
-        }
-      }
-    })
-    for (let i = 0; i < orders.length; i++) {
-      await orders[i].destroy()
-    }
-    res.json(orders)
+    const cart = await Order.findByPk(req.user.dataValues.cartId)
+    const product = await Product.findByPk(productId)
+    cart.removeProduct(product)
+
+    res.sendStatus(200)
   } catch (error) {
     console.error(
       'An error occurred in the remove from cart delete route. Error: ',
@@ -78,10 +70,9 @@ router.delete('/:id', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   const productId = req.params.id
   const quantityToAdd = req.body.quantity
-  const userId = req.user.id
   try {
     const updatedOrder = await Order.updateQuantity(
-      userId,
+      req.user.dataValues.cartId,
       productId,
       quantityToAdd
     )
@@ -98,13 +89,20 @@ router.put('/:id', async (req, res, next) => {
 //Add to cart
 router.post('/:id', async (req, res, next) => {
   try {
+    const userId = req.user.dataValues.id
     const productId = req.params.id
     const quantityToBuy = req.body.quantity
     const foundProduct = await Product.findByPk(productId)
     if (quantityToBuy > foundProduct.dataValues.stock) {
       res.send('Sorry not enough currently in stock')
     } else {
-      const newOrder = await Order.create()
+      const cart = await Order.findByPk(req.user.dataValues.cartId)
+      await cart.addProduct(foundProduct)
+      if (quantityToBuy > 1) {
+        await Order.updateQuantity(userId, productId, quantityToBuy)
+      }
+      //consider adding attributes to the found product
+      //we could then use object spread here instead
       const cartItem = {
         id: foundProduct.dataValues.id,
         title: foundProduct.dataValues.title,
@@ -113,8 +111,6 @@ router.post('/:id', async (req, res, next) => {
         imgUrl: foundProduct.dataValues.imgUrl,
         quantity: quantityToBuy
       }
-      await newOrder.addProduct(foundProduct)
-      await newOrder.setUser(req.session.userId)
       res.json(cartItem)
     }
   } catch (error) {
