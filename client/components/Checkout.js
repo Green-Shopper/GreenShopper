@@ -61,6 +61,7 @@ export class ShoppingCart extends Component {
           <h3>Total</h3>
           <h3>${subTotal}</h3>
         </div>
+        <button type="button">Checkout</button>
         <StripeCheckout
           stripeKey="pk_test_swgZVNKN4tyqgBXKrWl8R5HW000gFy8jra"
           // token={handleToken}
