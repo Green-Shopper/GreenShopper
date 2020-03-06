@@ -18,6 +18,15 @@ router.get('/', async (req, res, next) => {
     next(error)
   }
 })
+// router.put('/', async (req, res, next) => {
+//   try{
+//       let cart = await Order.getAllItemsInCart(req.user.id)
+//       let updatedCart = await cart.update(req.body)
+//       res.status(202).json(updatedCart)
+//   }catch(err){
+//     next(err)
+//   }
+// })
 
 //Get all items currently in a users cart
 //remember to add adminsOnly
@@ -37,7 +46,8 @@ router.get('/:id', async (req, res, next) => {
 
 //Remove from cart
 router.delete('/:id', async (req, res, next) => {
-  const {userId} = req.session
+  const userId = req.session.passport.user
+  console.log('logging req.session = ', req.session)
   try {
     const orders = await Order.findAll({
       where: {
@@ -104,8 +114,11 @@ router.post('/:id', async (req, res, next) => {
         imgUrl: foundProduct.dataValues.imgUrl,
         quantity: quantityToBuy
       }
+
       await newOrder.addProduct(foundProduct)
-      await newOrder.setUser(req.session.userId)
+      //changed req.session.userId to req.user.id
+      await newOrder.setUser(req.user.id)
+
       res.json(cartItem)
     }
   } catch (error) {

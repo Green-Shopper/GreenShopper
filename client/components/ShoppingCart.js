@@ -1,28 +1,42 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {deleteProductThunk} from '../store/products'
-import {getAllCartItemsThunk} from '../store/cart'
+import {
+  getAllCartItemsThunk,
+  removeProductFromCartThunk,
+  updateProductQtyInCart
+} from '../store/cart'
 import {Link} from 'react-router-dom'
 
-const incrementFunction = function() {
-  console.log('qty incremented!')
-}
-const decrementFunction = function() {
-  console.log('qty decremented')
-}
-const removeFunction = function() {
-  console.log('removedItem!')
-}
-
 export class ShoppingCart extends Component {
+  constructor() {
+    super()
+    this.incrementFunction = this.incrementFunction.bind(this)
+    this.decrementFunction = this.decrementFunction.bind(this)
+  }
+
   componentDidMount() {
     this.props.getProductsInCart()
+  }
+  incrementFunction(item) {
+    console.log('qty incremented!')
+
+    this.props.updateQuantity({
+      id: item.id,
+      quantity: item.quantity + 1
+    })
+  }
+  decrementFunction(item) {
+    console.log('qty decremented')
+    this.props.updateQuantity({
+      id: item.id,
+      quantity: item.quantity - 1
+    })
   }
   render() {
     console.log('logging cart Props', this.props)
     let subTotal = 0
     this.props.cart.forEach(function(item) {
-      subTotal += item.price
+      subTotal += item.price * item.quantity
     })
     return (
       <div className="shoppingComponent">
@@ -30,7 +44,7 @@ export class ShoppingCart extends Component {
         <Link to="/products">Continue Shopping</Link>
         <h3>{this.props.firstName + ' ' + this.props.lastName + "'s Cart"}</h3>
         <span>
-          {this.props.cart.map(function(item) {
+          {this.props.cart.map(item => {
             return (
               <div key={item.id}>
                 <div className="cartProducts">
@@ -38,14 +52,20 @@ export class ShoppingCart extends Component {
                   <div>
                     <h4>{item.title}</h4>
                     <p>Description: {item.description}</p>
-                    <h5>${item.price}</h5>
+                    <h5>${(item.price / 100).toFixed(2)}</h5>
                     <pre />
                     <p className="qty">
-                      <span className="spanStyle" onClick={decrementFunction}>
+                      <span
+                        className="spanStyle"
+                        onClick={() => this.decrementFunction(item)}
+                      >
                         -
                       </span>
-                      1
-                      <span className="spanStyle" onClick={incrementFunction}>
+                      {item.quantity}
+                      <span
+                        className="spanStyle"
+                        onClick={() => this.incrementFunction(item)}
+                      >
                         +
                       </span>
                     </p>
@@ -55,7 +75,9 @@ export class ShoppingCart extends Component {
                       <button
                         type="button"
                         className="shoppingRemove"
-                        onClick={removeFunction}
+                        onClick={() =>
+                          this.props.removeProductFromCart(item.id)
+                        }
                       >
                         X
                       </button>
@@ -68,7 +90,7 @@ export class ShoppingCart extends Component {
         </span>
         <div className="subtotalStyle">
           <h3>Subtotal</h3>
-          <h3>${subTotal}</h3>
+          <h3>${(subTotal / 100).toFixed(2)}</h3>
         </div>
         <pre>
           <button type="submit">
@@ -88,8 +110,9 @@ const mapState = state => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    deleteProduct: () => dispatch(deleteProductThunk()),
-    getProductsInCart: () => dispatch(getAllCartItemsThunk())
+    getProductsInCart: () => dispatch(getAllCartItemsThunk()),
+    removeProductFromCart: id => dispatch(removeProductFromCartThunk(id)),
+    updateQuantity: item => dispatch(updateProductQtyInCart(item))
   }
 }
 

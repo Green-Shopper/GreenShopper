@@ -4,7 +4,8 @@ import {fetchSingleProductThunk} from '../store/singleProduct'
 import {
   addProductToCartThunk,
   removeProductFromCartThunk,
-  updateProductQtyInCart
+  updateProductQtyInCart,
+  getAllCartItemsThunk
 } from '../store/cart'
 import {Link} from 'react-router-dom'
 
@@ -13,17 +14,26 @@ export class SingleProduct extends Component {
     const id = this.props.match.params.id
     console.log('this.props is: ', this.props)
     this.props.fetchSingleProduct(id)
+    this.props.getAllCartItems()
   }
 
   clickHandler(id, cart) {
     console.log('id, and cart are: ', id, cart)
-    let itemInCart
+    let itemInCart = []
     if (cart.length > 0) {
-      itemInCart = cart.filter(cartItem => cartItem.id !== id)
+      //changed !== to ===
+      console.log('LOGGING CART', cart)
+      // itemInCart = cart.filter(cartItem => cartItem.id === id);
+      for (let i = 0; i < cart.length; i++) {
+        let cartElement = cart[i]
+        if (cartElement.id === Number(id)) {
+          itemInCart.push(cartElement)
+        }
+      }
     }
-    console.log('In the cart now: ', cart)
-    if (itemInCart) {
-      console.log('itemInCart is: ', itemInCart[0].quantity)
+    console.log('In the cart now: ', cart, 'logging itemInCart', itemInCart)
+    if (itemInCart.length) {
+      // console.log('itemInCart is: ', itemInCart[0].quantity)
       this.props.updateQuantity({
         id,
         quantity: itemInCart[0].quantity + 1
@@ -100,7 +110,8 @@ const mapDispatchToProps = dispatch => ({
   addToCart: id => dispatch(addProductToCartThunk(id)),
   removeFromCart: id => dispatch(removeProductFromCartThunk(id)),
   //updateInfo needs to be an object with productId and the new quantity to buy {productId, quantity}
-  updateQuantity: updateInfo => dispatch(updateProductQtyInCart(updateInfo))
+  updateQuantity: updateInfo => dispatch(updateProductQtyInCart(updateInfo)),
+  getAllCartItems: () => dispatch(getAllCartItemsThunk())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct)
