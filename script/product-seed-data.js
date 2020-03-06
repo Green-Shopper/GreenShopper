@@ -4,7 +4,7 @@ const productsSeedData = [
     description: `Colorful and bold with hints of red on two-toned leaves`,
     price: 3500,
     imgUrl: 'imgs/red-prayer-plant-stone.jpg',
-    stock: 25,
+    stock: 15,
     tag: 'bright light'
   },
   {
