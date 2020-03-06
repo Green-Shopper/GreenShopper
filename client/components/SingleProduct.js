@@ -18,26 +18,20 @@ export class SingleProduct extends Component {
   }
 
   clickHandler(id, cart) {
-    console.log('id, and cart are: ', id, cart)
     let itemInCart = []
+    console.log('ITEM IN CART:', itemInCart)
     if (cart.length > 0) {
       //changed !== to ===
       console.log('LOGGING CART', cart)
       // itemInCart = cart.filter(cartItem => cartItem.id === id);
       for (let i = 0; i < cart.length; i++) {
         let cartElement = cart[i]
+        console.log('CART EL', cartElement)
         if (cartElement.id === Number(id)) {
           itemInCart.push(cartElement)
         }
       }
     }
-    console.log('In the cart now: ', cart, 'logging itemInCart', itemInCart)
-    console.log(
-      'logging ID',
-      id,
-      'logging quantity',
-      itemInCart[0].quantity + 1
-    )
     if (itemInCart.length) {
       this.props.updateQuantity({
         id,
