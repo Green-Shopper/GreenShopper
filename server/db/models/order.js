@@ -32,7 +32,7 @@ Order.getAllItemsInCart = async function(cartId) {
 Order.updateQuantity = async function(orderId, productId, newQty) {
   const cartItem = await OrderSummary.findOne({
     where: {
-      orderId: 57,
+      orderId: 53,
       productId: productId
     }
   })
