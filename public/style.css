@@ -28,6 +28,10 @@ form div {
   object-fit: cover;
 }
 
+.user-home-padding {
+  padding: 20px 90px 100px 90px;
+}
+
 .container-padding {
   padding: 40px 0px 0px 0px;
 }
