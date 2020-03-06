@@ -1,6 +1,6 @@
 import React from 'react'
 // import {Redirect} from 'react-router-dom'
-import ShoppingCart from './ShoppingCart'
+
 import {Link} from 'react-router-dom'
 // import {connect} from 'react-redux'
 // import {fetchUsersThunk} from '../store/allUsers'

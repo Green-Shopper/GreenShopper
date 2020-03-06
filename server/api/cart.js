@@ -19,6 +19,8 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+//remember to add adminsOnly
+// router.get('/:id', async (req, res, next) => {
 //Get new cart
 router.post('/', async (req, res, next) => {
   try {
@@ -50,6 +52,8 @@ router.get('/:id', adminsOnly, async (req, res, next) => {
 
 //Remove from cart
 router.delete('/:id', async (req, res, next) => {
+  // const userId = req.session.passport.user
+  console.log('logging req.session = ', req.session)
   const productId = req.params.id
   try {
     const cart = await Order.findByPk(req.user.dataValues.cartId)
@@ -88,10 +92,15 @@ router.put('/:id', async (req, res, next) => {
 router.post('/:id', async (req, res, next) => {
   try {
     const userId = req.user.dataValues.id
+    console.log('Loigging UserID!', userId)
     const productId = req.params.id
+    console.log('Logging productId', productId)
     const quantityToBuy = req.body.quantity
+    console.log('Logging QTY!', quantityToBuy)
     const foundProduct = await Product.findByPk(productId)
+
     if (quantityToBuy > foundProduct.dataValues.stock) {
+      console.log('firing if')
       res.send('Sorry not enough currently in stock')
     } else {
       const cart = await Order.findByPk(req.user.dataValues.cartId)
@@ -109,6 +118,11 @@ router.post('/:id', async (req, res, next) => {
         imgUrl: foundProduct.dataValues.imgUrl,
         quantity: quantityToBuy
       }
+
+      // await newOrder.addProduct(foundProduct)
+      // //changed req.session.userId to req.user.id
+      // await newOrder.setUser(req.user.id)
+      console.log('cartItem logging', cartItem.title)
       res.json(cartItem)
     }
   } catch (error) {
