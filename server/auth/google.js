@@ -42,10 +42,10 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
           where: {googleId},
           defaults: {email, imgUrl, firstName, lastName, fullName}
         })
-        await user.createOrder()
-        const cart = await user.createOrder()
-        const cartId = cart.dataValues.id
-        await user.updateUser({where: {cartId: cartId}})
+        if (!user.cartId) {
+          const cart = await Order.create()
+          await user.update({cartId: cart.id})
+        }
         done(null, user)
       } catch (error) {
         done(error)
