@@ -39,3 +39,35 @@ form div {
 #allUsersHeading {
   text-align: center;
 }
+.qty {
+  border: 1px solid black;
+  padding: 9px 16px 10px;
+  text-align: center;
+  white-space: nowrap;
+  min-width: 90px;
+  display: inline-flex;
+  justify-content: space-around;
+}
+
+.shoppingRemove {
+  margin: 8px;
+}
+.shoppingComponent {
+  text-align: center;
+  padding: 5%;
+}
+.tempPic {
+  height: 20%;
+  width: 20%;
+}
+.subtotalStyle {
+  display: flex;
+  justify-content: space-around;
+}
+
+.cartProducts {
+  display: flex;
+  justify-content: space-around;
+  margin: 7%;
+  box-sizing: border-box;
+}

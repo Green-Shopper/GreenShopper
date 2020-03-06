@@ -20,6 +20,8 @@ const getUser = user => ({type: GET_USER, user})
 const removeUser = () => ({type: REMOVE_USER})
 const updateUser = (id, update) => ({type: UPDATE_USER, id, update})
 
+//getbyidaction
+
 /**
  * THUNK CREATORS
  */

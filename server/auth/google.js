@@ -29,7 +29,7 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
 
   const strategy = new GoogleStrategy(
     googleConfig,
-    (token, refreshToken, profile, done) => {
+    async (token, refreshToken, profile, done) => {
       const googleId = profile.id
       const email = profile.emails[0].value
       const imgUrl = profile.photos[0].value
@@ -37,12 +37,18 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
       const lastName = profile.name.familyName
       const fullName = profile.displayName
 
-      User.findOrCreate({
-        where: {googleId},
-        defaults: {email, imgUrl, firstName, lastName, fullName}
-      })
-        .then(([user]) => done(null, user))
-        .catch(done)
+      try {
+        const [user] = await User.findOrCreate({
+          where: {googleId},
+          defaults: {email, imgUrl, firstName, lastName, fullName}
+        })
+        await user.createCart()
+        // const cartId = req.user.dataValues.cartId
+        // await user.updateUser({where: {cartId: cartId}})
+        done(null, user)
+      } catch (error) {
+        done(error)
+      }
     }
   )
 
