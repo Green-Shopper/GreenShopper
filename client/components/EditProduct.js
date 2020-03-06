@@ -48,7 +48,7 @@ export class EditProduct extends Component {
           <div className="card horizontal">
             <div className="card-image">
               <img
-                src={this.props.singleProduct.imgUrl}
+                src={`../../${this.props.singleProduct.imgUrl}`}
                 className="img-resize"
                 alt="Image of flower"
               />
