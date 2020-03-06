@@ -46,12 +46,12 @@ export class UserHome extends Component {
   }
 
   render() {
-    const {firstName, imgUrl, googleId, email} = this.props
+    const {firstName, imgUrl, googleId, email, isAdmin} = this.props
     return (
       <div>
         <section className="user-home-padding">
           <div className="row">
-            <UserNav googleId={googleId} />
+            <UserNav googleId={googleId} isAdmin={isAdmin} />
             <div className="col s9 l9" id="user-home-padding">
               <h3 className="center grey-text text-darken-1">
                 Welcome, {firstName}!
@@ -156,7 +156,8 @@ const mapState = state => {
     lastName: state.user.lastName,
     imgUrl: state.user.imgUrl,
     googleId: state.user.googleId,
-    id: state.user.id
+    id: state.user.id,
+    isAdmin: state.user.isAdmin
   }
 }
 
