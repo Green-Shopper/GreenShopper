@@ -28,8 +28,26 @@ form div {
   object-fit: cover;
 }
 
+.user-home-padding {
+  padding: 20px 90px 100px 90px;
+}
+
 .container-padding {
   padding: 40px 0px 0px 0px;
+}
+
+@media (min-width: 700px) {
+  .products {
+    padding: 40px 40px 100px 40px;
+  }
+  .product-list {
+    padding: 20px;
+  }
+}
+
+.product-img {
+  height: 520px;
+  object-fit: cover;
 }
 
 #allUsersHeading {

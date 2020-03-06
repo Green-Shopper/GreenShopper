@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {
   getAllCartItemsThunk,
   removeProductFromCartThunk,
-  updateProductQtyInCart
+  updateProductQtyInCartThunk
 } from '../store/cart'
 import {Link} from 'react-router-dom'
 
@@ -111,7 +111,7 @@ const mapDispatchToProps = dispatch => {
   return {
     getProductsInCart: () => dispatch(getAllCartItemsThunk()),
     removeProductFromCart: id => dispatch(removeProductFromCartThunk(id)),
-    updateQuantity: item => dispatch(updateProductQtyInCart(item))
+    updateQuantity: item => dispatch(updateProductQtyInCartThunk(item))
   }
 }
 

@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 const Product = require('./product')
+const OrderSummary = require('./order-summary')
 
 const Order = db.define('order', {
   isCart: {
@@ -9,59 +10,41 @@ const Order = db.define('order', {
   }
 })
 
-Order.getAllItemsInCart = async function(userId) {
-  console.log('Get all items class method userId: ', userId)
-  const dbOrderData = await Order.findAll({
-    where: {
-      userId: userId,
-      isCart: true
-    },
-    include: {
-      model: Product
-    }
-  })
+Order.getAllItemsInCart = async function(cartId) {
+  const cart = await Order.findByPk(cartId)
+  const allOrders = await cart.getProducts()
 
-  console.log('dbOrderData is: ', dbOrderData)
-
-  const allCartItems = dbOrderData.map(order => {
-    const {id, title, description, price, imgUrl} = order.dataValues.products[0]
+  const allCartItems = allOrders.map(order => {
+    const {id, title, description, price, imgUrl} = order.dataValues
     const cartItem = {
       id: id,
       title: title,
       description: description,
       price: price,
       imgUrl: imgUrl,
-      quantity: order.products[0].dataValues.orderSummary.dataValues.quantity
+      quantity: order.dataValues.orderSummary.dataValues.quantity
     }
     return cartItem
   })
   return allCartItems
 }
 
-Order.updateQuantity = async function(userId, productId, newQty) {
-  const cartItem = await Order.findOne({
+Order.updateQuantity = async function(orderId, productId, newQty) {
+  const cartItem = await OrderSummary.findOne({
     where: {
-      userId: userId,
-      isCart: true
-    },
-    include: {
-      model: Product,
-      where: {
-        id: productId
-      }
+      orderId: 53,
+      productId: productId
     }
   })
-  const orderSummary = cartItem.dataValues.products[0].orderSummary
-  await orderSummary.update({
+  const product = await Product.findByPk(productId)
+
+  await cartItem.update({
     quantity: newQty
   })
-  const {
-    id,
-    title,
-    description,
-    price,
-    imgUrl
-  } = cartItem.dataValues.products[0]
+
+  //consider adding attributes to the found product
+  //we could then use object spread here instead
+  const {id, title, description, price, imgUrl} = product.dataValues
   const updatedOrder = {
     id: id,
     title: title,

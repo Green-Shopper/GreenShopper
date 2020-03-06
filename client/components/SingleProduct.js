@@ -4,7 +4,7 @@ import {fetchSingleProductThunk} from '../store/singleProduct'
 import {
   addProductToCartThunk,
   removeProductFromCartThunk,
-  updateProductQtyInCart,
+  updateProductQtyInCartThunk,
   getAllCartItemsThunk
 } from '../store/cart'
 import {Link} from 'react-router-dom'
@@ -32,6 +32,12 @@ export class SingleProduct extends Component {
       }
     }
     console.log('In the cart now: ', cart, 'logging itemInCart', itemInCart)
+    console.log(
+      'logging ID',
+      id,
+      'logging quantity',
+      itemInCart[0].quantity + 1
+    )
     if (itemInCart.length) {
       this.props.updateQuantity({
         id,
@@ -52,7 +58,7 @@ export class SingleProduct extends Component {
           <div className="card horizontal">
             <div className="card-image">
               <img
-                src={product.imgUrl}
+                src={`../../${product.imgUrl}`}
                 className="img-resize"
                 alt="Image of flower"
               />
@@ -109,7 +115,9 @@ const mapDispatchToProps = dispatch => ({
   addToCart: id => dispatch(addProductToCartThunk(id)),
   removeFromCart: id => dispatch(removeProductFromCartThunk(id)),
   //updateInfo needs to be an object with productId and the new quantity to buy {productId, quantity}
-  updateQuantity: updateInfo => dispatch(updateProductQtyInCart(updateInfo)),
+
+  updateQuantity: updateInfo =>
+    dispatch(updateProductQtyInCartThunk(updateInfo)),
   getAllCartItems: () => dispatch(getAllCartItemsThunk())
 })
 
