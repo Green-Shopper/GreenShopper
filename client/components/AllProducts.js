@@ -1,6 +1,10 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchProductsThunk, deleteProductThunk} from '../store/products'
+import {
+  fetchProductsThunk,
+  deleteProductThunk,
+  sortedProducts
+} from '../store/products'
 import {Link} from 'react-router-dom'
 import NewProductForm from './NewProductForm'
 import me from '../store/user'
@@ -12,6 +16,7 @@ export class AllProducts extends Component {
 
   render() {
     const {products, isAdmin} = this.props
+    console.log(this.state)
     return (
       <div>
         <section className="products">
@@ -24,18 +29,37 @@ export class AllProducts extends Component {
                   <br />
                   <div className="row">
                     <div className="col s12 l4">
-                      <Link to="/products">
+                      <Link
+                        to="/products"
+                        onClick={() => this.props.sortProducts('low light')}
+                      >
                         <i className="fas fa-cloud" /> Low light
                       </Link>
                     </div>
                     <div className="col s12 l4">
-                      <Link to="/products">
+                      <Link
+                        to="/products"
+                        onClick={() => this.props.sortProducts('medium light')}
+                      >
                         <i className="fas fa-adjust" /> Medium Light
                       </Link>
                     </div>
                     <div className="col s12 l4">
-                      <Link to="/products">
-                        <i className="fas fa-sun" /> High Light
+                      <Link
+                        to="/products"
+                        onClick={() => this.props.sortProducts('bright light')}
+                      >
+                        <i className="fas fa-sun" /> Bright Light
+                      </Link>
+                    </div>
+                    <div className="col s12 l12">
+                      <br />
+                      <Link
+                        to="/products"
+                        className="red-text"
+                        onClick={() => this.props.fetchProducts('low light')}
+                      >
+                        Clear Filters
                       </Link>
                     </div>
                   </div>
@@ -106,7 +130,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchProducts: () => dispatch(fetchProductsThunk()),
-  deleteProduct: productId => dispatch(deleteProductThunk(productId))
+  deleteProduct: productId => dispatch(deleteProductThunk(productId)),
+  sortProducts: tag => dispatch(sortedProducts(tag))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllProducts)

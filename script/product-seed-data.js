@@ -12,7 +12,7 @@ const productsSeedData = [
     description: `Fun, distinct, and hardy. This plant is low-maintenance and adaptable.`,
     price: 6500,
     imgUrl: 'imgs/ponytail-palm-clay-1500x1819.jpg',
-    stock: 50,
+    stock: 40,
     tag: 'low light'
   },
   {
