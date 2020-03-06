@@ -63,6 +63,20 @@ export const getAllCartItemsThunk = () => async dispatch => {
   }
 }
 
+export const getAllCartItemsForUserThunk = userId => async dispatch => {
+  console.log('getin users items userId: ', userId)
+  try {
+    const {data} = await axios(`/api/cart/${userId}`)
+    console.log('data recieved from the db: ', data)
+    dispatch(gotAllCartItems(data))
+  } catch (error) {
+    console.error(
+      'An error occurred in thunk while getting all cart items from db. ',
+      error
+    )
+  }
+}
+
 export const getNewCartThunk = () => async dispatch => {
   try {
     const {data} = await axios.post('/api/cart')
@@ -88,7 +102,6 @@ export const removeProductFromCartThunk = productId => async dispatch => {
 export const updateProductQtyInCartThunk = updateInfo => async dispatch => {
   try {
     const {data} = await axios.put(`/api/cart/${updateInfo.id}`, updateInfo)
-    console.log('data recieved back from api: ', data)
     dispatch(updatedProductQtyInCart(data))
   } catch (error) {
     console.error(
