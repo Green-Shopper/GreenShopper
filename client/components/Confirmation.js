@@ -3,35 +3,14 @@ import {connect} from 'react-redux'
 import {deleteProductThunk} from '../store/products'
 import {getAllCartItemsThunk} from '../store/cart'
 import {Link} from 'react-router-dom'
-import StripeCheckout from 'react-stripe-checkout'
-import {toast} from 'react-toastify'
-import axios from 'axios'
 
-export class ShoppingCart extends Component {
+export class Confirmation extends Component {
   componentDidMount() {
     this.props.getProductsInCart()
   }
 
   render() {
     console.log('PROPS', this.props)
-    // Stripe implementation ========
-    // toast.configure()
-    // const handleToken = async token => {
-    //   const response = await axios.post(
-    //     'http://localhost:8080/shoppingcart/checkout',
-    //     {
-    //       token
-    //     }
-    //   )
-    //   const {status} = response.data
-    //   if (status === 'success') {
-    //     toast('Success!, Check email for details', {type: 'success'})
-    //   } else {
-    //     toast('Something went wrong', {type: 'error'})
-    //   }
-    // }
-
-    //Stripe implementation ========
 
     let subTotal = 0
     this.props.cart.forEach(function(item) {
@@ -83,4 +62,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapState, mapDispatchToProps)(ShoppingCart)
+export default connect(mapState, mapDispatchToProps)(Confrimation)

@@ -7,7 +7,7 @@ import StripeCheckout from 'react-stripe-checkout'
 import {toast} from 'react-toastify'
 import axios from 'axios'
 
-export class ShoppingCart extends Component {
+export class Checkout extends Component {
   componentDidMount() {
     this.props.getProductsInCart()
   }
@@ -88,4 +88,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapState, mapDispatchToProps)(ShoppingCart)
+export default connect(mapState, mapDispatchToProps)(Checkout)
