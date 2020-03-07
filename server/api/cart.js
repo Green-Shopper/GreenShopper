@@ -129,4 +129,27 @@ router.post('/:id', async (req, res, next) => {
     next(error)
   }
 })
+
+//Update cart status to false
+router.put('/checkout', async (req, res, next) => {
+  try {
+    const cartId = req.user.dataValues.cartId
+    const foundOrder = await Order.findByPk(cartId)
+    foundOrder.update({isCart: false})
+    res.json(foundOrder)
+  } catch (error) {
+    next(error)
+  }
+})
+
+//Create a new cart
+router.post('/checkout', async (req, res, next) => {
+  try {
+    const newCart = await Order.Create()
+    res.json(newCart)
+  } catch (error) {
+    next(error)
+  }
+})
+
 module.exports = router
