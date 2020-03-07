@@ -7,7 +7,6 @@ import {
 } from '../store/products'
 import {Link} from 'react-router-dom'
 import {v4 as uuidv4} from 'uuid'
-import {NewProductForm} from './NewProductForm'
 
 export class AllProducts extends Component {
   componentDidMount() {
@@ -19,7 +18,6 @@ export class AllProducts extends Component {
     console.log(this.state)
     return (
       <div>
-        <NewProductForm />
         <section className="products">
           <div className="row">
             {/* product nav start */}

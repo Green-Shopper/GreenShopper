@@ -25,73 +25,105 @@ export class NewProductForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    console.log('PROPS', this.props)
-    this.props.add(this.state)
+    this.props.addNewProduct(this.state)
+    //Below is resetting the state for the fields of the form
+    this.setState({
+      title: '',
+      description: '',
+      price: '',
+      imgUrl: '',
+      stock: '',
+      tag: ''
+    })
   }
 
   render() {
     return (
       <div className="main-header">
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Title:
-            <input
-              type="text"
-              name="title"
-              onChange={this.handleChange}
-              value={this.state.title}
-            />
-          </label>
+        <div className="showcase container">
+          <div className="row">
+            <div className="col s12 m10 offset-m1">
+              <div className="card-panel grey-text">
+                <form onSubmit={this.handleSubmit}>
+                  <label>
+                    Title:
+                    <input
+                      type="text"
+                      name="title"
+                      onChange={this.handleChange}
+                      value={this.state.title}
+                      className="validate grey-text text-darken-2"
+                      required
+                    />
+                  </label>
 
-          <label>
-            Description:
-            <input
-              type="text"
-              name="description"
-              onChange={this.handleChange}
-              value={this.state.description}
-            />
-          </label>
+                  <label>
+                    Description:
+                    <input
+                      type="text"
+                      name="description"
+                      onChange={this.handleChange}
+                      value={this.state.description}
+                      className="validate grey-text text-darken-2"
+                      required
+                    />
+                  </label>
 
-          <label>
-            Price:
-            <input
-              type="number"
-              name="price"
-              onChange={this.handleChange}
-              value={this.state.price}
-            />
-          </label>
+                  <label>
+                    Price:
+                    <input
+                      type="number"
+                      name="price"
+                      onChange={this.handleChange}
+                      value={this.state.price}
+                      className="validate grey-text text-darken-2"
+                      required
+                    />
+                  </label>
 
-          <label>
-            Image URL:
-            <input
-              type="text"
-              name="imgUrl"
-              onChange={this.handleChange}
-              value={this.state.imgUrl}
-            />
-          </label>
+                  <label>
+                    Image URL:
+                    <input
+                      type="text"
+                      name="imgUrl"
+                      onChange={this.handleChange}
+                      value={this.state.imgUrl}
+                      className="validate grey-text text-darken-2"
+                      required
+                    />
+                  </label>
 
-          <label>
-            Stock:
-            <input
-              type="number"
-              name="stock"
-              onChange={this.handleChange}
-              value={this.state.stock}
-            />
-          </label>
-          <label>
-            Tag: (low light, medium light, bright light)
-            <input type="text" name="tag" onChange={this.handleChange} />
-          </label>
-          <br />
-          <br />
-          <button className="btn" type="submit">
-            Add Product
-          </button>
-        </form>
+                  <label>
+                    Stock:
+                    <input
+                      type="number"
+                      name="stock"
+                      onChange={this.handleChange}
+                      value={this.state.stock}
+                      className="validate grey-text text-darken-2"
+                      required
+                    />
+                  </label>
+                  <label>
+                    Tag: (low light, medium light, bright light)
+                    <input
+                      type="text"
+                      name="tag"
+                      onChange={this.handleChange}
+                      value={this.state.tag}
+                      className="validate grey-text text-darken-2"
+                    />
+                  </label>
+                  <br />
+                  <br />
+                  <button className="btn" type="submit">
+                    Add Product
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
@@ -102,7 +134,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  add: newProduct => dispatch(addProductThunk(newProduct))
+  addNewProduct: newProduct => dispatch(addProductThunk(newProduct))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewProductForm)

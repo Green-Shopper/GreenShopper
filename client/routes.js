@@ -13,7 +13,7 @@ import {fetchUsersThunk} from './store/allUsers'
 import {getAllCartItemsThunk} from './store/cart'
 import EditProduct from './components/EditProduct'
 import Checkout from './components/Checkout'
-import {NewProductForm} from './components/NewProductForm'
+import NewProductForm from './components/NewProductForm'
 
 /**
  * COMPONENT
