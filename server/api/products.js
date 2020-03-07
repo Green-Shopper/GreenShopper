@@ -29,7 +29,7 @@ router.get('/:id', async (req, res, next) => {
 })
 
 //Add product to store
-router.post('/', adminsOnly, async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
     const newProduct = await Product.create(req.body)
     if (!newProduct) {
