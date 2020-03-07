@@ -1,33 +1,45 @@
 'use strict'
 
 const db = require('../server/db')
-const {User, Product, Order, OrderSummary} = require('../server/db/models')
+const {User, Product, Order} = require('../server/db/models')
 const productsSeedData = require('./product-seed-data')
 const usersSeedData = require('./user-seed-data')
 const ordersSeedData = require('./order-seed-data')
 
+const log = []
 async function seed() {
   async function assignOrdersToUsers(orders, users) {
     const ordersLen = orders.length
     const usersLen = users.length
     let userAtIndex = 0
     let ordersIndex = 0
-
     //while there are unassigned orders we continue this loop
     //on each iteration we assign the order to the next user in line
     //once we reach the end of the users array we start at the beggining of the array again
     while (ordersIndex < ordersLen) {
       userAtIndex = userAtIndex === usersLen ? 0 : userAtIndex
-
+      log.push(`user: ${userAtIndex}, order: ${ordersIndex}`)
       await orders[ordersIndex].setUser(users[userAtIndex])
       userAtIndex++
       ordersIndex++
+    }
+    //assignment order is off with out this
+    await orders[0].setUser(users[0])
+  }
+
+  async function assignCartIdsTOUsers(users, orders) {
+    for (let i = 0; i < users.length; i++) {
+      await users[i].update({cartId: orders[i].dataValues.id})
     }
   }
 
   async function assignProductsToOrders(products, orders) {
     await orders.forEach(async order => {
-      await order.addProduct(products[Math.ceil(Math.random() * 25)])
+      let productNum = Math.floor(Math.random() * 8)
+      while (productNum < products.length) {
+        await order.addProduct(products[productNum])
+        productNum += Math.floor(Math.random() * 6)
+      }
     })
   }
   await db.sync({force: true})
@@ -51,10 +63,13 @@ async function seed() {
     })
   )
 
+  orders.sort((a, b) => a.dataValues.id - b.dataValues.id)
+  users.sort((a, b) => a.dataValues.id - b.dataValues.id)
   await assignProductsToOrders(products, orders)
   await assignOrdersToUsers(orders, users)
+  await assignCartIdsTOUsers(users, orders)
 
-  await orders[0].setUser(users[1])
+  console.log('>>>>>>log is: ', log)
   console.log(`seeded ${orders.length} orders`)
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${products.length} products`)
