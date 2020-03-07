@@ -40,7 +40,7 @@ export class ShoppingCart extends Component {
 
     return (
       <div className="shoppingComponent">
-        <h1>Order Summary</h1>
+        <h1>Thanks for your order {this.props.firstName}</h1>
         <span>
           {this.props.cart.map(function(item) {
             return (
@@ -62,12 +62,7 @@ export class ShoppingCart extends Component {
           <h3>Total</h3>
           <h3>${subTotal}</h3>
         </div>
-        <div>
-          <Link to="checkout/confirmation">Buy Now</Link>
-        </div>
-        <div>
-          <Link to="/products">Keep Shopping</Link>
-        </div>
+        <Link to="/products">Browse Products</Link>
       </div>
     )
   }
