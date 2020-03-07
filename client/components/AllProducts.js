@@ -6,8 +6,7 @@ import {
   sortedProducts
 } from '../store/products'
 import {Link} from 'react-router-dom'
-import NewProductForm from './NewProductForm'
-import me from '../store/user'
+import {v4 as uuidv4} from 'uuid'
 
 export class AllProducts extends Component {
   componentDidMount() {
@@ -73,7 +72,7 @@ export class AllProducts extends Component {
                 <div className="row">
                   {products.map(product => {
                     return (
-                      <div key={products.id} className="col s12 m6 l4">
+                      <div key={uuidv4()} className="col s12 m6 l4">
                         <div className="card">
                           <div className="card-image">
                             <Link to={`/products/${product.id}`}>
