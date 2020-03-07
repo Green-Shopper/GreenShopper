@@ -46,7 +46,7 @@ const productsReducers = (state = [], action) => {
     case FETCH_PRODUCTS:
       return [...action.products]
     case ADD_PRODUCT:
-      return [...state, action.newProduct]
+      return [action.newProduct]
     case DELETE_PRODUCT:
       return state.filter(product => product.id !== action.productId)
     case SORT_PRODUCTS:

@@ -14,6 +14,7 @@ import {getAllCartItemsThunk} from './store/cart'
 import EditProduct from './components/EditProduct'
 import Checkout from './components/Checkout'
 import NewProductForm from './components/NewProductForm'
+import ProductAdded from './components/productadded'
 
 /**
  * COMPONENT
@@ -42,6 +43,7 @@ class Routes extends Component {
             {/* <Route path="/home" component={UserHome} /> */}
             <Route path="/editproduct/:id" component={EditProduct} />
             <Route path="/addproduct/" component={NewProductForm} />
+            <Route path="/productadded/" component={ProductAdded} />
             <Route
               exact
               path="/users"
