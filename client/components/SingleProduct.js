@@ -5,7 +5,8 @@ import {
   addProductToCartThunk,
   removeProductFromCartThunk,
   updateProductQtyInCartThunk,
-  getAllCartItemsThunk
+  getAllCartItemsThunk,
+  gotAllCartItems
 } from '../store/cart'
 import {Link} from 'react-router-dom'
 
@@ -21,7 +22,9 @@ export class SingleProduct extends Component {
     const toastHTML = `
       <div>
         <p>Added to cart!</p>
-        <p>Qty ${quantity}: ${productName} in your cart</p>
+        <p>Qty ${quantity}: ${productName}${
+      quantity > 1 ? 's are' : ' is'
+    } in your cart</p>
       </div>`
     M.toast({
       html: toastHTML
@@ -32,7 +35,7 @@ export class SingleProduct extends Component {
     if (user.email) {
       this.addToUserCartHandler(id, cart, product)
     } else {
-      this.addToGuestCartHandler(id, product)
+      this.addToGuestCartHandler(product)
     }
   }
 
@@ -45,7 +48,6 @@ export class SingleProduct extends Component {
       // itemInCart = cart.filter(cartItem => cartItem.id === id);
       for (let i = 0; i < cart.length; i++) {
         let cartElement = cart[i]
-        console.log('CART EL', cartElement)
         if (cartElement.id === Number(id)) {
           itemInCart.push(cartElement)
         }
@@ -66,8 +68,47 @@ export class SingleProduct extends Component {
     }
   }
 
-  addToGuestCartHandler(id, product) {
-    console.log('Addin to the guest cart')
+  addToGuestCartHandler(product) {
+    const ls = window.localStorage
+    const itemToAdd = {
+      id: product.id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      imgUrl: product.imgUrl
+    }
+    let guestCart = JSON.parse(ls.getItem('cart'))
+    //if guestCart is undefined create an empty guestCart
+    if (!guestCart) {
+      guestCart = []
+    }
+    //cycle through items in cart and update quantity if
+    //the item is already in the cart
+    for (let i = 0; i < guestCart.length; i++) {
+      //+'s are used for type coercion
+      // const cartItem = JSON.parse(guestCart[i])
+      if (+guestCart[i].id === +itemToAdd.id) {
+        guestCart[i].quantity += 1
+        this.props.setGuestCartInStore(guestCart)
+        ls.setItem('cart', JSON.stringify(guestCart))
+        this.addToCartNotification(itemToAdd.title, guestCart[i].quantity)
+        return
+      }
+    }
+
+    //adding a new product to the cart here
+    const updatedCart = JSON.stringify([
+      ...guestCart,
+      {...itemToAdd, quantity: 1}
+    ])
+    ls.setItem('cart', updatedCart)
+    this.props.setGuestCartInStore(JSON.parse(updatedCart))
+    this.addToCartNotification(itemToAdd.title, 1)
+  }
+
+  clearGuestCart() {
+    window.localStorage.removeItem('cart')
+    console.log('cleared guest cart')
   }
 
   render() {
@@ -107,6 +148,9 @@ export class SingleProduct extends Component {
                     Add to Cart
                     <i className="material-icons right">shopping_cart</i>
                   </button>
+                  <button type="button" onClick={this.clearGuestCart}>
+                    clearGuestCart
+                  </button>
 
                   {isAdmin ? (
                     <Link
@@ -137,11 +181,12 @@ const mapDispatchToProps = dispatch => ({
   fetchSingleProduct: id => dispatch(fetchSingleProductThunk(id)),
   addToCart: id => dispatch(addProductToCartThunk(id)),
   removeFromCart: id => dispatch(removeProductFromCartThunk(id)),
-  //updateInfo needs to be an object with productId and the new quantity to buy {productId, quantity}
 
+  //updateInfo needs to be an object with productId and the new quantity to buy {productId, quantity}
   updateQuantity: updateInfo =>
     dispatch(updateProductQtyInCartThunk(updateInfo)),
-  getAllCartItems: () => dispatch(getAllCartItemsThunk())
+  getAllCartItems: () => dispatch(getAllCartItemsThunk()),
+  setGuestCartInStore: guestCart => dispatch(gotAllCartItems(guestCart))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct)
