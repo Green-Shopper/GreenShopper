@@ -1,7 +1,7 @@
 'use strict'
 
 const db = require('../server/db')
-const {User, Product, Order, OrderSummary} = require('../server/db/models')
+const {User, Product, Order} = require('../server/db/models')
 const productsSeedData = require('./product-seed-data')
 const usersSeedData = require('./user-seed-data')
 const ordersSeedData = require('./order-seed-data')
