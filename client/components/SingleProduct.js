@@ -17,9 +17,28 @@ export class SingleProduct extends Component {
     this.props.getAllCartItems()
   }
 
-  clickHandler(id, cart) {
+  addToCartNotification(productName, quantity) {
+    const toastHTML = `
+      <div>
+        <p>Added to cart!</p>
+        <p>Qty ${quantity}: ${productName} in your cart</p>
+      </div>`
+    M.toast({
+      html: toastHTML
+    })
+  }
+
+  chooseHandler(id, user, product, cart) {
+    if (user.email) {
+      this.addToUserCartHandler(id, cart, product)
+    } else {
+      this.addToGuestCartHandler(id, product)
+    }
+  }
+
+  addToUserCartHandler(id, cart, product) {
     let itemInCart = []
-    console.log('ITEM IN CART:', itemInCart)
+    console.log('ITEM IN CART:', product)
     if (cart.length > 0) {
       //changed !== to ===
       console.log('LOGGING CART', cart)
@@ -37,14 +56,23 @@ export class SingleProduct extends Component {
         id,
         quantity: itemInCart[0].quantity + 1
       })
+      this.addToCartNotification(
+        itemInCart[0].title,
+        itemInCart[0].quantity + 1
+      )
     } else {
       this.props.addToCart({id, quantity: 1})
+      this.addToCartNotification(product.title, 1)
     }
+  }
+
+  addToGuestCartHandler(id, product) {
+    console.log('Addin to the guest cart')
   }
 
   render() {
     const id = this.props.match.params.id
-    const {singleProduct, isAdmin, cart} = this.props
+    const {singleProduct, isAdmin, cart, user} = this.props
     const product = singleProduct ? singleProduct : {}
     return (
       <div className="container container-padding">
@@ -74,7 +102,7 @@ export class SingleProduct extends Component {
                   <button
                     className="btn waves-effect waves-light center"
                     type="button"
-                    onClick={() => this.clickHandler(id, cart)}
+                    onClick={() => this.chooseHandler(id, user, product, cart)}
                   >
                     Add to Cart
                     <i className="material-icons right">shopping_cart</i>
@@ -101,7 +129,8 @@ export class SingleProduct extends Component {
 const mapStateToProps = state => ({
   singleProduct: state.singleProduct,
   isAdmin: state.user.isAdmin,
-  cart: state.cart
+  cart: state.cart,
+  user: state.user
 })
 
 const mapDispatchToProps = dispatch => ({
