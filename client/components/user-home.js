@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {UserNav} from './user-nav'
 import {updateUserThunk} from '../store/user'
+import {getAllCartItemsThunk} from '../store/cart'
 
 /**
  * COMPONENT
@@ -30,6 +31,7 @@ export class UserHome extends Component {
       id: `${this.props.id}`,
       imgUrl: `${this.props.imgUrl}`
     })
+    this.props.getAllCartItems()
     // console.log('FIRSTNAME', this.props.firstName)
   }
 
@@ -162,7 +164,8 @@ const mapState = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  updateUser: (id, update) => dispatch(updateUserThunk(id, update))
+  updateUser: (id, update) => dispatch(updateUserThunk(id, update)),
+  getAllCartItems: () => dispatch(getAllCartItemsThunk())
 })
 
 export default connect(mapState, mapDispatchToProps)(UserHome)
