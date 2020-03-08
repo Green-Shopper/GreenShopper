@@ -16,6 +16,7 @@ import Checkout from './components/Checkout'
 import NewProductForm from './components/NewProductForm'
 import ProductAdded from './components/productadded'
 import Home from './components/Home'
+import Confirmation from './components/Confirmation'
 
 /**
  * COMPONENT
@@ -44,11 +45,6 @@ class Routes extends Component {
         />
         <Route
           exact
-          path="/users"
-          render={props => <AllUsers {...props} users={this.props.users} />}
-        />
-        <Route
-          exact
           path="/shoppingcart"
           render={props => <ShoppingCart {...props} cart={this.props.cart} />}
         />
@@ -56,6 +52,17 @@ class Routes extends Component {
           exact
           path="/shoppingcart/checkout"
           render={props => <Checkout {...props} cart={this.props.cart} />}
+        />
+        <Route
+          exact
+          path="/shoppingcart/checkout/confirmation"
+          render={props => (
+            <Confirmation
+              {...props}
+              cart={this.props.cart}
+              order={this.props.order}
+            />
+          )}
         />
         <Route
           exact
@@ -69,6 +76,11 @@ class Routes extends Component {
             {/* <Route path="/home" component={UserHome} /> */}
             <Route path="/editproduct/:id" component={EditProduct} />
             <Route path="/addproduct/" component={NewProductForm} />
+            <Route
+              exact
+              path="/users"
+              render={props => <AllUsers {...props} users={this.props.users} />}
+            />
             <Route path="/productadded/" component={ProductAdded} />
             <Route component={UserHome} />
           </Switch>
