@@ -13,7 +13,7 @@ export class Checkout extends Component {
   }
 
   render() {
-    console.log('PROPS', this.props)
+    console.log('CART ID', this.props.user.cartId)
     // Stripe implementation ========
     // toast.configure()
     // const handleToken = async token => {
