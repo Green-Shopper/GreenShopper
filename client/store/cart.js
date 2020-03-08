@@ -2,6 +2,7 @@ import axios from 'axios'
 
 //ACTION TYPES
 const ADD_PRODUCT_TO_CART = 'ADD_PRODUCT_TO_CART'
+const MERGE_CARTS = 'MERGE_CARTS'
 const REMOVE_PRODUCT_TO_CART = 'REMOVE_PRODUCT_TO_CART'
 const UPDATE_PRODUCT_QTY_IN_CART = 'UPDATE_PRODUCT_QTY_IN_CART'
 const GET_ALL_CART_ITEMS = 'GET_ALL_CART_ITEMS'
@@ -19,6 +20,11 @@ export const gotAllCartItems = cartItems => ({
 
 const gotNewCart = () => ({
   type: GET_NEW_CART
+})
+
+const mergedGuestAndUserCart = combinedCarts => ({
+  type: MERGE_CARTS,
+  combinedCarts
 })
 
 const removedProductFromCart = productId => ({
@@ -86,6 +92,21 @@ export const getNewCartThunk = () => async dispatch => {
   }
 }
 
+//this thunk takes in an object with both the guest and user carts
+//ex {guestCart: [], userCart: []}
+export const mergeGuestAndUserCartThunk = guestAndUserCarts => async dispatch => {
+  try {
+    const {data: mergedCarts} = await axios.patch(
+      '/api/cart',
+      guestAndUserCarts
+    )
+    console.log('data recieved from db', mergedCarts)
+    dispatch(mergedGuestAndUserCart(mergedCarts))
+  } catch (error) {
+    console.error('An error occurred in thunk while merging carts. ', error)
+  }
+}
+
 export const removeProductFromCartThunk = productId => async dispatch => {
   try {
     await axios.delete(`/api/cart/${productId}`)
@@ -125,6 +146,9 @@ const cartReducers = (state = initialState, action) => {
     }
     case GET_NEW_CART: {
       return []
+    }
+    case MERGE_CARTS: {
+      return [...action.combinedCarts]
     }
     case REMOVE_PRODUCT_TO_CART: {
       const previousCartCopy = []
