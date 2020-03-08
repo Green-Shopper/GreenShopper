@@ -14,6 +14,7 @@ import {getAllCartItemsThunk} from './store/cart'
 import EditProduct from './components/EditProduct'
 import Checkout from './components/Checkout'
 import {NewProductForm} from './components/NewProductForm'
+import Confirmation from './components/Confirmation'
 
 /**
  * COMPONENT
@@ -62,7 +63,24 @@ class Routes extends Component {
             <Route
               exact
               path="/shoppingcart/checkout"
-              render={props => <Checkout {...props} cart={this.props.cart} />}
+              render={props => (
+                <Checkout
+                  {...props}
+                  cart={this.props.cart}
+                  order={this.props.order}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/shoppingcart/checkout/confirmation"
+              render={props => (
+                <Confirmation
+                  {...props}
+                  cart={this.props.cart}
+                  order={this.props.order}
+                />
+              )}
             />
             <Route
               exact
