@@ -15,6 +15,7 @@ import EditProduct from './components/EditProduct'
 import Checkout from './components/Checkout'
 import NewProductForm from './components/NewProductForm'
 import ProductAdded from './components/productadded'
+import Home from './components/Home'
 
 /**
  * COMPONENT
@@ -31,10 +32,31 @@ class Routes extends Component {
     return (
       <Switch>
         {/* Routes placed here are available to all visitors */}
+        <Route path="/home" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route exact path="/products" component={AllProducts} />
         <Route exact path="/products/:id" component={SingleProduct} />
+        <Route
+          exact
+          path="/userCart/:id"
+          render={props => <UserCart {...props} cart={this.props.cart} />}
+        />
+        <Route
+          exact
+          path="/users"
+          render={props => <AllUsers {...props} users={this.props.users} />}
+        />
+        <Route
+          exact
+          path="/shoppingcart"
+          render={props => <ShoppingCart {...props} cart={this.props.cart} />}
+        />
+        <Route
+          exact
+          path="/shoppingcart/checkout"
+          render={props => <Checkout {...props} cart={this.props.cart} />}
+        />
         <Route
           exact
           path="/userCart/:id"
@@ -48,33 +70,11 @@ class Routes extends Component {
             <Route path="/editproduct/:id" component={EditProduct} />
             <Route path="/addproduct/" component={NewProductForm} />
             <Route path="/productadded/" component={ProductAdded} />
-            <Route
-              exact
-              path="/users"
-              render={props => <AllUsers {...props} users={this.props.users} />}
-            />
-            <Route
-              exact
-              path="/shoppingcart"
-              render={props => (
-                <ShoppingCart {...props} cart={this.props.cart} />
-              )}
-            />
-            <Route
-              exact
-              path="/shoppingcart/checkout"
-              render={props => <Checkout {...props} cart={this.props.cart} />}
-            />
-            <Route
-              exact
-              path="/userCart/:id"
-              render={props => <UserCart {...props} cart={this.props.cart} />}
-            />
             <Route component={UserHome} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
-        <Route component={Login} />
+        <Route component={Home} />
       </Switch>
     )
   }
