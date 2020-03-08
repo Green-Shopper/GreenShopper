@@ -19,6 +19,25 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+//Merge guest cart with users cart
+router.patch('/', async (req, res, next) => {
+  const orderId = req.user.dataValues.cartId
+  const {guestCart, userCart} = req.body
+  try {
+    const mergedCarts = await Order.mergeGuestCartWithUserCart(
+      orderId,
+      guestCart,
+      userCart
+    )
+    res.json(mergedCarts)
+  } catch (error) {
+    console.error(
+      'An error occurred in the merge guest and user cart route. ',
+      error
+    )
+  }
+})
+
 //remember to add adminsOnly
 // router.get('/:id', async (req, res, next) => {
 //Get new cart
@@ -29,7 +48,7 @@ router.post('/', async (req, res, next) => {
     await user.update({cartId: newOrder.id})
     res.sendStatus(201)
   } catch (error) {
-    console.error('An error occurred while creating a new cart')
+    console.error('An error occurred while creating a new cart. ', error)
     next(error)
   }
 })
