@@ -69,6 +69,7 @@ router.delete('/:id', async (req, res, next) => {
     next(error)
   }
 })
+
 //update quantity in cart
 router.put('/:id', async (req, res, next) => {
   const productId = req.params.id
@@ -88,6 +89,7 @@ router.put('/:id', async (req, res, next) => {
     next(error)
   }
 })
+
 //Add to cart
 router.post('/:id', async (req, res, next) => {
   try {
