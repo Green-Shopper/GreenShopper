@@ -1,5 +1,29 @@
 const orderSeedData = [
   {
+    isCart: true
+  },
+  {
+    isCart: true
+  },
+  {
+    isCart: true
+  },
+  {
+    isCart: true
+  },
+  {
+    isCart: true
+  },
+  {
+    isCart: true
+  },
+  {
+    isCart: true
+  },
+  {
+    isCart: true
+  },
+  {
     isCart: false
   },
   {
@@ -27,88 +51,64 @@ const orderSeedData = [
     isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
+    isCart: false
   },
   {
-    isCart: true
-  },
-  {
-    isCart: true
-  },
-  {
-    isCart: true
-  },
-  {
-    isCart: true
-  },
-  {
-    isCart: true
-  },
-  {
-    isCart: true
-  },
-  {
-    isCart: true
-  },
-  {
-    isCart: true
-  },
-  {
-    isCart: true
+    isCart: false
   },
   {
     isCart: false

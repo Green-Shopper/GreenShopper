@@ -12,7 +12,7 @@ const addedProductToCart = product => ({
   type: ADD_PRODUCT_TO_CART,
   product
 })
-const gotAllCartItems = cartItems => ({
+export const gotAllCartItems = cartItems => ({
   type: GET_ALL_CART_ITEMS,
   cartItems
 })

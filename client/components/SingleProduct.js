@@ -5,7 +5,8 @@ import {
   addProductToCartThunk,
   removeProductFromCartThunk,
   updateProductQtyInCartThunk,
-  getAllCartItemsThunk
+  getAllCartItemsThunk,
+  gotAllCartItems
 } from '../store/cart'
 import {Link} from 'react-router-dom'
 
@@ -17,16 +18,36 @@ export class SingleProduct extends Component {
     this.props.getAllCartItems()
   }
 
-  clickHandler(id, cart) {
+  addToCartNotification(productName, quantity) {
+    const toastHTML = `
+      <div>
+        <p>Added to cart!</p>
+        <p>Qty ${quantity}: ${productName}${
+      quantity > 1 ? 's are' : ' is'
+    } in your cart</p>
+      </div>`
+    M.toast({
+      html: toastHTML
+    })
+  }
+
+  chooseHandler(id, user, product, cart) {
+    if (user.email) {
+      this.addToUserCartHandler(id, cart, product)
+    } else {
+      this.addToGuestCartHandler(product)
+    }
+  }
+
+  addToUserCartHandler(id, cart, product) {
     let itemInCart = []
-    console.log('ITEM IN CART:', itemInCart)
+    console.log('ITEM IN CART:', product)
     if (cart.length > 0) {
       //changed !== to ===
       console.log('LOGGING CART', cart)
       // itemInCart = cart.filter(cartItem => cartItem.id === id);
       for (let i = 0; i < cart.length; i++) {
         let cartElement = cart[i]
-        console.log('CART EL', cartElement)
         if (cartElement.id === Number(id)) {
           itemInCart.push(cartElement)
         }
@@ -37,14 +58,62 @@ export class SingleProduct extends Component {
         id,
         quantity: itemInCart[0].quantity + 1
       })
+      this.addToCartNotification(
+        itemInCart[0].title,
+        itemInCart[0].quantity + 1
+      )
     } else {
       this.props.addToCart({id, quantity: 1})
+      this.addToCartNotification(product.title, 1)
     }
+  }
+
+  addToGuestCartHandler(product) {
+    const ls = window.localStorage
+    const itemToAdd = {
+      id: product.id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      imgUrl: product.imgUrl
+    }
+    let guestCart = JSON.parse(ls.getItem('cart'))
+    //if guestCart is undefined create an empty guestCart
+    if (!guestCart) {
+      guestCart = []
+    }
+    //cycle through items in cart and update quantity if
+    //the item is already in the cart
+    for (let i = 0; i < guestCart.length; i++) {
+      //+'s are used for type coercion
+      // const cartItem = JSON.parse(guestCart[i])
+      if (+guestCart[i].id === +itemToAdd.id) {
+        guestCart[i].quantity += 1
+        this.props.setGuestCartInStore(guestCart)
+        ls.setItem('cart', JSON.stringify(guestCart))
+        this.addToCartNotification(itemToAdd.title, guestCart[i].quantity)
+        return
+      }
+    }
+
+    //adding a new product to the cart here
+    const updatedCart = JSON.stringify([
+      ...guestCart,
+      {...itemToAdd, quantity: 1}
+    ])
+    ls.setItem('cart', updatedCart)
+    this.props.setGuestCartInStore(JSON.parse(updatedCart))
+    this.addToCartNotification(itemToAdd.title, 1)
+  }
+
+  clearGuestCart() {
+    window.localStorage.removeItem('cart')
+    console.log('cleared guest cart')
   }
 
   render() {
     const id = this.props.match.params.id
-    const {singleProduct, isAdmin, cart} = this.props
+    const {singleProduct, isAdmin, cart, user} = this.props
     const product = singleProduct ? singleProduct : {}
     return (
       <div className="container container-padding">
@@ -74,10 +143,13 @@ export class SingleProduct extends Component {
                   <button
                     className="btn waves-effect waves-light center"
                     type="button"
-                    onClick={() => this.clickHandler(id, cart)}
+                    onClick={() => this.chooseHandler(id, user, product, cart)}
                   >
                     Add to Cart
                     <i className="material-icons right">shopping_cart</i>
+                  </button>
+                  <button type="button" onClick={this.clearGuestCart}>
+                    clearGuestCart
                   </button>
 
                   {isAdmin ? (
@@ -101,18 +173,20 @@ export class SingleProduct extends Component {
 const mapStateToProps = state => ({
   singleProduct: state.singleProduct,
   isAdmin: state.user.isAdmin,
-  cart: state.cart
+  cart: state.cart,
+  user: state.user
 })
 
 const mapDispatchToProps = dispatch => ({
   fetchSingleProduct: id => dispatch(fetchSingleProductThunk(id)),
   addToCart: id => dispatch(addProductToCartThunk(id)),
   removeFromCart: id => dispatch(removeProductFromCartThunk(id)),
-  //updateInfo needs to be an object with productId and the new quantity to buy {productId, quantity}
 
+  //updateInfo needs to be an object with productId and the new quantity to buy {productId, quantity}
   updateQuantity: updateInfo =>
     dispatch(updateProductQtyInCartThunk(updateInfo)),
-  getAllCartItems: () => dispatch(getAllCartItemsThunk())
+  getAllCartItems: () => dispatch(getAllCartItemsThunk()),
+  setGuestCartInStore: guestCart => dispatch(gotAllCartItems(guestCart))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct)
