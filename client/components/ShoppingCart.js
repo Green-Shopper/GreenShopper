@@ -32,7 +32,6 @@ export class ShoppingCart extends Component {
     })
   }
   render() {
-    console.log('logging cartId in shopping cart', this.props.cartId)
     let subTotal = 0
     this.props.cart.forEach(item => {
       if (item.quantity === 0) {

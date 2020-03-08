@@ -42,7 +42,7 @@ export class UserCart extends Component {
       }
       subTotal += item.price * item.quantity
     })
-    console.log('logging Props in USERCART', this.props)
+
     return (
       <div className="shoppingComponent">
         <h1>Shopping Cart</h1>
