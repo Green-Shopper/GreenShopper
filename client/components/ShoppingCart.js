@@ -93,7 +93,7 @@ export class ShoppingCart extends Component {
         </div>
         <pre>
           <button type="submit">
-            <Link to="/shoppingcart/checkout">Checkout</Link>
+            <Link to="shoppingcart/checkout">Checkout</Link>
           </button>
         </pre>
       </div>

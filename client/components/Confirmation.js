@@ -3,35 +3,14 @@ import {connect} from 'react-redux'
 import {deleteProductThunk} from '../store/products'
 import {getAllCartItemsThunk} from '../store/cart'
 import {Link} from 'react-router-dom'
-import StripeCheckout from 'react-stripe-checkout'
-import {toast} from 'react-toastify'
-import axios from 'axios'
 
-export class Checkout extends Component {
+export class Confirmation extends Component {
   componentDidMount() {
     this.props.getProductsInCart()
   }
 
   render() {
     console.log('PROPS', this.props)
-    // Stripe implementation ========
-    // toast.configure()
-    // const handleToken = async token => {
-    //   const response = await axios.post(
-    //     'http://localhost:8080/shoppingcart/checkout',
-    //     {
-    //       token
-    //     }
-    //   )
-    //   const {status} = response.data
-    //   if (status === 'success') {
-    //     toast('Success!, Check email for details', {type: 'success'})
-    //   } else {
-    //     toast('Something went wrong', {type: 'error'})
-    //   }
-    // }
-
-    //Stripe implementation ========
 
     let subTotal = 0
     this.props.cart.forEach(function(item) {
@@ -40,7 +19,7 @@ export class Checkout extends Component {
 
     return (
       <div className="shoppingComponent">
-        <h1>Order Summary</h1>
+        <h1>Thanks for your order {this.props.firstName}</h1>
         <span>
           {this.props.cart.map(function(item) {
             return (
@@ -62,12 +41,7 @@ export class Checkout extends Component {
           <h3>Total</h3>
           <h3>${subTotal}</h3>
         </div>
-        <div>
-          <Link to="checkout/confirmation">Buy Now</Link>
-        </div>
-        <div>
-          <Link to="/products">Keep Shopping</Link>
-        </div>
+        <Link to="/products">Browse Products</Link>
       </div>
     )
   }
@@ -88,4 +62,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapState, mapDispatchToProps)(Checkout)
+export default connect(mapState, mapDispatchToProps)(Confrimation)
