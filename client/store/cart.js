@@ -13,6 +13,7 @@ const addedProductToCart = product => ({
   type: ADD_PRODUCT_TO_CART,
   product
 })
+
 export const gotAllCartItems = cartItems => ({
   type: GET_ALL_CART_ITEMS,
   cartItems
@@ -57,7 +58,7 @@ export const addProductToCartThunk = productToAdd => async dispatch => {
 
 export const getAllCartItemsThunk = () => async dispatch => {
   try {
-    const {data} = await axios('/api/cart')
+    const {data} = await axios.get('/api/cart')
     console.log('data recieved from the db: ', data)
     dispatch(gotAllCartItems(data))
   } catch (error) {
@@ -68,11 +69,10 @@ export const getAllCartItemsThunk = () => async dispatch => {
   }
 }
 
+//looks like this is not being used
 export const getAllCartItemsForUserThunk = userId => async dispatch => {
-  console.log('getin users items userId: ', userId)
   try {
-    const {data} = await axios(`/api/cart/${userId}`)
-    console.log('data recieved from the db: ', data)
+    const {data} = await axios.get(`/api/cart/${userId}`)
     dispatch(gotAllCartItems(data))
   } catch (error) {
     console.error(
@@ -96,6 +96,8 @@ export const getNewCartThunk = () => async dispatch => {
 //ex {guestCart: [], userCart: []}
 export const mergeGuestAndUserCartThunk = guestAndUserCarts => async dispatch => {
   try {
+    guestAndUserCarts.guestCart.sort((a, b) => a.id - b.id)
+    guestAndUserCarts.userCart.sort((a, b) => a.id - b.id)
     const {data: mergedCarts} = await axios.patch(
       '/api/cart',
       guestAndUserCarts
