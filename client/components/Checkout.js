@@ -3,9 +3,9 @@ import {connect} from 'react-redux'
 import {deleteProductThunk} from '../store/products'
 import {getAllCartItemsThunk} from '../store/cart'
 import {Link} from 'react-router-dom'
-import StripeCheckout from 'react-stripe-checkout'
-import {toast} from 'react-toastify'
-import axios from 'axios'
+// import StripeCheckout from 'react-stripe-checkout'
+// import {toast} from 'react-toastify'
+// import axios from 'axios'
 
 export class Checkout extends Component {
   componentDidMount() {

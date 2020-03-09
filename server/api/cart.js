@@ -20,7 +20,7 @@ router.get('/', async (req, res, next) => {
 })
 
 //remember to add adminsOnly
-// router.get('/:id', async (req, res, next) => {
+
 //Get new cart
 router.post('/', async (req, res, next) => {
   try {
@@ -53,14 +53,23 @@ router.get('/:id', adminsOnly, async (req, res, next) => {
 //Remove from cart
 router.delete('/:id', async (req, res, next) => {
   // const userId = req.session.passport.user
-  console.log('logging req.session = ', req.session)
-  const productId = req.params.id
-  try {
-    const cart = await Order.findByPk(req.user.dataValues.cartId)
-    const product = await Product.findByPk(productId)
-    cart.removeProduct(product)
 
-    res.sendStatus(200)
+  const productId = req.params.id
+
+  try {
+    //req.user.dataValues.cartId changed to req.body.cartId
+    if (
+      req.body.cartId !== req.user.dataValues.cartId &&
+      req.user.isAdmin !== true
+    ) {
+      res.send('You must be an Admin to do that')
+    } else {
+      const cart = await Order.findByPk(req.body.cartId)
+      const product = await Product.findByPk(productId)
+      cart.removeProduct(product)
+
+      res.sendStatus(200)
+    }
   } catch (error) {
     console.error(
       'An error occurred in the remove from cart delete route. Error: ',
@@ -71,15 +80,25 @@ router.delete('/:id', async (req, res, next) => {
 })
 //update quantity in cart
 router.put('/:id', async (req, res, next) => {
+  console.log('')
   const productId = req.params.id
   const quantityToAdd = req.body.quantity
+
   try {
-    const updatedOrder = await Order.updateQuantity(
-      req.user.dataValues.cartId,
-      productId,
-      quantityToAdd
-    )
-    res.json(updatedOrder)
+    if (
+      req.body.cartId !== req.user.dataValues.cartId &&
+      req.user.isAdmin !== true
+    ) {
+      res.send('You must be an Admin to do that')
+    } else {
+      const updatedOrder = await Order.updateQuantity(
+        // req.user.dataValues.cartId,
+        req.body.cartId,
+        productId,
+        quantityToAdd
+      )
+      res.json(updatedOrder)
+    }
   } catch (error) {
     console.error(
       'An error occurred in put route to update product qty in cart. Error: ',
@@ -92,11 +111,11 @@ router.put('/:id', async (req, res, next) => {
 router.post('/:id', async (req, res, next) => {
   try {
     const userId = req.user.dataValues.id
-    console.log('Loigging UserID!', userId)
+
     const productId = req.params.id
-    console.log('Logging productId', productId)
+
     const quantityToBuy = req.body.quantity
-    console.log('Logging QTY!', quantityToBuy)
+
     const foundProduct = await Product.findByPk(productId)
 
     if (quantityToBuy > foundProduct.dataValues.stock) {

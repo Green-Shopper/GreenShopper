@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom'
 
 export const AllUsers = props => {
   // props.fetchUsers()
-  console.log('logging props', props)
+  console.log('logging USers in AllUsers', props.users)
   //   const clickFunction = () => {
   //     console.log('firing clickFunction')
   //     return <ShoppingCart/>
