@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {UserNav} from './user-nav'
 import {updateUserThunk} from '../store/user'
-import {getAllCartItemsThunk} from '../store/cart'
+import {getAllCartItemsThunk, mergeGuestAndUserCartThunk} from '../store/cart'
 
 /**
  * COMPONENT
@@ -31,8 +31,23 @@ export class UserHome extends Component {
       id: `${this.props.id}`,
       imgUrl: `${this.props.imgUrl}`
     })
-    this.props.getAllCartItems()
+    this.handleLogin()
     // console.log('FIRSTNAME', this.props.firstName)
+  }
+
+  async handleLogin() {
+    const ls = window.localStorage
+    const guestCart = JSON.parse(ls.getItem('cart'))
+    await this.props.getAllCartItems()
+    if (guestCart) {
+      this.props.mergeCarts({guestCart, userCart: this.props.userCart})
+      ls.removeItem('cart')
+      console.log('guest cart found!!')
+      console.log('guest cart: ', guestCart)
+      console.log('user cart: ', this.props.userCart)
+    } else {
+      console.log('no guest cart found')
+    }
   }
 
   handleChange(event) {
@@ -159,13 +174,17 @@ const mapState = state => {
     imgUrl: state.user.imgUrl,
     googleId: state.user.googleId,
     id: state.user.id,
-    isAdmin: state.user.isAdmin
+    isAdmin: state.user.isAdmin,
+    userCart: state.cart
   }
 }
 
 const mapDispatchToProps = dispatch => ({
   updateUser: (id, update) => dispatch(updateUserThunk(id, update)),
-  getAllCartItems: () => dispatch(getAllCartItemsThunk())
+  getAllCartItems: () => dispatch(getAllCartItemsThunk()),
+  //ex {guestCart: [], userCart: []}
+  mergeCarts: guestAndUserCarts =>
+    dispatch(mergeGuestAndUserCartThunk(guestAndUserCarts))
 })
 
 export default connect(mapState, mapDispatchToProps)(UserHome)
