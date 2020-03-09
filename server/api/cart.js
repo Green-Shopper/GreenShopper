@@ -5,11 +5,15 @@ const {adminsOnly} = require('./utils')
 //Get all items currently in users cart
 router.get('/', async (req, res, next) => {
   try {
-    const allCartItems = await Order.getAllItemsInCart(
-      req.user.dataValues.cartId
-    )
+    if (!req.user) {
+      res.sendStatus(204)
+    } else {
+      const allCartItems = await Order.getAllItemsInCart(
+        req.user.dataValues.cartId
+      )
 
-    res.json(allCartItems)
+      res.json(allCartItems)
+    }
   } catch (error) {
     console.error(
       'An error occurred in the get all cart items route. Error: ',
