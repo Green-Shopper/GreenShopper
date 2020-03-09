@@ -41,6 +41,33 @@ class Routes extends Component {
           path="/userCart/:id"
           render={props => <UserCart {...props} cart={this.props.cart} />}
         />
+        <Route
+          exact
+          path="/shoppingcart"
+          render={props => <ShoppingCart {...props} cart={this.props.cart} />}
+        />
+        <Route
+          exact
+          path="/shoppingcart/checkout"
+          render={props => (
+            <Checkout
+              {...props}
+              cart={this.props.cart}
+              order={this.props.order}
+            />
+          )}
+        />
+        <Route
+          exact
+          path="/shoppingcart/checkout/confirmation"
+          render={props => (
+            <Confirmation
+              {...props}
+              cart={this.props.cart}
+              order={this.props.order}
+            />
+          )}
+        />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}

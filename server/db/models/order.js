@@ -29,6 +29,19 @@ Order.getAllItemsInCart = async function(cartId) {
   return allCartItems
 }
 
+Order.updatePriceAtCheckOut = async function(orderId, productId, price) {
+  const cartItem = await OrderSummary.findOne({
+    where: {
+      orderId: orderId,
+      productId: productId
+    }
+  })
+
+  await cartItem.update({
+    priceAtCheckOut: price
+  })
+}
+
 Order.updateQuantity = async function(orderId, productId, newQty) {
   const cartItem = await OrderSummary.findOne({
     where: {

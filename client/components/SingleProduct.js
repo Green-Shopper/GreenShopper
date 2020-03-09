@@ -63,7 +63,7 @@ export class SingleProduct extends Component {
         itemInCart[0].quantity + 1
       )
     } else {
-      this.props.addToCart({id, quantity: 1})
+      this.props.addToCart({id, quantity: 1, price: product.price})
       this.addToCartNotification(product.title, 1)
     }
   }
@@ -179,7 +179,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchSingleProduct: id => dispatch(fetchSingleProductThunk(id)),
-  addToCart: id => dispatch(addProductToCartThunk(id)),
+  addToCart: productToAdd => dispatch(addProductToCartThunk(productToAdd)),
   removeFromCart: id => dispatch(removeProductFromCartThunk(id)),
 
   //updateInfo needs to be an object with productId and the new quantity to buy {productId, quantity}

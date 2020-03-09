@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Product, Order, User} = require('../db/models/')
+const {Product, Order, User, OrderSummary} = require('../db/models/')
 const {adminsOnly} = require('./utils')
 
 //Get all items currently in users cart
@@ -87,6 +87,7 @@ router.put('/checkout', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   const productId = req.params.id
   const quantityToAdd = req.body.quantity
+
   try {
     const updatedOrder = await Order.updateQuantity(
       req.user.dataValues.cartId,
@@ -112,6 +113,8 @@ router.post('/:id', async (req, res, next) => {
     const quantityToBuy = req.body.quantity
     console.log('Logging QTY!', quantityToBuy)
     const foundProduct = await Product.findByPk(productId)
+    const price = req.body.price
+    console.log('PRICE>>>>>>>>', price)
 
     if (quantityToBuy > foundProduct.dataValues.stock) {
       console.log('firing if')
@@ -119,6 +122,13 @@ router.post('/:id', async (req, res, next) => {
     } else {
       const cart = await Order.findByPk(req.user.dataValues.cartId)
       await cart.addProduct(foundProduct)
+
+      await Order.updatePriceAtCheckOut(
+        req.user.dataValues.cartId,
+        productId,
+        price
+      )
+
       if (quantityToBuy > 1) {
         await Order.updateQuantity(userId, productId, quantityToBuy)
       }
