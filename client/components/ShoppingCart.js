@@ -17,23 +17,25 @@ export class ShoppingCart extends Component {
   componentDidMount() {
     this.props.getProductsInCart()
   }
-  incrementFunction(item) {
+  incrementFunction(item, cartId) {
     this.props.updateQuantity({
       id: item.id,
-      quantity: item.quantity + 1
+      quantity: item.quantity + 1,
+      cartId
     })
   }
-  decrementFunction(item) {
+  decrementFunction(item, cartId) {
     this.props.updateQuantity({
       id: item.id,
-      quantity: item.quantity - 1
+      quantity: item.quantity - 1,
+      cartId
     })
   }
   render() {
     let subTotal = 0
     this.props.cart.forEach(item => {
       if (item.quantity === 0) {
-        this.props.removeProductFromCart(item.id)
+        this.props.removeProductFromCart(item.id, this.props.cartId)
       }
       subTotal += item.price * item.quantity
     })
@@ -50,20 +52,24 @@ export class ShoppingCart extends Component {
                   <img src={item.imgUrl} className="tempPic" />
                   <div>
                     <h4>{item.title}</h4>
-                    <p>Description!: {item.description}</p>
+                    <p>Description: {item.description}</p>
                     <h5>${(item.price / 100).toFixed(2)}</h5>
                     <pre />
                     <p className="qty">
                       <span
                         className="spanStyle"
-                        onClick={() => this.decrementFunction(item)}
+                        onClick={() =>
+                          this.decrementFunction(item, this.props.cartId)
+                        }
                       >
                         -
                       </span>
                       {item.quantity}
                       <span
                         className="spanStyle"
-                        onClick={() => this.incrementFunction(item)}
+                        onClick={() =>
+                          this.incrementFunction(item, this.props.cartId)
+                        }
                       >
                         +
                       </span>
@@ -75,7 +81,10 @@ export class ShoppingCart extends Component {
                         type="button"
                         className="shoppingRemove"
                         onClick={() =>
-                          this.props.removeProductFromCart(item.id)
+                          this.props.removeProductFromCart(
+                            item.id,
+                            this.props.cartId
+                          )
                         }
                       >
                         X
@@ -93,7 +102,7 @@ export class ShoppingCart extends Component {
         </div>
         <pre>
           <button type="submit">
-            <Link to="shoppingcart/checkout">Checkout</Link>
+            <Link to="/shoppingcart/checkout">Checkout</Link>
           </button>
         </pre>
       </div>
@@ -104,13 +113,15 @@ export class ShoppingCart extends Component {
 const mapState = state => {
   return {
     firstName: state.user.firstName,
-    lastName: state.user.lastName
+    lastName: state.user.lastName,
+    cartId: state.user.cartId
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
     getProductsInCart: () => dispatch(getAllCartItemsThunk()),
-    removeProductFromCart: id => dispatch(removeProductFromCartThunk(id)),
+    removeProductFromCart: (productId, cartId) =>
+      dispatch(removeProductFromCartThunk(productId, cartId)),
     updateQuantity: item => dispatch(updateProductQtyInCartThunk(item))
   }
 }

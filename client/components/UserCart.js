@@ -1,24 +1,48 @@
 import React, {Component} from 'react'
-import {deleteProductThunk} from '../store/products'
 import {fetchSingleUserThunk} from '../store/singleUser'
-import {getCartByIdThunk} from '../store/singleUserCart'
+import {
+  getCartByIdThunk,
+  removeProductFromUserCartThunk,
+  updateProductQtyInUserCartThunk
+} from '../store/singleUserCart'
+
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 
 export class UserCart extends Component {
+  constructor() {
+    super()
+    this.incrementFunction = this.incrementFunction.bind(this)
+    this.decrementFunction = this.decrementFunction.bind(this)
+  }
   componentDidMount() {
     const id = this.props.match.params.id
-    console.log('loggingIdInMount', id)
     this.props.fetchSingleUser(id)
     this.props.getCartById(id)
   }
-  render() {
-    const id = this.props.match.params.id
-    let subTotal = 0
-    this.props.userCart.forEach(function(item) {
-      subTotal += item.price
+  incrementFunction(item, cartId) {
+    this.props.updateQuantity({
+      id: item.id,
+      quantity: item.quantity + 1,
+      cartId
     })
-    console.log('logging Props in USERCART', this.props)
+  }
+  decrementFunction(item, cartId) {
+    this.props.updateQuantity({
+      id: item.id,
+      quantity: item.quantity - 1,
+      cartId
+    })
+  }
+  render() {
+    let subTotal = 0
+    this.props.userCart.forEach(item => {
+      if (item.quantity === 0) {
+        this.props.removeProductFromCart(item.id, this.props.cartId)
+      }
+      subTotal += item.price * item.quantity
+    })
+
     return (
       <div className="shoppingComponent">
         <h1>Shopping Cart</h1>
@@ -29,7 +53,7 @@ export class UserCart extends Component {
             "'s Cart"}
         </h3>
         <span>
-          {this.props.userCart.map(function(item) {
+          {this.props.userCart.map(item => {
             return (
               <div key={item.id}>
                 <div className="cartProducts">
@@ -37,14 +61,39 @@ export class UserCart extends Component {
                   <div>
                     <h4>{item.title}</h4>
                     <p>Description: {item.description}</p>
-                    <h5>${item.price}</h5>
+                    <h5>${(item.price / 100).toFixed(2)}</h5>
                     <pre />
                     <p className="qty">
-                      <span>-</span>1<span>+</span>
+                      <span
+                        className="spanStyle"
+                        onClick={() =>
+                          this.decrementFunction(item, this.props.cartId)
+                        }
+                      >
+                        -
+                      </span>
+                      {item.quantity}
+                      <span
+                        className="spanStyle"
+                        onClick={() =>
+                          this.incrementFunction(item, this.props.cartId)
+                        }
+                      >
+                        +
+                      </span>
                     </p>
                     <div>
                       Remove
-                      <button type="button" className="shoppingRemove">
+                      <button
+                        type="button"
+                        className="shoppingRemove"
+                        onClick={() =>
+                          this.props.removeProductFromCart(
+                            item.id,
+                            this.props.cartId
+                          )
+                        }
+                      >
                         X
                       </button>
                     </div>
@@ -56,7 +105,7 @@ export class UserCart extends Component {
         </span>
         <div className="subtotalStyle">
           <h3>Subtotal</h3>
-          <h3>${subTotal}</h3>
+          <h3>${(subTotal / 100).toFixed(2)}</h3>
         </div>
         <pre>
           <button type="submit">
@@ -70,15 +119,18 @@ export class UserCart extends Component {
 
 const mapDispatchToProps = function(dispatch) {
   return {
-    deleteProducts: () => dispatch(deleteProductThunk()),
+    removeProductFromCart: (productId, cartId) =>
+      dispatch(removeProductFromUserCartThunk(productId, cartId)),
     fetchSingleUser: id => dispatch(fetchSingleUserThunk(id)),
-    getCartById: id => dispatch(getCartByIdThunk(id))
+    getCartById: id => dispatch(getCartByIdThunk(id)),
+    updateQuantity: item => dispatch(updateProductQtyInUserCartThunk(item))
   }
 }
 const mapStateToProps = function(state) {
   return {
     selectedUser: state.selectedUser,
-    userCart: state.userCart
+    userCart: state.userCart,
+    cartId: state.selectedUser.cartId
   }
 }
 
