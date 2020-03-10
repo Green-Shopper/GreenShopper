@@ -5,17 +5,37 @@ const {adminsOnly} = require('./utils')
 //Get all items currently in users cart
 router.get('/', async (req, res, next) => {
   try {
-    const allCartItems = await Order.getAllItemsInCart(
-      req.user.dataValues.cartId
-    )
+    if (!req.user) {
+      res.sendStatus(204)
+    } else {
+      const allCartItems = await Order.getAllItemsInCart(
+        req.user.dataValues.cartId
+      )
 
-    res.json(allCartItems)
+      res.json(allCartItems)
+    }
   } catch (error) {
     console.error(
       'An error occurred in the get all cart items route. Error: ',
       error
     )
     next(error)
+  }
+})
+
+//Merge guest cart with users cart
+router.patch('/', async (req, res, next) => {
+  const orderId = req.user.dataValues.cartId
+  const {guestCart, userCart} = req.body
+  try {
+    const mergedCarts = await Order.mergeCarts(orderId, guestCart, userCart)
+    console.log('>>> In path route. mergedCarts are: ', mergedCarts)
+    res.status(202).json(mergedCarts)
+  } catch (error) {
+    console.error(
+      'An error occurred in the merge guest and user cart route. ',
+      error
+    )
   }
 })
 
@@ -30,7 +50,7 @@ router.put('/checkout/confirmation', async (req, res, next) => {
     await newOrder.update({userId: user.id})
     res.sendStatus(201)
   } catch (error) {
-    console.error('An error occurred while creating a new cart')
+    console.error('An error occurred while creating a new cart. ', error)
     next(error)
   }
 })
@@ -121,6 +141,7 @@ router.put('/:id', async (req, res, next) => {
     next(error)
   }
 })
+
 //Add to cart
 router.post('/:id', async (req, res, next) => {
   try {

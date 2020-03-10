@@ -13,7 +13,6 @@ import {Link} from 'react-router-dom'
 export class SingleProduct extends Component {
   componentDidMount() {
     const id = this.props.match.params.id
-    console.log('this.props is: ', this.props)
     this.props.fetchSingleProduct(id)
     this.props.getAllCartItems()
   }
@@ -41,11 +40,7 @@ export class SingleProduct extends Component {
 
   addToUserCartHandler(id, cart, product) {
     let itemInCart = []
-    console.log('ITEM IN CART:', product)
     if (cart.length > 0) {
-      //changed !== to ===
-      console.log('LOGGING CART', cart)
-      // itemInCart = cart.filter(cartItem => cartItem.id === id);
       for (let i = 0; i < cart.length; i++) {
         let cartElement = cart[i]
         if (cartElement.id === Number(id)) {
@@ -86,7 +81,6 @@ export class SingleProduct extends Component {
     //the item is already in the cart
     for (let i = 0; i < guestCart.length; i++) {
       //+'s are used for type coercion
-      // const cartItem = JSON.parse(guestCart[i])
       if (+guestCart[i].id === +itemToAdd.id) {
         guestCart[i].quantity += 1
         this.props.setGuestCartInStore(guestCart)
@@ -104,11 +98,6 @@ export class SingleProduct extends Component {
     ls.setItem('cart', updatedCart)
     this.props.setGuestCartInStore(JSON.parse(updatedCart))
     this.addToCartNotification(itemToAdd.title, 1)
-  }
-
-  clearGuestCart() {
-    window.localStorage.removeItem('cart')
-    console.log('cleared guest cart')
   }
 
   render() {
@@ -148,6 +137,7 @@ export class SingleProduct extends Component {
                     Add to Cart
                     <i className="material-icons right">shopping_cart</i>
                   </button>
+
                   {isAdmin ? (
                     <Link
                       to={`/editproduct/${id}`}

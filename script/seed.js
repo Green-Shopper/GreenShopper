@@ -69,7 +69,6 @@ async function seed() {
   await assignOrdersToUsers(orders, users)
   await assignCartIdsTOUsers(users, orders)
 
-  console.log('>>>>>>log is: ', log)
   console.log(`seeded ${orders.length} orders`)
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${products.length} products`)
