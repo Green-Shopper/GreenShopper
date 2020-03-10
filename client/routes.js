@@ -87,7 +87,7 @@ class Routes extends Component {
             <Route path="/addproduct/" component={NewProductForm} />
             <Route exact path="/users" component={AllUsers} />
             <Route path="/productadded/" component={ProductAdded} />
-            <Route path="/" component={Home} />
+            <Route exact path="/" component={Home} />
             <Route component={NotFound} />
           </Switch>
         )}
