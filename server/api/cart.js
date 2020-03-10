@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Product, Order, User} = require('../db/models/')
+const {Product, Order, User, OrderSummary} = require('../db/models/')
 const {adminsOnly} = require('./utils')
 const nodemailer = require('nodemailer')
 
@@ -45,10 +45,46 @@ router.patch('/', async (req, res, next) => {
 //Get new cart
 router.put('/checkout/confirmation', async (req, res, next) => {
   try {
+    //Find all orders associated to the user checking out
+    const foundProducts = await OrderSummary.findAll({
+      where: {orderId: req.user.dataValues.cartId}
+    })
+    //Create temp variable to store product ID's in users cart at checkout
+    let productIds = []
+    //Loop through all products in users cart at checkout
+    for (let i = 0; i < foundProducts.length; i++) {
+      productIds.push(foundProducts[i].dataValues.productId)
+    }
+
+    let arrOfProductObjs = []
+
+    //Looping through each product in users cart at checkout to retrieve the specific product object for each product in the cart
+    for (let i = 0; i < productIds.length; i++) {
+      let id = productIds[i]
+      let foundProduct = await Product.findAll({where: {id: id}})
+      arrOfProductObjs.push(foundProduct[0].dataValues)
+    }
+
+    //Update price at checkout in OrderSummary table for each specific product in the users cart at checkout
+    for (let i = 0; i < arrOfProductObjs.length; i++) {
+      let product = arrOfProductObjs[i]
+
+      let productId = product.id
+      let price = product.price
+      await Order.updatePriceAtCheckOut(
+        req.user.dataValues.cartId,
+        productId,
+        price
+      )
+    }
+
+    //Create a new cart for the user after they checkout
     const newOrder = await Order.create()
     const user = await User.findByPk(req.user.dataValues.id)
+
     await user.update({cartId: newOrder.id})
     await newOrder.update({userId: user.id})
+
     res.sendStatus(201)
   } catch (error) {
     console.error('An error occurred while creating a new cart. ', error)
@@ -187,12 +223,19 @@ router.post('/:id', async (req, res, next) => {
     const quantityToBuy = req.body.quantity
 
     const foundProduct = await Product.findByPk(productId)
-    console.log('logging user DataValues', req.user.dataValues)
+
     if (quantityToBuy > foundProduct.dataValues.stock) {
       res.send('Sorry not enough currently in stock')
     } else {
       const cart = await Order.findByPk(req.user.dataValues.cartId)
       await cart.addProduct(foundProduct)
+
+      // await Order.updatePriceAtCheckOut(
+      //   req.user.dataValues.cartId,
+      //   productId,
+      //   price
+      // )
+
       if (quantityToBuy > 1) {
         await Order.updateQuantity(userId, productId, quantityToBuy)
       }
@@ -217,15 +260,5 @@ router.post('/:id', async (req, res, next) => {
     next(error)
   }
 })
-
-// //Create a new cart
-// router.post('/checkout', async (req, res, next) => {
-//   try {
-//     const newCart = await Order.Create()
-//     res.json(newCart)
-//   } catch (error) {
-//     next(error)
-//   }
-// })
 
 module.exports = router
