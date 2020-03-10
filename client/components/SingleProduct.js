@@ -148,10 +148,6 @@ export class SingleProduct extends Component {
                     Add to Cart
                     <i className="material-icons right">shopping_cart</i>
                   </button>
-                  <button type="button" onClick={this.clearGuestCart}>
-                    clearGuestCart
-                  </button>
-
                   {isAdmin ? (
                     <Link
                       to={`/editproduct/${id}`}
