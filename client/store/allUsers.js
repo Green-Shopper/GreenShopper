@@ -18,10 +18,6 @@ export const fetchUsersThunk = () => async dispatch => {
   }
 }
 
-// export const initialState = {
-//     users: []
-//   }
-
 const usersReducer = (state = [], action) => {
   switch (action.type) {
     case FETCH_USERS:
