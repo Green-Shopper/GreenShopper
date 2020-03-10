@@ -56,10 +56,28 @@ export class UserHome extends Component {
     })
   }
 
+  userUpdatedNotification() {
+    const toastHTML = `
+    <div>
+      <p class="updateNotification-headerText">User succefully updated!</p>
+      <p class="updateNotification-updatedText">User Name: ${
+        this.state.firstName
+      } ${this.state.lastName}</p>
+      <p class="updateNotification-updatedText">User email: ${
+        this.state.email
+      }</p>
+    </div>
+    `
+    M.toast({
+      html: toastHTML
+    })
+  }
+
   handleSubmit(event) {
     const userId = this.props.id
     event.preventDefault()
     this.props.updateUser(userId, this.state)
+    this.userUpdatedNotification()
   }
 
   render() {
