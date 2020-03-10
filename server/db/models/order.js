@@ -29,7 +29,6 @@ Order.getAllItemsInCart = async function(cartId) {
   return allCartItems
 }
 
-
 Order.updatePriceAtCheckOut = async function(orderId, productId, price) {
   const cartItem = await OrderSummary.findOne({
     where: {
@@ -82,7 +81,6 @@ Order.mergeCarts = async function(orderId, guestCart, userCart) {
     }
   }
   return Object.values(combinedCartObj)
-
 }
 
 Order.updateQuantity = async function(orderId, productId, newQty) {
