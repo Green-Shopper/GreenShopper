@@ -1,21 +1,42 @@
 const router = require('express').Router()
 const {Product, Order, User, OrderSummary} = require('../db/models/')
 const {adminsOnly} = require('./utils')
+const nodemailer = require('nodemailer')
 
 //Get all items currently in users cart
 router.get('/', async (req, res, next) => {
   try {
-    const allCartItems = await Order.getAllItemsInCart(
-      req.user.dataValues.cartId
-    )
+    if (!req.user) {
+      res.sendStatus(204)
+    } else {
+      const allCartItems = await Order.getAllItemsInCart(
+        req.user.dataValues.cartId
+      )
 
-    res.json(allCartItems)
+      res.json(allCartItems)
+    }
   } catch (error) {
     console.error(
       'An error occurred in the get all cart items route. Error: ',
       error
     )
     next(error)
+  }
+})
+
+//Merge guest cart with users cart
+router.patch('/', async (req, res, next) => {
+  const orderId = req.user.dataValues.cartId
+  const {guestCart, userCart} = req.body
+  try {
+    const mergedCarts = await Order.mergeCarts(orderId, guestCart, userCart)
+    console.log('>>> In path route. mergedCarts are: ', mergedCarts)
+    res.status(202).json(mergedCarts)
+  } catch (error) {
+    console.error(
+      'An error occurred in the merge guest and user cart route. ',
+      error
+    )
   }
 })
 
@@ -66,7 +87,7 @@ router.put('/checkout/confirmation', async (req, res, next) => {
 
     res.sendStatus(201)
   } catch (error) {
-    console.error('An error occurred while creating a new cart')
+    console.error('An error occurred while creating a new cart. ', error)
     next(error)
   }
 })
@@ -120,9 +141,43 @@ router.delete('/:id', async (req, res, next) => {
 router.put('/checkout', async (req, res, next) => {
   try {
     const cartId = req.user.dataValues.cartId
-    const foundOrder = await Order.findByPk(cartId)
+
+    const foundOrder = await Order.findByPk(cartId, {include: {model: Product}})
     await foundOrder.update({isCart: false})
     res.json(foundOrder)
+
+    let transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.theUser,
+        pass: process.env.thePass
+      },
+      tls: {rejectUnauthorized: false}
+    })
+    console.log('logging foundOrder', foundOrder)
+
+    let productString = ''
+    for (let i = 0; i < foundOrder.dataValues.products.length; i++) {
+      let product = foundOrder.dataValues.products[i]
+      let number = i
+      productString += String(number + 1) + '. ' + product.title + ' '
+    }
+
+    let info = await transporter.sendMail({
+      from: process.env.theUser,
+      to: req.user.dataValues.email,
+      subject: 'Green Shopper Confirmation',
+      text: 'Yay you bought some plants!!!',
+      html: `<div> 
+      <p>Yay you bought some plants!!!</p>
+      <p>Products: ${productString}</p>
+      <p>Your plant(s) should arrive soon!</p>
+      </div>`
+    })
+
+    console.log('Message sent: %s', info.messageId)
   } catch (error) {
     next(error)
   }
@@ -157,6 +212,7 @@ router.put('/:id', async (req, res, next) => {
     next(error)
   }
 })
+
 //Add to cart
 router.post('/:id', async (req, res, next) => {
   try {
@@ -167,11 +223,8 @@ router.post('/:id', async (req, res, next) => {
     const quantityToBuy = req.body.quantity
 
     const foundProduct = await Product.findByPk(productId)
-    // const price = req.body.price
-    // console.log('PRICE>>>>>>>>', price)
 
     if (quantityToBuy > foundProduct.dataValues.stock) {
-      console.log('firing if')
       res.send('Sorry not enough currently in stock')
     } else {
       const cart = await Order.findByPk(req.user.dataValues.cartId)

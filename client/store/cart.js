@@ -2,6 +2,7 @@ import axios from 'axios'
 
 //ACTION TYPES
 const ADD_PRODUCT_TO_CART = 'ADD_PRODUCT_TO_CART'
+const MERGE_CARTS = 'MERGE_CARTS'
 const REMOVE_PRODUCT_TO_CART = 'REMOVE_PRODUCT_TO_CART'
 const UPDATE_PRODUCT_QTY_IN_CART = 'UPDATE_PRODUCT_QTY_IN_CART'
 const GET_ALL_CART_ITEMS = 'GET_ALL_CART_ITEMS'
@@ -13,6 +14,7 @@ const addedProductToCart = product => ({
   type: ADD_PRODUCT_TO_CART,
   product
 })
+
 export const gotAllCartItems = cartItems => ({
   type: GET_ALL_CART_ITEMS,
   cartItems
@@ -20,6 +22,11 @@ export const gotAllCartItems = cartItems => ({
 
 const gotNewCart = () => ({
   type: GET_NEW_CART
+})
+
+const mergedGuestAndUserCart = combinedCarts => ({
+  type: MERGE_CARTS,
+  combinedCarts
 })
 
 const removedProductFromCart = productId => ({
@@ -57,7 +64,7 @@ export const addProductToCartThunk = productToAdd => async dispatch => {
 
 export const getAllCartItemsThunk = () => async dispatch => {
   try {
-    const {data} = await axios('/api/cart')
+    const {data} = await axios.get('/api/cart')
     console.log('data recieved from the db: ', data)
     dispatch(gotAllCartItems(data))
   } catch (error) {
@@ -89,6 +96,23 @@ export const getNewCartThunk = () => async dispatch => {
     dispatch(gotNewCart())
   } catch (error) {
     console.error('An error occurred in thunk while getting new cart. ', error)
+  }
+}
+
+//this thunk takes in an object with both the guest and user carts
+//ex {guestCart: [], userCart: []}
+export const mergeGuestAndUserCartThunk = guestAndUserCarts => async dispatch => {
+  try {
+    guestAndUserCarts.guestCart.sort((a, b) => a.id - b.id)
+    guestAndUserCarts.userCart.sort((a, b) => a.id - b.id)
+    const {data: mergedCarts} = await axios.patch(
+      '/api/cart',
+      guestAndUserCarts
+    )
+    console.log('data recieved from db', mergedCarts)
+    dispatch(mergedGuestAndUserCart(mergedCarts))
+  } catch (error) {
+    console.error('An error occurred in thunk while merging carts. ', error)
   }
 }
 
@@ -153,6 +177,9 @@ const cartReducers = (state = initialState, action) => {
     }
     case GET_NEW_CART: {
       return []
+    }
+    case MERGE_CARTS: {
+      return [...action.combinedCarts]
     }
     case REMOVE_PRODUCT_TO_CART: {
       const previousCartCopy = []
