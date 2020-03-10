@@ -17,18 +17,29 @@ export class Checkout extends Component {
   }
 
   componentDidMount() {
-    this.props.getProductsInCart()
+    this.getProducts()
+  }
+
+  getProducts() {
+    const guestCart = JSON.parse(localStorage.getItem('cart'))
+    if (this.props.cartId) {
+      console.log('cartId was found')
+      this.props.getProductsInCart()
+    } else if (guestCart) {
+      this.props.setGuestCartInStore(guestCart)
+    }
   }
 
   async handleClick() {
     await this.props.updateCart()
     await this.props.assignNewCart()
     await window.localStorage.removeItem('cart')
-    this.props.setGuestCartInStore([])
+    await this.props.setGuestCartInStore([])
   }
 
   render() {
-    const cartId = this.props.user.cartId
+    // const cartId = this.props.user.cartId
+    console.log('CHECKOUT PROPS', this.props)
 
     let subTotal = 0
     this.props.cart.forEach(function(item) {
@@ -64,11 +75,6 @@ export class Checkout extends Component {
           <Link onClick={() => this.handleClick()} to="checkout/confirmation">
             Buy Now
           </Link>
-          <Checkout
-            name="GreenShopper"
-            description="We Sell Plants"
-            amount={(subTotal / 100).toFixed(2)}
-          />
         </div>
         <div>
           <Link to="/products">Keep Shopping</Link>
@@ -97,6 +103,3 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default connect(mapState, mapDispatchToProps)(Checkout)
-
-//Buy now switch current cart to false
-//Give user a new cart

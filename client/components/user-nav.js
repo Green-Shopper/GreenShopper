@@ -27,6 +27,9 @@ export class UserNav extends Component {
                   <li>
                     <Link to="/orders">View Orders</Link>
                   </li>
+                  <li>
+                    <Link to="/orderhistory">Order History</Link>
+                  </li>
                 </ul>
               </div>
               {this.props.isAdmin ? (
