@@ -29,58 +29,45 @@ Order.getAllItemsInCart = async function(cartId) {
   return allCartItems
 }
 
-// eslint-disable-next-line max-statements
-Order.mergeGuestCartWithUserCart = async function(
-  orderId,
-  guestCart,
-  userCart
-) {
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>> You seein this!!!')
-  const guest = {index: 0, length: guestCart.length}
-  const user = {index: 0, length: userCart.length}
-  let combinedCart = []
-  let productToAdd
-
+Order.mergeCarts = async function(orderId, guestCart, userCart) {
+  const combinedCartObj = {}
   const cart = await Order.findByPk(orderId)
-  console.log('orderId: ', orderId)
+  async function updateQuantity(newQty, productId) {
+    await OrderSummary.update(
+      {
+        quantity: newQty
+      },
+      {
+        where: {
+          orderId: orderId,
+          productId: productId
+        }
+      }
+    )
+  }
 
-  //add products to the combined cart in order
-  while (guest.index < guest.length && user.index < user.length) {
-    if (guestCart[guest.index].id === userCart[user.index].id) {
-      console.log('in while loop guestCartId: ', guestCart[guest.index].id)
-      const newQty =
-        guestCart[guest.index].quantity + userCart[user.index].quantity
-      await Order.updateQuantity(orderId, guestCart[guest.index].id, newQty)
-      guest.index++
-      user.index++
-      guestCart[guest.index].quantity = newQty
-      combinedCart.push(guestCart[guest.index])
-      continue
-    }
-    if (guestCart[guest.index].id < userCart[user.index].id) {
-      productToAdd = await Product.findByPk(guestCart[guest.index].id)
-      console.log('product to add: ', productToAdd)
+  userCart.forEach(product => {
+    combinedCartObj[product.id] = product
+  })
+
+  let productToAdd
+  for (let i = 0; i < guestCart.length; i++) {
+    const currentProductId = guestCart[i].id
+    const currentProductQty = guestCart[i].quantity
+    if (combinedCartObj[currentProductId] === undefined) {
+      productToAdd = await Product.findByPk(currentProductId)
       await cart.addProduct(productToAdd)
-      combinedCart.push(guestCart[guest.index])
-      guest.index++
+      if (currentProductQty > 1) {
+        await updateQuantity(currentProductQty, currentProductId)
+      }
+      combinedCartObj[currentProductId] = guestCart[i]
     } else {
-      combinedCart.push(userCart[user.index])
-      user.index++
+      const total =
+        combinedCartObj[currentProductId].quantity + currentProductQty
+      await updateQuantity(total, currentProductId)
     }
   }
-  //spread remaing entries into the combinedCart array
-  if (guest.index >= guest.length) {
-    while (guest.index < guest.length) {
-      productToAdd = await Product.findByPk(guestCart[guest.index].id)
-      console.log('product to add: ', productToAdd)
-      await cart.addProduct(productToAdd)
-      combinedCart.push(guestCart[guest.index])
-      guest.index++
-    }
-  } else {
-    combinedCart = [...combinedCart, ...guestCart.slice(guest.index)]
-  }
-  return combinedCart
+  return Object.values(combinedCartObj)
 }
 
 Order.updateQuantity = async function(orderId, productId, newQty) {
