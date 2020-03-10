@@ -90,6 +90,7 @@ export class ShoppingCart extends Component {
     }
   }
   render() {
+    console.log('SHOPPING CART PROPS', this.props)
     let subTotal = 0
     this.props.cart.forEach(item => {
       if (item.quantity === 0) {
