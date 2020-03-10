@@ -28,12 +28,9 @@ router.patch('/', async (req, res, next) => {
   const orderId = req.user.dataValues.cartId
   const {guestCart, userCart} = req.body
   try {
-    const mergedCarts = await Order.mergeGuestCartWithUserCart(
-      orderId,
-      guestCart,
-      userCart
-    )
-    res.json(mergedCarts)
+    const mergedCarts = await Order.mergeCarts(orderId, guestCart, userCart)
+    console.log('>>> In path route. mergedCarts are: ', mergedCarts)
+    res.status(202).json(mergedCarts)
   } catch (error) {
     console.error(
       'An error occurred in the merge guest and user cart route. ',
