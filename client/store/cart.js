@@ -69,18 +69,19 @@ export const getAllCartItemsThunk = () => async dispatch => {
   }
 }
 
-//looks like this is not being used
-export const getAllCartItemsForUserThunk = userId => async dispatch => {
-  try {
-    const {data} = await axios.get(`/api/cart/${userId}`)
-    dispatch(gotAllCartItems(data))
-  } catch (error) {
-    console.error(
-      'An error occurred in thunk while getting all cart items from db. ',
-      error
-    )
-  }
-}
+// export const getAllCartItemsForUserThunk = userId => async dispatch => {
+//   console.log('getin users items userId: ', userId)
+//   try {
+//     const {data} = await axios(`/api/cart/${userId}`)
+//     console.log('data recieved from the db: ', data)
+//     dispatch(gotAllCartItems(data))
+//   } catch (error) {
+//     console.error(
+//       'An error occurred in thunk while getting all cart items from db. ',
+//       error
+//     )
+//   }
+// }
 
 export const getNewCartThunk = () => async dispatch => {
   try {
@@ -109,9 +110,13 @@ export const mergeGuestAndUserCartThunk = guestAndUserCarts => async dispatch =>
   }
 }
 
-export const removeProductFromCartThunk = productId => async dispatch => {
+export const removeProductFromCartThunk = (
+  productId,
+  cartId
+) => async dispatch => {
   try {
-    await axios.delete(`/api/cart/${productId}`)
+    console.log('logging cartId in redux', cartId)
+    await axios.delete(`/api/cart/${productId}`, {data: {cartId}})
     dispatch(removedProductFromCart(productId))
   } catch (error) {
     console.error(

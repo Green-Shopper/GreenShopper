@@ -1,24 +1,11 @@
-/* body {
-  font-family: sans-serif;
+.main-header {
+  background: url(./img/image-from-rawpixel-id-436202-jpeg.jpg);
+  background-size: cover;
+  background-position: center;
+  min-height: 600px;
+  color: #fff;
 }
 
-a {
-  text-decoration: none;
-}
-
-label {
-  display: block;
-}
-
-nav a {
-  display: inline-block;
-  margin: 1em;
-}
-
-form div {
-  margin: 1em;
-  display: inline-block;
-} */
 .main-header .showcase {
   padding-top: 70px;
 }

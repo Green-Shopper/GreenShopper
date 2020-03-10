@@ -24,7 +24,7 @@ export const fetchProductsThunk = () => async dispatch => {
 
 export const addProductThunk = newProduct => async dispatch => {
   try {
-    const {data} = await axios.post(`api/products`, newProduct)
+    const {data} = await axios.post('/api/products', newProduct)
     dispatch(addedProduct(data))
   } catch (error) {
     console.error('Add Product Thunk Error:', error)
@@ -33,7 +33,7 @@ export const addProductThunk = newProduct => async dispatch => {
 
 export const deleteProductThunk = productId => async dispatch => {
   try {
-    await axios.delete(`api/products/${productId}`)
+    await axios.delete(`/api/products/${productId}`)
     dispatch(deletedProduct(productId))
   } catch (error) {
     console.error('Delete Product Thunk Error:', error)
@@ -46,7 +46,7 @@ const productsReducers = (state = [], action) => {
     case FETCH_PRODUCTS:
       return [...action.products]
     case ADD_PRODUCT:
-      return [...state, action.newProduct]
+      return [action.newProduct]
     case DELETE_PRODUCT:
       return state.filter(product => product.id !== action.productId)
     case SORT_PRODUCTS:
