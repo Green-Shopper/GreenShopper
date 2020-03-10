@@ -4,14 +4,10 @@ import {deleteProductThunk} from '../store/products'
 import {
   getAllCartItemsThunk,
   checkoutCartThunk,
-  confirmationCartThunk,
-  getNewCartThunk
+  getNewCartThunk,
+  gotAllCartItems
 } from '../store/cart'
 import {Link} from 'react-router-dom'
-
-// import StripeCheckout from 'react-stripe-checkout'
-// import {toast} from 'react-toastify'
-// import axios from 'axios'
 
 export class Checkout extends Component {
   constructor() {
@@ -24,32 +20,14 @@ export class Checkout extends Component {
   }
 
   async handleClick() {
-    // console.log(id)
     await this.props.updateCart()
     await this.props.assignNewCart()
+    await window.localStorage.removeItem('cart')
+    this.props.setGuestCartInStore([])
   }
 
   render() {
     const cartId = this.props.user.cartId
-    // console.log('PROPS', this.props.user.cartId)
-    // Stripe implementation ========
-    // toast.configure()
-    // const handleToken = async token => {
-    //   const response = await axios.post(
-    //     'http://localhost:8080/shoppingcart/checkout',
-    //     {
-    //       token
-    //     }
-    //   )
-    //   const {status} = response.data
-    //   if (status === 'success') {
-    //     toast('Success!, Check email for details', {type: 'success'})
-    //   } else {
-    //     toast('Something went wrong', {type: 'error'})
-    //   }
-    // }
-
-    //Stripe implementation ========
 
     let subTotal = 0
     this.props.cart.forEach(function(item) {
@@ -107,7 +85,8 @@ const mapDispatchToProps = dispatch => {
     deleteProduct: () => dispatch(deleteProductThunk()),
     getProductsInCart: () => dispatch(getAllCartItemsThunk()),
     updateCart: () => dispatch(checkoutCartThunk()),
-    assignNewCart: () => dispatch(getNewCartThunk())
+    assignNewCart: () => dispatch(getNewCartThunk()),
+    setGuestCartInStore: guestCart => dispatch(gotAllCartItems(guestCart))
   }
 }
 
