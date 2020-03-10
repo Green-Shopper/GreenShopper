@@ -7,6 +7,7 @@ const REMOVE_PRODUCT_TO_CART = 'REMOVE_PRODUCT_TO_CART'
 const UPDATE_PRODUCT_QTY_IN_CART = 'UPDATE_PRODUCT_QTY_IN_CART'
 const GET_ALL_CART_ITEMS = 'GET_ALL_CART_ITEMS'
 const GET_NEW_CART = 'GET_NEW_CART'
+const CHECKOUT_CART = 'CHECKOUT_CART'
 
 //ACTION CREATORS
 const addedProductToCart = product => ({
@@ -36,6 +37,11 @@ const removedProductFromCart = productId => ({
 export const updatedProductQtyInCart = updatedProduct => ({
   type: UPDATE_PRODUCT_QTY_IN_CART,
   updatedProduct
+})
+
+const checkoutCart = id => ({
+  type: CHECKOUT_CART,
+  id
 })
 
 //THUNK CREATORS
@@ -85,7 +91,7 @@ export const getAllCartItemsThunk = () => async dispatch => {
 
 export const getNewCartThunk = () => async dispatch => {
   try {
-    const {data} = await axios.post('/api/cart')
+    const {data} = await axios.put('/api/cart/checkout/confirmation')
     console.log('data recieved from db', data)
     dispatch(gotNewCart())
   } catch (error) {
@@ -135,6 +141,24 @@ export const updateProductQtyInCartThunk = updateInfo => async dispatch => {
       'An error occurred in the thunk while updating product quantity in cart. ',
       error
     )
+  }
+}
+
+export const checkoutCartThunk = () => async dispatch => {
+  try {
+    const {data} = await axios.put('/api/cart/checkout')
+    dispatch(checkoutCart(data))
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const confirmationCartThunk = () => async dispatch => {
+  try {
+    await axios.post('/api/cart/checkout/confirmation')
+    dispatch(gotNewCart())
+  } catch (error) {
+    console.error(error)
   }
 }
 //INITIAL STATE
