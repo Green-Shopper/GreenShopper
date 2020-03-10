@@ -22,11 +22,12 @@ router.get('/', async (req, res, next) => {
 //remember to add adminsOnly
 
 //Get new cart
-router.post('/', async (req, res, next) => {
+router.put('/checkout/confirmation', async (req, res, next) => {
   try {
     const newOrder = await Order.create()
     const user = await User.findByPk(req.user.dataValues.id)
     await user.update({cartId: newOrder.id})
+    await newOrder.update({userId: user.id})
     res.sendStatus(201)
   } catch (error) {
     console.error('An error occurred while creating a new cart')
@@ -78,6 +79,19 @@ router.delete('/:id', async (req, res, next) => {
     next(error)
   }
 })
+
+//Update cart status to false
+router.put('/checkout', async (req, res, next) => {
+  try {
+    const cartId = req.user.dataValues.cartId
+    const foundOrder = await Order.findByPk(cartId)
+    await foundOrder.update({isCart: false})
+    res.json(foundOrder)
+  } catch (error) {
+    next(error)
+  }
+})
+
 //update quantity in cart
 router.put('/:id', async (req, res, next) => {
   console.log('')
@@ -149,26 +163,14 @@ router.post('/:id', async (req, res, next) => {
   }
 })
 
-//Update cart status to false
-router.put('/checkout', async (req, res, next) => {
-  try {
-    const cartId = req.user.dataValues.cartId
-    const foundOrder = await Order.findByPk(cartId)
-    foundOrder.update({isCart: false})
-    res.json(foundOrder)
-  } catch (error) {
-    next(error)
-  }
-})
-
-//Create a new cart
-router.post('/checkout', async (req, res, next) => {
-  try {
-    const newCart = await Order.Create()
-    res.json(newCart)
-  } catch (error) {
-    next(error)
-  }
-})
+// //Create a new cart
+// router.post('/checkout', async (req, res, next) => {
+//   try {
+//     const newCart = await Order.Create()
+//     res.json(newCart)
+//   } catch (error) {
+//     next(error)
+//   }
+// })
 
 module.exports = router

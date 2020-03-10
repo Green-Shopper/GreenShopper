@@ -20,27 +20,6 @@ export class Confirmation extends Component {
     return (
       <div className="shoppingComponent">
         <h1>Thanks for your order {this.props.firstName}</h1>
-        <span>
-          {this.props.cart.map(function(item) {
-            return (
-              <div key={item.id}>
-                <div className="cartProducts">
-                  <img src={item.imgUrl} className="tempPic" />
-                  <div>
-                    <h4>{item.title}</h4>
-                    <p>Description: {item.description}</p>
-                    <h5>${item.price}</h5>
-                    <pre />
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-        </span>
-        <div className="subtotalStyle">
-          <h3>Total</h3>
-          <h3>${subTotal}</h3>
-        </div>
         <Link to="/products">Browse Products</Link>
       </div>
     )

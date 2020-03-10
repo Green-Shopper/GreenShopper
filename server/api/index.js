@@ -2,7 +2,6 @@ const router = require('express').Router()
 module.exports = router
 
 router.use('/users', require('./users'))
-//Mount router to products
 router.use('/products', require('./products'))
 router.use('/cart', require('./cart'))
 
