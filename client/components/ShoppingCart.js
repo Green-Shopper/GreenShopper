@@ -2,8 +2,10 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {
   getAllCartItemsThunk,
+  gotAllCartItems,
   removeProductFromCartThunk,
-  updateProductQtyInCartThunk
+  updateProductQtyInCartThunk,
+  updatedProductQtyInCart
 } from '../store/cart'
 import {Link} from 'react-router-dom'
 
@@ -15,21 +17,77 @@ export class ShoppingCart extends Component {
   }
 
   componentDidMount() {
-    this.props.getProductsInCart()
+    this.getProducts()
   }
+
+  getProducts() {
+    const guestCart = JSON.parse(localStorage.getItem('cart'))
+    if (this.props.cartId) {
+      console.log('cartId was found')
+      this.props.getProductsInCart()
+    } else if (guestCart) {
+      this.props.setGuestCartInStore(guestCart)
+    }
+  }
+
   incrementFunction(item, cartId) {
-    this.props.updateQuantity({
-      id: item.id,
-      quantity: item.quantity + 1,
-      cartId
-    })
+    if (cartId) {
+      this.props.updateQuantity({
+        id: item.id,
+        quantity: item.quantity + 1,
+        cartId
+      })
+    } else {
+      const ls = window.localStorage
+      const guestCart = JSON.parse(ls.getItem('cart'))
+      const updatedCart = guestCart.map(cartItem => {
+        if (cartItem.id === item.id) {
+          cartItem.quantity += 1
+        }
+        this.props.updateGuestQuantity(cartItem)
+        return cartItem
+      })
+      ls.setItem('cart', JSON.stringify(updatedCart))
+    }
   }
   decrementFunction(item, cartId) {
-    this.props.updateQuantity({
-      id: item.id,
-      quantity: item.quantity - 1,
-      cartId
-    })
+    if (cartId) {
+      this.props.updateQuantity({
+        id: item.id,
+        quantity: item.quantity - 1,
+        cartId
+      })
+    } else {
+      const ls = window.localStorage
+      const guestCart = JSON.parse(ls.getItem('cart'))
+      let updatedCart = []
+      for (let i = 0; i < guestCart.length; i++) {
+        if (guestCart[i].id === item.id) {
+          guestCart[i].quantity -= 1
+        }
+        if (guestCart[i].quantity > 0) {
+          updatedCart.push(guestCart[i])
+          this.props.updateGuestQuantity(guestCart[i])
+        }
+      }
+      this.props.setGuestCartInStore(updatedCart)
+      ls.setItem('cart', JSON.stringify(updatedCart))
+    }
+  }
+  removeHandler(itemId, cartId) {
+    if (cartId) {
+      this.props.removeProductFromCart(itemId, cartId)
+    } else {
+      const ls = window.localStorage
+      const guestCart = JSON.parse(ls.getItem('cart'))
+      const filteredCart = guestCart.filter(item => {
+        if (item.id !== itemId) {
+          return item
+        }
+      })
+      ls.setItem('cart', JSON.stringify(filteredCart))
+      this.props.setGuestCartInStore(filteredCart)
+    }
   }
   render() {
     let subTotal = 0
@@ -43,7 +101,14 @@ export class ShoppingCart extends Component {
       <div className="shoppingComponent">
         <h1>Shopping Cart</h1>
         <Link to="/products">Continue Shopping</Link>
-        <h3>{this.props.firstName + ' ' + this.props.lastName + "'s Cart"}</h3>
+        {this.props.firstName ? (
+          <h3>
+            {this.props.firstName + ' ' + this.props.lastName + "'s Cart"}
+          </h3>
+        ) : (
+          <h3>Guest Cart</h3>
+        )}
+
         <span>
           {this.props.cart.map(item => {
             return (
@@ -81,10 +146,7 @@ export class ShoppingCart extends Component {
                         type="button"
                         className="shoppingRemove"
                         onClick={() =>
-                          this.props.removeProductFromCart(
-                            item.id,
-                            this.props.cartId
-                          )
+                          this.removeHandler(item.id, this.props.cartId)
                         }
                       >
                         X
@@ -122,7 +184,9 @@ const mapDispatchToProps = dispatch => {
     getProductsInCart: () => dispatch(getAllCartItemsThunk()),
     removeProductFromCart: (productId, cartId) =>
       dispatch(removeProductFromCartThunk(productId, cartId)),
-    updateQuantity: item => dispatch(updateProductQtyInCartThunk(item))
+    updateQuantity: item => dispatch(updateProductQtyInCartThunk(item)),
+    updateGuestQuantity: item => dispatch(updatedProductQtyInCart(item)),
+    setGuestCartInStore: guestCart => dispatch(gotAllCartItems(guestCart))
   }
 }
 

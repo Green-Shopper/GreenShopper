@@ -33,7 +33,7 @@ const removedProductFromCart = productId => ({
   productId
 })
 
-const updatedProductQtyInCart = updatedProduct => ({
+export const updatedProductQtyInCart = updatedProduct => ({
   type: UPDATE_PRODUCT_QTY_IN_CART,
   updatedProduct
 })
