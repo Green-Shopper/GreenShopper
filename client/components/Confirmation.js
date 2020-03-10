@@ -20,6 +20,7 @@ export class Confirmation extends Component {
     return (
       <div className="shoppingComponent">
         <h1>Thanks for your order {this.props.firstName}</h1>
+        <p>A confirmation email has been sent.</p>
         <Link to="/products">Browse Products</Link>
       </div>
     )
