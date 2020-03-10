@@ -5,11 +5,10 @@ import PropTypes from 'prop-types'
 import {Login, Signup, UserHome} from './components'
 import {me} from './store'
 import AllProducts from './components/AllProducts'
-import {AllUsers} from './components/AllUsers'
+import AllUsers from './components/AllUsers'
 import SingleProduct from './components/SingleProduct'
 import ShoppingCart from './components/ShoppingCart'
 import UserCart from './components/UserCart'
-import {fetchUsersThunk} from './store/allUsers'
 import {getAllCartItemsThunk} from './store/cart'
 import EditProduct from './components/EditProduct'
 import Checkout from './components/Checkout'
@@ -18,6 +17,7 @@ import ProductAdded from './components/productadded'
 import Home from './components/Home'
 import Confirmation from './components/Confirmation'
 import NotFound from './components/not-found'
+import OrderHistory from './components/OrderHistory'
 
 /**
  * COMPONENT
@@ -25,7 +25,7 @@ import NotFound from './components/not-found'
 class Routes extends Component {
   componentDidMount() {
     this.props.loadInitialData()
-    this.props.fetchUsers()
+    // this.props.fetchUsers()
     this.props.getProductsInCart()
   }
 
@@ -37,6 +37,7 @@ class Routes extends Component {
         <Route path="/home" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
+
         <Route exact path="/products" component={AllProducts} />
         <Route exact path="/products/:id" component={SingleProduct} />
         <Route
@@ -52,7 +53,13 @@ class Routes extends Component {
         <Route
           exact
           path="/shoppingcart/checkout"
-          render={props => <Checkout {...props} cart={this.props.cart} />}
+          render={props => (
+            <Checkout
+              {...props}
+              cart={this.props.cart}
+              order={this.props.order}
+            />
+          )}
         />
         <Route
           exact
@@ -74,21 +81,18 @@ class Routes extends Component {
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route path="/user" component={UserHome} />
+            <Route exact path="/orderhistory" component={OrderHistory} />
             {/* <Route path="/home" component={UserHome} /> */}
             <Route path="/editproduct/:id" component={EditProduct} />
             <Route path="/addproduct/" component={NewProductForm} />
-            <Route
-              exact
-              path="/users"
-              render={props => <AllUsers {...props} users={this.props.users} />}
-            />
+            <Route exact path="/users" component={AllUsers} />
             <Route path="/productadded/" component={ProductAdded} />
             <Route path="/" component={Home} />
             <Route component={NotFound} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
-        <Route path="/" component={Home} />
+        <Route exact path="/" component={Home} />
         <Route component={NotFound} />
       </Switch>
     )
@@ -113,7 +117,6 @@ const mapDispatch = dispatch => {
     loadInitialData() {
       dispatch(me())
     },
-    fetchUsers: () => dispatch(fetchUsersThunk()),
     getProductsInCart: () => dispatch(getAllCartItemsThunk())
   }
 }
