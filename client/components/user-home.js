@@ -146,11 +146,12 @@ export class UserHome extends Component {
                         <div className="row">
                           <div className="input-field col s12">
                             <input
-                              type="text"
+                              type="email"
                               name="email"
                               onChange={this.handleChange}
                               value={this.state.email}
-                              className="validate"
+                              className="validate grey-text text-darken-2"
+                              required
                             />
                             <label className="black-text" />
                             <span className="helper-text" data-error="wrong">
