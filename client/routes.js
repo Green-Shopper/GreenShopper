@@ -17,6 +17,7 @@ import NewProductForm from './components/NewProductForm'
 import ProductAdded from './components/productadded'
 import Home from './components/Home'
 import Confirmation from './components/Confirmation'
+import NotFound from './components/not-found'
 
 /**
  * COMPONENT
@@ -86,7 +87,7 @@ class Routes extends Component {
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
-        <Route component={Home} />
+        <Route component={NotFound} />
       </Switch>
     )
   }
