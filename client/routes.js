@@ -83,7 +83,7 @@ class Routes extends Component {
               render={props => <AllUsers {...props} users={this.props.users} />}
             />
             <Route path="/productadded/" component={ProductAdded} />
-            <Route component={UserHome} />
+            <Route component={NotFound} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
