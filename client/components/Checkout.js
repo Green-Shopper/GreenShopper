@@ -8,6 +8,7 @@ import {
   gotAllCartItems
 } from '../store/cart'
 import {Link} from 'react-router-dom'
+// import Checkout from './Checkout'
 
 export class Checkout extends Component {
   constructor() {
@@ -63,6 +64,11 @@ export class Checkout extends Component {
           <Link onClick={() => this.handleClick()} to="checkout/confirmation">
             Buy Now
           </Link>
+          <Checkout
+            name="GreenShopper"
+            description="We Sell Plants"
+            amount={(subTotal / 100).toFixed(2)}
+          />
         </div>
         <div>
           <Link to="/products">Keep Shopping</Link>

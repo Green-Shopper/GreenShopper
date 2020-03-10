@@ -18,6 +18,7 @@ import ProductAdded from './components/productadded'
 import Home from './components/Home'
 import Confirmation from './components/Confirmation'
 import NotFound from './components/not-found'
+import OrderHistory from './components/OrderHistory'
 
 /**
  * COMPONENT
@@ -37,6 +38,7 @@ class Routes extends Component {
         <Route path="/home" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
+
         <Route exact path="/products" component={AllProducts} />
         <Route exact path="/products/:id" component={SingleProduct} />
         <Route
@@ -80,6 +82,7 @@ class Routes extends Component {
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route path="/user" component={UserHome} />
+            <Route exact path="/orderhistory" component={OrderHistory} />
             {/* <Route path="/home" component={UserHome} /> */}
             <Route path="/editproduct/:id" component={EditProduct} />
             <Route path="/addproduct/" component={NewProductForm} />

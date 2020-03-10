@@ -208,14 +208,4 @@ router.post('/:id', async (req, res, next) => {
   }
 })
 
-// //Create a new cart
-// router.post('/checkout', async (req, res, next) => {
-//   try {
-//     const newCart = await Order.Create()
-//     res.json(newCart)
-//   } catch (error) {
-//     next(error)
-//   }
-// })
-
 module.exports = router
