@@ -107,11 +107,6 @@ export class UserCart extends Component {
           <h3>Subtotal</h3>
           <h3>${(subTotal / 100).toFixed(2)}</h3>
         </div>
-        <pre>
-          <button type="submit">
-            <Link to="/shoppingcart/checkout">Checkout</Link>
-          </button>
-        </pre>
       </div>
     )
   }
