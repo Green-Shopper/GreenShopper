@@ -44,6 +44,10 @@
   object-fit: cover;
 }
 
+.updateNotification-headerText {
+  text-align: center;
+}
+
 .user-home-padding {
   padding: 20px 90px 100px 90px;
 }
