@@ -60,12 +60,9 @@ export class UserHome extends Component {
     const toastHTML = `
     <div>
       <p class="updateNotification-headerText">User succefully updated!</p>
-      <p class="updateNotification-updatedText">User Name: ${
-        this.state.firstName
-      } ${this.state.lastName}</p>
-      <p class="updateNotification-updatedText">User email: ${
-        this.state.email
-      }</p>
+      <hr></hr>
+      <p>User Name: ${this.state.firstName} ${this.state.lastName}</p>
+      <p>User email: ${this.state.email}</p>
     </div>
     `
     M.toast({
