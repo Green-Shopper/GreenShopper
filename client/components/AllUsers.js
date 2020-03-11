@@ -11,22 +11,36 @@ export class AllUsers extends Component {
   }
 
   render() {
+    console.log('IMG URL=======', this.props.theUsers.map(user => user))
     return (
       <div>
         <h1 id="allUsersHeading">All Users</h1>
         <div>
           {this.props.theUsers.map(function(user) {
             return (
-              <ul key={user.id}>
-                <h3>{user.firstName + ' ' + user.lastName} </h3>
-                <div>Email: {user.email}</div>
-                <p />
-                <div>id: {user.id}</div>
-                <p />
-                <button type="submit">
-                  <Link to={`/userCart/${user.id}`}>Edit Cart</Link>
-                </button>
-              </ul>
+              <div key={user.id} className="container">
+                <ul className="collection">
+                  <li className="collection-item avatar">
+                    <img src={user.imgUrl} className="circle" />
+                    <span className="title">
+                      <b>{user.firstName + ' ' + user.lastName}</b>
+                    </span>
+                    <p>
+                      <b>Email:</b> {user.email}
+                      <br />
+                      <b>id:</b> {user.id}
+                    </p>
+                    <button
+                      type="submit"
+                      className="secondary-content btn waves-effect waves-light"
+                    >
+                      <Link className="white-text" to={`/userCart/${user.id}`}>
+                        Edit Cart
+                      </Link>
+                    </button>
+                  </li>
+                </ul>
+              </div>
             )
           })}
         </div>
