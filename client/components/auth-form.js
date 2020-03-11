@@ -78,6 +78,7 @@ const AuthForm = props => {
                               name="firstName"
                               type="text"
                               className="validate grey-text text-darken-2"
+                              required
                             />
                             <span
                               className="helper-text"
@@ -90,6 +91,7 @@ const AuthForm = props => {
                               name="lastName"
                               type="text"
                               className="validate grey-text text-darken-2"
+                              required
                             />
                           </div>
                         </div>
