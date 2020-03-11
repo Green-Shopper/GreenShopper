@@ -89,6 +89,7 @@ export class ShoppingCart extends Component {
     }
   }
   render() {
+    console.log('CART PROPS', this.props)
     let subTotal = 0
     this.props.cart.forEach(item => {
       if (item.quantity === 0) {
@@ -111,7 +112,6 @@ export class ShoppingCart extends Component {
             <Link to="/products">Continue Shopping</Link>
             <br />
           </div>
-
           <div className="col s12 m9 l9">
             {this.props.cart.map(item => {
               return (
@@ -193,14 +193,16 @@ export class ShoppingCart extends Component {
                   <h4>${(subTotal / 100).toFixed(2)}</h4>
                 </div>
               </div>
-              <div className="card-action center">
-                <Link
-                  to="/shoppingcart/checkout"
-                  className="btn waves-effect waves-light"
-                >
-                  Checkout <i className="material-icons right">loyalty</i>
-                </Link>
-              </div>
+              {this.props.cart.length ? (
+                <div className="card-action center">
+                  <Link
+                    to="/shoppingcart/checkout"
+                    className="btn waves-effect waves-light"
+                  >
+                    Checkout <i className="material-icons right">loyalty</i>
+                  </Link>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
