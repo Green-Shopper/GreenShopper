@@ -5,9 +5,7 @@ import {
   removeProductFromUserCartThunk,
   updateProductQtyInUserCartThunk
 } from '../store/singleUserCart'
-
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 
 export class UserCart extends Component {
   constructor() {
@@ -44,70 +42,107 @@ export class UserCart extends Component {
     })
 
     return (
-      <div className="shoppingComponent">
-        <h1>Shopping Cart</h1>
-        <h3>
-          {this.props.selectedUser.firstName +
-            ' ' +
-            this.props.selectedUser.lastName +
-            "'s Cart"}
-        </h3>
-        <span>
-          {this.props.userCart.map(item => {
-            return (
-              <div key={item.id}>
-                <div className="cartProducts">
-                  <img src={item.imgUrl} className="tempPic" />
-                  <div>
-                    <h4>{item.title}</h4>
-                    <p>Description: {item.description}</p>
-                    <h5>${(item.price / 100).toFixed(2)}</h5>
-                    <pre />
-                    <p className="qty">
-                      <span
-                        className="spanStyle"
-                        onClick={() =>
-                          this.decrementFunction(item, this.props.cartId)
-                        }
-                      >
-                        -
-                      </span>
-                      {item.quantity}
-                      <span
-                        className="spanStyle"
-                        onClick={() =>
-                          this.incrementFunction(item, this.props.cartId)
-                        }
-                      >
-                        +
-                      </span>
-                    </p>
-                    <div>
-                      Remove
-                      <button
-                        type="button"
-                        className="shoppingRemove"
-                        onClick={() =>
-                          this.props.removeProductFromCart(
-                            item.id,
-                            this.props.cartId
-                          )
-                        }
-                      >
-                        X
-                      </button>
+      <section className="products">
+        <div className="row">
+          <div className="center grey-text text-darken-2">
+            <h3>Shopping Cart</h3>
+            <h4>
+              {this.props.selectedUser.firstName +
+                ' ' +
+                this.props.selectedUser.lastName +
+                "'s Cart"}
+            </h4>
+            <br />
+          </div>
+
+          <div className="col s12 m9 l9">
+            {this.props.userCart.map(item => {
+              return (
+                <div key={item.id} className="card horizontal">
+                  <div className="card-image">
+                    {`${item.imgUrl}`.startsWith('http') ? (
+                      <img
+                        src={item.imgUrl}
+                        className="cart-img"
+                        alt="Image of flower"
+                      />
+                    ) : (
+                      <img
+                        src={`../../${item.imgUrl}`}
+                        className="cart-img"
+                        alt="Image of flower"
+                      />
+                    )}
+                  </div>
+                  <div className="card-stacked">
+                    <div className="card-content">
+                      <div>
+                        <div className="col s12 l6 left">
+                          <h5>{item.title}</h5>
+                          {item.description}
+                        </div>
+                        <p className="col s12 l1 right blue-text">
+                          ${(item.price / 100).toFixed(2)}
+                        </p>
+                        <br />
+                        <div className="row right">
+                          <p className="qty">
+                            <span
+                              className="spanStyle"
+                              onClick={() =>
+                                this.decrementFunction(item, this.props.cartId)
+                              }
+                            >
+                              -
+                            </span>
+                            {item.quantity}
+                            <span
+                              className="spanStyle"
+                              onClick={() =>
+                                this.incrementFunction(item, this.props.cartId)
+                              }
+                            >
+                              +
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="card-action">
+                      <div className="col s12 l6 right">
+                        <button
+                          className="btn-floating waves-effect waves-light red right"
+                          type="button"
+                          name="action"
+                          onClick={() =>
+                            this.props.removeProductFromCart(
+                              item.id,
+                              this.props.cartId
+                            )
+                          }
+                        >
+                          <i className="material-icons">remove</i>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
+              )
+            })}
+          </div>
+
+          <div className="col s12 l3 center">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title center center">Subtotal</span>
+                <div>
+                  <h4>${(subTotal / 100).toFixed(2)}</h4>
+                </div>
               </div>
-            )
-          })}
-        </span>
-        <div className="subtotalStyle">
-          <h3>Subtotal</h3>
-          <h3>${(subTotal / 100).toFixed(2)}</h3>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
     )
   }
 }
