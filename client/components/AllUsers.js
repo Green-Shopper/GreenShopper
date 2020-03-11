@@ -11,7 +11,6 @@ export class AllUsers extends Component {
   }
 
   render() {
-    console.log('IMG URL=======', this.props.theUsers.map(user => user))
     return (
       <div>
         <h1 id="allUsersHeading">All Users</h1>

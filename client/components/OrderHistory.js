@@ -47,7 +47,6 @@ export class OrderHistory extends Component {
 
   render() {
     const {orders} = this.props
-    console.log('PROPS', this.props)
 
     return (
       <div className="container">

@@ -23,7 +23,6 @@ export class ShoppingCart extends Component {
   getProducts() {
     const guestCart = JSON.parse(localStorage.getItem('cart'))
     if (this.props.cartId) {
-      console.log('cartId was found')
       this.props.getProductsInCart()
     } else if (guestCart) {
       this.props.setGuestCartInStore(guestCart)

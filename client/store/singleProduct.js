@@ -12,7 +12,6 @@ export const editedProduct = (id, update) => ({type: EDIT_PRODUCT, id, update})
 
 export const editProductThunk = (id, update) => async dispatch => {
   try {
-    console.log('EDIT PRODUCT THUNK')
     await axios.put(`/api/products/editproduct/${id}`, {
       title: update.title,
       description: update.description,

@@ -19,7 +19,6 @@ router.get('/', adminsOnly, async (req, res, next) => {
 
 router.put('/', async (req, res, next) => {
   const userId = req.body.id
-  console.log('REQ.BODY', req.body)
   try {
     await User.update(req.body, {where: {id: userId}})
     res.sendStatus(204)

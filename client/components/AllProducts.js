@@ -15,7 +15,6 @@ export class AllProducts extends Component {
 
   render() {
     const {products, isAdmin} = this.props
-    console.log(this.state)
     return (
       <div>
         <section className="products">

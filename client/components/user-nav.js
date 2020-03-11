@@ -3,7 +3,6 @@ import {Link} from 'react-router-dom'
 
 export class UserNav extends Component {
   render() {
-    console.log('PROPS', this.props)
     return (
       <div>
         <div className="col s12 l3">

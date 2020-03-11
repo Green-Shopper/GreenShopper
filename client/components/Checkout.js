@@ -22,7 +22,6 @@ export class Checkout extends Component {
   getProducts() {
     const guestCart = JSON.parse(localStorage.getItem('cart'))
     if (this.props.cartId) {
-      console.log('cartId was found')
       this.props.getProductsInCart()
     } else if (guestCart) {
       this.props.setGuestCartInStore(guestCart)
@@ -37,9 +36,6 @@ export class Checkout extends Component {
   }
 
   render() {
-    // const cartId = this.props.user.cartId
-    console.log('CHECKOUT PROPS', this.props)
-
     let subTotal = 0
     this.props.cart.forEach(function(item) {
       subTotal += item.price * item.quantity
