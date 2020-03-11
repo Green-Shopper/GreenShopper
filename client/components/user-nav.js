@@ -16,16 +16,8 @@ export class UserNav extends Component {
                   <li>
                     <Link to="/user">Edit Profile</Link>
                   </li>
-                  {this.props.googleId ? null : (
-                    <li>
-                      <Link to="/changepassword">Change Password</Link>
-                    </li>
-                  )}
                   <li>
                     <Link to="/shoppingcart">View Cart</Link>
-                  </li>
-                  <li>
-                    <Link to="/orders">View Orders</Link>
                   </li>
                   <li>
                     <Link to="/orderhistory">Order History</Link>
