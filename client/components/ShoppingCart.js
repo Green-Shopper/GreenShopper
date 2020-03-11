@@ -90,7 +90,6 @@ export class ShoppingCart extends Component {
     }
   }
   render() {
-    console.log('SHOPPING CART PROPS', this.props)
     let subTotal = 0
     this.props.cart.forEach(item => {
       if (item.quantity === 0) {
@@ -99,76 +98,114 @@ export class ShoppingCart extends Component {
       subTotal += item.price * item.quantity
     })
     return (
-      <div className="shoppingComponent">
-        <h1>Shopping Cart</h1>
-        <Link to="/products">Continue Shopping</Link>
-        {this.props.firstName ? (
-          <h3>
-            {this.props.firstName + ' ' + this.props.lastName + "'s Cart"}
-          </h3>
-        ) : (
-          <h3>Guest Cart</h3>
-        )}
+      <section className="products">
+        <div className="row">
+          <div className="center grey-text text-darken-2">
+            <h3>Shopping Cart</h3>
+            {this.props.firstName ? (
+              <h5>
+                {this.props.firstName + ' ' + this.props.lastName + "'s Cart"}
+              </h5>
+            ) : (
+              <h5>Guest Cart</h5>
+            )}
+            <Link to="/products">Continue Shopping</Link>
+            <br />
+          </div>
 
-        <span>
-          {this.props.cart.map(item => {
-            return (
-              <div key={item.id}>
-                <div className="cartProducts">
-                  <img src={item.imgUrl} className="tempPic" />
-                  <div>
-                    <h4>{item.title}</h4>
-                    <p>Description: {item.description}</p>
-                    <h5>${(item.price / 100).toFixed(2)}</h5>
-                    <pre />
-                    <p className="qty">
-                      <span
-                        className="spanStyle"
-                        onClick={() =>
-                          this.decrementFunction(item, this.props.cartId)
-                        }
-                      >
-                        -
-                      </span>
-                      {item.quantity}
-                      <span
-                        className="spanStyle"
-                        onClick={() =>
-                          this.incrementFunction(item, this.props.cartId)
-                        }
-                      >
-                        +
-                      </span>
-                    </p>
-
-                    <div>
-                      Remove
-                      <button
-                        type="button"
-                        className="shoppingRemove"
-                        onClick={() =>
-                          this.removeHandler(item.id, this.props.cartId)
-                        }
-                      >
-                        X
-                      </button>
+          <div className="col s12 m9 l9">
+            {this.props.cart.map(item => {
+              return (
+                <div key={item.id} className="card horizontal">
+                  <div className="card-image">
+                    {`${item.imgUrl}`.startsWith('http') ? (
+                      <img
+                        src={item.imgUrl}
+                        className="cart-img"
+                        alt="Image of flower"
+                      />
+                    ) : (
+                      <img
+                        src={`../../${item.imgUrl}`}
+                        className="cart-img"
+                        alt="Image of flower"
+                      />
+                    )}
+                  </div>
+                  <div className="card-stacked">
+                    <div className="card-content">
+                      <div>
+                        <div className="col s12 l6 left">
+                          <h5>{item.title}</h5>
+                          {item.description}
+                        </div>
+                        <p className="col s12 l1 right blue-text">
+                          ${(item.price / 100).toFixed(2)}
+                        </p>
+                        <br />
+                        <div className="row right">
+                          <p className="qty">
+                            <span
+                              className="spanStyle"
+                              onClick={() =>
+                                this.decrementFunction(item, this.props.cartId)
+                              }
+                            >
+                              -
+                            </span>
+                            {item.quantity}
+                            <span
+                              className="spanStyle"
+                              onClick={() =>
+                                this.incrementFunction(item, this.props.cartId)
+                              }
+                            >
+                              +
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="card-action">
+                      <div className="col s12 l6 right">
+                        <button
+                          className="btn-floating waves-effect waves-light red right"
+                          type="button"
+                          name="action"
+                          onClick={() =>
+                            this.removeHandler(item.id, this.props.cartId)
+                          }
+                        >
+                          <i className="material-icons">remove</i>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
+              )
+            })}
+          </div>
+
+          <div className="col s12 l3 center">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title center center">Subtotal</span>
+                <div>
+                  <h4>${(subTotal / 100).toFixed(2)}</h4>
+                </div>
               </div>
-            )
-          })}
-        </span>
-        <div className="subtotalStyle">
-          <h3>Subtotal</h3>
-          <h3>${(subTotal / 100).toFixed(2)}</h3>
+              <div className="card-action center">
+                <Link
+                  to="/shoppingcart/checkout"
+                  className="btn waves-effect waves-light"
+                >
+                  Checkout <i className="material-icons right">loyalty</i>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
-        <pre>
-          <button type="submit">
-            <Link to="/shoppingcart/checkout">Checkout</Link>
-          </button>
-        </pre>
-      </div>
+      </section>
     )
   }
 }
