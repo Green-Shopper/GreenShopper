@@ -3,7 +3,6 @@ import {Link} from 'react-router-dom'
 
 export class UserNav extends Component {
   render() {
-    console.log('PROPS', this.props)
     return (
       <div>
         <div className="col s12 l3">
@@ -16,16 +15,8 @@ export class UserNav extends Component {
                   <li>
                     <Link to="/user">Edit Profile</Link>
                   </li>
-                  {this.props.googleId ? null : (
-                    <li>
-                      <Link to="/changepassword">Change Password</Link>
-                    </li>
-                  )}
                   <li>
                     <Link to="/shoppingcart">View Cart</Link>
-                  </li>
-                  <li>
-                    <Link to="/orders">View Orders</Link>
                   </li>
                   <li>
                     <Link to="/orderhistory">Order History</Link>

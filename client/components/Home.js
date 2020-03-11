@@ -46,6 +46,8 @@ class Home extends Component {
             </div>
           </div>
         </div>
+        <br />
+        <br />
         <section className="section section-icons center">
           <div className="container">
             <div className="row">
@@ -82,7 +84,7 @@ class Home extends Component {
             </div>
           </div>
         </section>
-        <section id="popular" className="section section-popular scrollspy">
+        <section>
           <div className="container">
             <div className="row">
               <h4 className="center">

@@ -10,8 +10,6 @@ export class Confirmation extends Component {
   }
 
   render() {
-    console.log('PROPS', this.props)
-
     let subTotal = 0
     this.props.cart.forEach(function(item) {
       subTotal += item.price

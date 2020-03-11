@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
+import {Link} from 'react-router-dom'
 
 /**
  * COMPONENT
@@ -18,6 +19,7 @@ const AuthForm = props => {
               <div className="card-panel grey-text">
                 {displayName === 'Login' ? (
                   <div>
+                    New shopper? <Link to="/signup">Sign Up</Link>
                     <form onSubmit={handleSubmit} name={name}>
                       <div className="input-field">
                         <i className="material-icons prefix grey-text">email</i>
@@ -53,13 +55,17 @@ const AuthForm = props => {
                         className="waves-effect waves-light btn-small blue"
                         href="/auth/google"
                       >
-                        <i className="fab fa-google left" /> {displayName}
-                        with Google
+                        <i className="fab fa-google left" />
+                        {`${displayName} with Google`}
                       </a>
                     </div>
                   </div>
                 ) : (
                   <div>
+                    <h3>Sign up! It's Free.</h3>
+                    <p>
+                      Returning shopper? <Link to="/login">Login</Link>
+                    </p>
                     <form onSubmit={handleSubmit} name={name}>
                       <div>
                         <div className="row">
@@ -72,6 +78,7 @@ const AuthForm = props => {
                               name="firstName"
                               type="text"
                               className="validate grey-text text-darken-2"
+                              required
                             />
                             <span
                               className="helper-text"
@@ -84,6 +91,7 @@ const AuthForm = props => {
                               name="lastName"
                               type="text"
                               className="validate grey-text text-darken-2"
+                              required
                             />
                           </div>
                         </div>
@@ -121,8 +129,8 @@ const AuthForm = props => {
                         className="waves-effect waves-light btn-small blue"
                         href="/auth/google"
                       >
-                        <i className="fab fa-google left" /> {displayName}
-                        with Google
+                        <i className="fab fa-google left" />{' '}
+                        {`${displayName} with Google`}
                       </a>
                     </div>
                   </div>

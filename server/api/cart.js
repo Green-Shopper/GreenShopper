@@ -170,7 +170,7 @@ router.put('/checkout', async (req, res, next) => {
       to: req.user.dataValues.email,
       subject: 'Green Shopper Confirmation',
       text: 'Yay you bought some plants!!!',
-      html: `<div> 
+      html: `<div>
       <p>Yay you bought some plants!!!</p>
       <p>Products: ${productString}</p>
       <p>Your plant(s) should arrive soon!</p>
@@ -185,7 +185,6 @@ router.put('/checkout', async (req, res, next) => {
 
 //update quantity in cart
 router.put('/:id', async (req, res, next) => {
-  console.log('')
   const productId = req.params.id
   const quantityToAdd = req.body.quantity
 
@@ -249,11 +248,6 @@ router.post('/:id', async (req, res, next) => {
         imgUrl: foundProduct.dataValues.imgUrl,
         quantity: quantityToBuy
       }
-
-      // await newOrder.addProduct(foundProduct)
-      // //changed req.session.userId to req.user.id
-      // await newOrder.setUser(req.user.id)
-      console.log('cartItem logging', cartItem.title)
       res.json(cartItem)
     }
   } catch (error) {

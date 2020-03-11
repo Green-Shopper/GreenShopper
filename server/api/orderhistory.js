@@ -10,7 +10,6 @@ router.get('/', async (req, res, next) => {
         isCart: false
       }
     })
-    console.log('PREVIOUS ORDERS:,', prevOrders)
     let orderIds = []
     let orderHistory = []
     for (let i = 0; i < prevOrders.length; i++) {
@@ -18,12 +17,8 @@ router.get('/', async (req, res, next) => {
       let orderId = order.id
       orderIds.push(orderId)
     }
-    console.log('ORDER IDS', orderIds)
     for (let i = 0; i < orderIds.length; i++) {
-      console.log('ORDER ID AT I:', orderIds[i])
       const orders = await OrderSummary.findAll({where: {orderId: orderIds[i]}})
-      // console.log('ORDERS==================', orders[i].dataValues)
-      // console.log('ORDERS.DATAVALS==================', orders[i].dataValues)
       orderHistory.push(orders)
     }
 

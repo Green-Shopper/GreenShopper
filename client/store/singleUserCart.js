@@ -33,7 +33,6 @@ export const removeProductFromUserCartThunk = (
   cartId
 ) => async dispatch => {
   try {
-    console.log('logging cartId in redux', cartId)
     await axios.delete(`/api/cart/${productId}`, {data: {cartId}})
     dispatch(removedProductFromUserCart(productId))
   } catch (error) {

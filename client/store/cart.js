@@ -65,7 +65,6 @@ export const addProductToCartThunk = productToAdd => async dispatch => {
 export const getAllCartItemsThunk = () => async dispatch => {
   try {
     const {data} = await axios.get('/api/cart')
-    console.log('data recieved from the db: ', data)
     dispatch(gotAllCartItems(data))
   } catch (error) {
     console.error(
@@ -75,24 +74,9 @@ export const getAllCartItemsThunk = () => async dispatch => {
   }
 }
 
-// export const getAllCartItemsForUserThunk = userId => async dispatch => {
-//   console.log('getin users items userId: ', userId)
-//   try {
-//     const {data} = await axios(`/api/cart/${userId}`)
-//     console.log('data recieved from the db: ', data)
-//     dispatch(gotAllCartItems(data))
-//   } catch (error) {
-//     console.error(
-//       'An error occurred in thunk while getting all cart items from db. ',
-//       error
-//     )
-//   }
-// }
-
 export const getNewCartThunk = () => async dispatch => {
   try {
     const {data} = await axios.put('/api/cart/checkout/confirmation')
-    console.log('data recieved from db', data)
     dispatch(gotNewCart())
   } catch (error) {
     console.error('An error occurred in thunk while getting new cart. ', error)
@@ -109,7 +93,6 @@ export const mergeGuestAndUserCartThunk = guestAndUserCarts => async dispatch =>
       '/api/cart',
       guestAndUserCarts
     )
-    console.log('data recieved from db', mergedCarts)
     dispatch(mergedGuestAndUserCart(mergedCarts))
   } catch (error) {
     console.error('An error occurred in thunk while merging carts. ', error)

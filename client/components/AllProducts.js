@@ -15,7 +15,6 @@ export class AllProducts extends Component {
 
   render() {
     const {products, isAdmin} = this.props
-    console.log(this.state)
     return (
       <div>
         <section className="products">
@@ -30,7 +29,11 @@ export class AllProducts extends Component {
                     <div className="col s12 l4">
                       <Link
                         to="/products"
-                        onClick={() => this.props.sortProducts('low light')}
+                        onClick={() =>
+                          this.props
+                            .fetchProducts()
+                            .then(() => this.props.sortProducts('low light'))
+                        }
                       >
                         <i className="fas fa-cloud" /> Low light
                       </Link>
@@ -38,7 +41,11 @@ export class AllProducts extends Component {
                     <div className="col s12 l4">
                       <Link
                         to="/products"
-                        onClick={() => this.props.sortProducts('medium light')}
+                        onClick={() =>
+                          this.props
+                            .fetchProducts()
+                            .then(() => this.props.sortProducts('medium light'))
+                        }
                       >
                         <i className="fas fa-adjust" /> Medium Light
                       </Link>
@@ -46,7 +53,11 @@ export class AllProducts extends Component {
                     <div className="col s12 l4">
                       <Link
                         to="/products"
-                        onClick={() => this.props.sortProducts('bright light')}
+                        onClick={() =>
+                          this.props
+                            .fetchProducts()
+                            .then(() => this.props.sortProducts('bright light'))
+                        }
                       >
                         <i className="fas fa-sun" /> Bright Light
                       </Link>
@@ -56,7 +67,7 @@ export class AllProducts extends Component {
                       <Link
                         to="/products"
                         className="red-text"
-                        onClick={() => this.props.fetchProducts('low light')}
+                        onClick={() => this.props.fetchProducts()}
                       >
                         Clear Filters
                       </Link>
@@ -76,10 +87,19 @@ export class AllProducts extends Component {
                         <div className="card">
                           <div className="card-image">
                             <Link to={`/products/${product.id}`}>
-                              <img
-                                className="product-img"
-                                src={`../../${product.imgUrl}`}
-                              />
+                              {`${product.imgUrl}`.startsWith('http') ? (
+                                <img
+                                  src={product.imgUrl}
+                                  className="img-resize"
+                                  alt="Image of flower"
+                                />
+                              ) : (
+                                <img
+                                  src={`../../${product.imgUrl}`}
+                                  className="img-resize"
+                                  alt="Image of flower"
+                                />
+                              )}
                             </Link>
                             {isAdmin ? (
                               <button

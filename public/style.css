@@ -101,3 +101,9 @@
   margin: 7%;
   box-sizing: border-box;
 }
+
+.cart-img {
+  /* object-fit: cover; */
+  height: 150px;
+  object-fit: cover;
+}

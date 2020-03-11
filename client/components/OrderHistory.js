@@ -5,10 +5,18 @@ import {v4 as uuidv4} from 'uuid'
 
 const Order = ({order}) => (
   <ul key={uuidv4()}>
-    <li>Order Id: {order.orderId}</li>
-    <li>Product Id: {order.productId}</li>
-    <li>Qty: {order.quantity}</li>
-    <li>Unit Price: {`$${(order.priceAtCheckOut / 100).toFixed(2)}`}</li>
+    <li>
+      Order Id: <b>{order.orderId}</b>
+    </li>
+    <li>
+      Product Id: <b>{order.productId}</b>
+    </li>
+    <li>
+      Unit Price: <b>{`$${(order.priceAtCheckOut / 100).toFixed(2)}`}</b>
+    </li>
+    <li>
+      Qty: <b>{order.quantity}</b>
+    </li>
   </ul>
 )
 
@@ -17,12 +25,17 @@ const OrderContainer = ({orders}) => {
     const newTotal = acc + currentOrder.priceAtCheckOut * currentOrder.quantity
     return newTotal
   }, 0)
-  console.log(orderTotal)
   return (
-    <div className="container">
-      <p>Order Date: {orders[0].updatedAt}</p>
+    <div className="container center">
+      <span className="card-title">Order no. {orders[0].orderId}</span>
+      <p>
+        Order Date: <b>{orders[0].updatedAt}</b>
+      </p>
       {orders.map(order => <Order key={uuidv4()} order={order} />)}
-      <p>Order Total: {`$${(orderTotal / 100).toFixed(2)}`}</p>
+      <div className="card-action">
+        Order Total:{' '}
+        <b className="red-text">{`$${(orderTotal / 100).toFixed(2)}`}</b>
+      </div>
     </div>
   )
 }
@@ -34,23 +47,26 @@ export class OrderHistory extends Component {
 
   render() {
     const {orders} = this.props
-    console.log('PROPS', this.props)
-    // const individualOrders = orders.map(order =>
-    //   order.map(element => element.orderId)
-    // )
-    // console.log('ORDER IDs', individualOrders)
-    return orders.map(function(ordersList) {
-      return <OrderContainer key={uuidv4()} orders={ordersList} />
-      // return (
-      //   <ul key={uuidv4()}>
-      //     <li>Order Id: {order.orderId}</li>
-      //     <li>Product Id: {order.productId}</li>
-      //     <li>Qty: {order.quantity}</li>
-      //     <li>Price: {order.priceAtCheckout}</li>
-      //   </ul>
-      // )
-    })
-    // return <div className="container">{ordersList}</div>
+
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="col s12 m6">
+            {orders.map(function(ordersList) {
+              return (
+                <div className="card" key={uuidv4()}>
+                  <div className="card-content">
+                    <div>
+                      <OrderContainer key={uuidv4()} orders={ordersList} />
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    )
   }
 }
 
