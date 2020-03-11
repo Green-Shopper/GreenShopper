@@ -88,10 +88,19 @@ export class AllProducts extends Component {
                         <div className="card">
                           <div className="card-image">
                             <Link to={`/products/${product.id}`}>
-                              <img
-                                className="product-img"
-                                src={`../../${product.imgUrl}`}
-                              />
+                              {`${product.imgUrl}`.startsWith('http') ? (
+                                <img
+                                  src={product.imgUrl}
+                                  className="img-resize"
+                                  alt="Image of flower"
+                                />
+                              ) : (
+                                <img
+                                  src={`../../${product.imgUrl}`}
+                                  className="img-resize"
+                                  alt="Image of flower"
+                                />
+                              )}
                             </Link>
                             {isAdmin ? (
                               <button

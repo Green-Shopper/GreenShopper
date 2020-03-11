@@ -109,11 +109,19 @@ export class SingleProduct extends Component {
         <div className="col s12 m7">
           <div className="card horizontal">
             <div className="card-image">
-              <img
-                src={`../../${product.imgUrl}`}
-                className="img-resize"
-                alt="Image of flower"
-              />
+              {`${product.imgUrl}`.startsWith('http') ? (
+                <img
+                  src={product.imgUrl}
+                  className="img-resize"
+                  alt="Image of flower"
+                />
+              ) : (
+                <img
+                  src={`../../${product.imgUrl}`}
+                  className="img-resize"
+                  alt="Image of flower"
+                />
+              )}
             </div>
             <div className="card-stacked">
               <div className="card-content">
