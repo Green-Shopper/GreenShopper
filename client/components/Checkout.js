@@ -8,7 +8,6 @@ import {
   gotAllCartItems
 } from '../store/cart'
 import {Link} from 'react-router-dom'
-// import Checkout from './Checkout'
 
 export class Checkout extends Component {
   constructor() {
@@ -43,7 +42,7 @@ export class Checkout extends Component {
 
     let subTotal = 0
     this.props.cart.forEach(function(item) {
-      subTotal += item.price
+      subTotal += item.price * item.quantity
     })
 
     return (
@@ -58,7 +57,8 @@ export class Checkout extends Component {
                   <div>
                     <h4>{item.title}</h4>
                     <p>Description: {item.description}</p>
-                    <h5>${(item.price / 100).toFixed(2)}</h5>
+                    <p>Qty: {item.quantity}</p>
+                    <h5>${(item.price / 100).toFixed(2) * item.quantity}</h5>
 
                     <pre />
                   </div>
