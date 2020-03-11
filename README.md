@@ -50,7 +50,7 @@ If you want to run the server and/or `webpack` separately, you can also
 * It might look like this:
   ```javascript
   process.env.GOOGLE_CLIENT_ID = 'Your Google Client ID here'
-  process.env.GOOGLE_CLIENT_SECRET = 'Your Google Client Secrete here'
+  process.env.GOOGLE_CLIENT_SECRET = 'Your Google Client Secret here'
   process.env.GOOGLE_CALLBACK = '/auth/google/callback'
   ```
 
