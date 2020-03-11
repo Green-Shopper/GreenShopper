@@ -46,40 +46,73 @@ export class Checkout extends Component {
     })
 
     return (
-      <div className="shoppingComponent">
-        <h1>Order Summary</h1>
-        <span>
-          {this.props.cart.map(function(item) {
-            return (
-              <div key={item.id}>
-                <div className="cartProducts">
-                  <img src={item.imgUrl} className="tempPic" />
-                  <div>
-                    <h4>{item.title}</h4>
-                    <p>Description: {item.description}</p>
-                    <p>Qty: {item.quantity}</p>
-                    <h5>${(item.price / 100).toFixed(2) * item.quantity}</h5>
+      <section className="products">
+        <div className="row">
+          <div className="center grey-text text-darken-2">
+            <h1>Order Summary</h1>
+          </div>
+          <div className="col s12 l12">
+            {this.props.cart.map(item => {
+              return (
+                <div key={item.id} className="card horizontal">
+                  <div className="card-image">
+                    {`${item.imgUrl}`.startsWith('http') ? (
+                      <img
+                        src={item.imgUrl}
+                        className="cart-img"
+                        alt="Image of flower"
+                      />
+                    ) : (
+                      <img
+                        src={`../../${item.imgUrl}`}
+                        className="cart-img"
+                        alt="Image of flower"
+                      />
+                    )}
+                  </div>
+                  <div className="card-stacked">
+                    <div className="card-content">
+                      <div className="col s12 l6 left">
+                        <h5>{item.title}</h5>
+                        <p>{item.description}</p>
+                        Qty: <b className="red-text">{item.quantity}</b>
+                      </div>
+                      <div className="col 12 l1 right blue-text">
+                        <h5>
+                          ${(item.price / 100).toFixed(2) * item.quantity}
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
 
-                    <pre />
+            <div className="row right">
+              <div className="col s12 l12">
+                <div className="card">
+                  <div className="card-content">
+                    <h5>
+                      Total:
+                      <b className="red-text">${(subTotal / 100).toFixed(2)}</b>
+                    </h5>
+                  </div>
+                  <div className="card-action center">
+                    <Link
+                      onClick={() => this.handleClick()}
+                      className="btn waves-effect waves-light"
+                      to="checkout/confirmation"
+                    >
+                      Buy Now
+                    </Link>
+                    <Link to="/products"> Keep Shopping</Link>
                   </div>
                 </div>
               </div>
-            )
-          })}
-        </span>
-        <div className="subtotalStyle">
-          <h3>Total</h3>
-          <h3>${(subTotal / 100).toFixed(2)}</h3>
+            </div>
+          </div>
         </div>
-        <div>
-          <Link onClick={() => this.handleClick()} to="checkout/confirmation">
-            Buy Now
-          </Link>
-        </div>
-        <div>
-          <Link to="/products">Keep Shopping</Link>
-        </div>
-      </div>
+      </section>
     )
   }
 }
