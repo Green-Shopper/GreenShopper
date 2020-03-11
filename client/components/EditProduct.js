@@ -47,11 +47,19 @@ export class EditProduct extends Component {
         <div className="col s12 m7">
           <div className="card horizontal">
             <div className="card-image">
-              <img
-                src={`../../${this.props.singleProduct.imgUrl}`}
-                className="img-resize"
-                alt="Image of flower"
-              />
+              {`${this.props.singleProduct.imgUrl}`.startsWith('http') ? (
+                <img
+                  src={this.props.singleProduct.imgUrl}
+                  className="img-resize"
+                  alt="Image of flower"
+                />
+              ) : (
+                <img
+                  src={`../../${this.props.singleProduct.imgUrl}`}
+                  className="img-resize"
+                  alt="Image of flower"
+                />
+              )}
             </div>
             <div className="card-stacked">
               <div className="card-content">
